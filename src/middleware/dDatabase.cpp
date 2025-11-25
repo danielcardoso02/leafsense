@@ -1,0 +1,102 @@
+/**
+ * @file dDatabase.cpp
+ * @brief Implementation of the Database Daemon Logic
+ */
+
+#include "../../include/middleware/dDatabase.h"
+#include <iostream>
+
+dDatabase::dDatabase(MQueueHandler* queue, std::string dbInfo) 
+    : incomingQueue(queue), running(true) {
+    // Initialize DB Manager
+    db = new dbManager(dbInfo);
+}
+
+dDatabase::~dDatabase() {
+    delete db;
+}
+
+void dDatabase::stop() {
+    running = false;
+}
+
+// Helper to split strings for parsing protocol
+std::vector<std::string> dDatabase::split(const std::string& str, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(str);
+    while (std::getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
+// The Translation Logic ("Convert MQueue to SQL command")
+std::string dDatabase::translateToSQL(std::string rawMessage) {
+    // Protocol Format: TAG|DATA1|DATA2...
+    std::vector<std::string> parts = split(rawMessage, '|');
+    
+    if (parts.empty()) return "";
+
+    std::string tag = parts[0];
+    std::stringstream sql;
+
+    if (tag == "SENSOR" && parts.size() >= 4) {
+        // Format: SENSOR|TEMP|PH|EC
+        // Schema: sensor_readings (temperature, ph, ec)
+        sql << "INSERT INTO sensor_readings (temperature, ph, ec) VALUES ("
+            << parts[1] << ", " << parts[2] << ", " << parts[3] << ");";
+            
+    } else if (tag == "LOG" && parts.size() >= 4) {
+        // Format: LOG|TYPE|MESSAGE|DETAILS
+        // Schema: logs (log_type, message, details)
+        sql << "INSERT INTO logs (log_type, message, details) VALUES ('"
+            << parts[1] << "', '" << parts[2] << "', '" << parts[3] << "');";
+            
+    } else if (tag == "ALERT" && parts.size() >= 3) {
+        // Format: ALERT|TYPE|MESSAGE
+        // Schema: alerts (type, message)
+        sql << "INSERT INTO alerts (type, message) VALUES ('"
+            << parts[1] << "', '" << parts[2] << "');";
+            
+    } else if (tag == "IMG" && parts.size() >= 3) {
+        // Format: IMG|FILENAME|PATH
+        // Schema: plant_images (filename, filepath)
+        sql << "INSERT INTO plant_images (filename, filepath) VALUES ('"
+            << parts[1] << "', '" << parts[2] << "');";
+    } else {
+        std::cerr << "[Daemon] Unknown message format: " << rawMessage << std::endl;
+        return "";
+    }
+
+    return sql.str();
+}
+
+// The Event Loop
+void dDatabase::run() {
+    std::cout << "[Daemon] Database Service Started." << std::endl;
+
+    while (running) {
+        // 1. Wait for Message (Blocking Call)
+        // This corresponds to the "MQueue to process" decision diamond
+        std::string msg = incomingQueue->receiveMessage();
+
+        if (msg.empty()) continue;
+
+        // 2. Translation Layer
+        std::string sqlCommand = translateToSQL(msg);
+
+        // 3. Execution Layer
+        if (!sqlCommand.empty()) {
+            bool success = db->insert(sqlCommand);
+            if (!success) {
+                std::cerr << "[Daemon] Failed to execute: " << sqlCommand << std::endl;
+            } else {
+                // Optional: Debug logging
+                std::cout << "[Daemon] Processed: " << msg << std::endl;
+            }
+        }
+    }
+    
+    std::cout << "[Daemon] Database Service Stopped." << std::endl;
+}
