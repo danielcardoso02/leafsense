@@ -1,0 +1,4 @@
+/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/LeafSense.dir
+/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/edit_cache.dir
+/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/rebuild_cache.dir
+/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/LeafSense_autogen.dir

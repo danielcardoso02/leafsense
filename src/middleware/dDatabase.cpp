@@ -18,6 +18,9 @@ dDatabase::~dDatabase() {
 
 void dDatabase::stop() {
     running = false;
+    if (incomingQueue) {
+        incomingQueue->sendMessage("EXIT");
+    }
 }
 
 // Helper to split strings for parsing protocol
@@ -78,9 +81,10 @@ void dDatabase::run() {
 
     while (running) {
         // 1. Wait for Message (Blocking Call)
-        // This corresponds to the "MQueue to process" decision diamond
         std::string msg = incomingQueue->receiveMessage();
 
+        // FIX: Check for the Exit Signal immediately
+        if (msg == "EXIT") break; 
         if (msg.empty()) continue;
 
         // 2. Translation Layer
@@ -92,7 +96,7 @@ void dDatabase::run() {
             if (!success) {
                 std::cerr << "[Daemon] Failed to execute: " << sqlCommand << std::endl;
             } else {
-                // Optional: Debug logging
+                // Debug output
                 std::cout << "[Daemon] Processed: " << msg << std::endl;
             }
         }

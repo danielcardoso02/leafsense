@@ -1,0 +1,22 @@
+{
+	"BUILD_DIR" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen",
+	"CMAKE_BINARY_DIR" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project",
+	"CMAKE_SOURCE_DIR" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project",
+	"INCLUDE_DIR" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/resources/images/logo_leafsense.png"
+	],
+	"LOCK_FILE" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/LeafSense_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "resources" ],
+	"OUTPUT_CHECKSUM" : "3YJK5W5UP7",
+	"OUTPUT_NAME" : "qrc_resources.cpp",
+	"RCC_EXECUTABLE" : "/usr/lib/qt5/bin/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/LeafSense_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Used.txt",
+	"SOURCE" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/resources/resources.qrc",
+	"VERBOSITY" : 0
+}

@@ -1,43 +1,72 @@
+#include <QApplication>
+#include <QDialog>
+#include <QDebug>
 #include <pthread.h>
-#include "../../include/middleware/MQueueHandler.h"
-#include "../../include/middleware/dDatabase.h"
+#include "../include/middleware/MQueueHandler.h"
+#include "../include/application/gui/mainwindow.h"
+#include "../include/application/gui/login_dialog.h"
+#include "../include/application/gui/theme/theme_manager.h"
+#include "../include/middleware/MQueueHandler.h"
+#include "../include/middleware/dDatabase.h"
+#include "../include/middleware/Master.h"
 
-// Global Queue (Shared Resource)
-MQueueHandler* mqueueToDB;
+// Global Pointers
+Master* systemMaster = nullptr;
+dDatabase* dbDaemon = nullptr;
+MQueueHandler* mqueueToDB = nullptr;
+pthread_t tDatabase;
 
-// Wrapper function for pthreads to run the Daemon class method
+// Daemon Wrapper
 void* dbDaemonFunc(void* arg) {
-    dDatabase* daemon = (dDatabase*)arg;
-    daemon->run(); // Enters the infinite loop
+    ((dDatabase*)arg)->run();
     return NULL;
 }
 
-int main() {
-    // 1. Infrastructure Initialization
-    // Create Message Queue first (Dependency for threads)
-    mqueueToDB = new MQueueHandler();
-
-    // 2. Initialize Daemon Package
-    // Connects to leafsense.db using dbManager internally
-    dDatabase* dbDaemon = new dDatabase(mqueueToDB, "database/leafsense.db");
-
-    // 3. Create Daemon Thread
-    pthread_t tDatabase;
-    if (pthread_create(&tDatabase, NULL, dbDaemonFunc, (void*)dbDaemon) != 0) {
-        std::cerr << "Failed to create DB Daemon thread" << std::endl;
-        return -1;
-    }
-
-    // ... Initialize Sensor Threads (tReadSensors, etc.) ...
-    // Example usage from a sensor thread would be:
-    // mqueueToDB->sendMessage("SENSOR|23.5|6.2|1100");
-
-    // Wait for threads (Join)
+// Cleanup
+void performCleanup() {
+    qDebug() << "[System] Stopping backend services...";
+    if (systemMaster) systemMaster->stop();
+    if (dbDaemon) dbDaemon->stop();
     pthread_join(tDatabase, NULL);
-
-    // Cleanup
-    delete dbDaemon;
+    delete systemMaster; 
+    delete dbDaemon; 
     delete mqueueToDB;
+    qDebug() << "[System] Cleanup done.";
+}
 
-    return 0;
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+    app.setApplicationName("LeafSense");
+
+    // 1. Start Backend (Simulation Mode)
+    // This starts the threads that generate fake data and write to DB
+    mqueueToDB = new MQueueHandler();
+    dbDaemon = new dDatabase(mqueueToDB, "leafsense.db"); 
+    pthread_create(&tDatabase, NULL, dbDaemonFunc, (void*)dbDaemon);
+    
+    systemMaster = new Master(mqueueToDB);
+    systemMaster->start(); 
+
+    // 2. Start GUI
+    ThemeManager::instance().set_theme(ThemeMode::LIGHT);
+
+    while (true) {
+        LoginDialog login;
+        if (login.exec() == QDialog::Accepted) {
+            MainWindow* w = new MainWindow();
+            w->set_logged_in_user(login.get_username());
+            w->set_login_time(login.get_login_time());
+            
+            Plant p; p.id=1; p.name="Lettuce"; 
+            w->set_selected_plant(p);
+            w->show();
+            
+            int res = app.exec();
+            delete w;
+            
+            if (res != 0) { performCleanup(); return res; }
+        } else {
+            performCleanup(); return 0;
+        }
+    }
 }
