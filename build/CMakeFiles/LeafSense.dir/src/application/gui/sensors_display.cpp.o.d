@@ -1,7 +1,7 @@
 CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o: \
  /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/sensors_display.cpp \
  /usr/include/stdc-predef.h \
- /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/include/application/gui/sensors_display.h \
+ /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/../include/application/gui/sensors_display.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtwidgetsglobal.h \
@@ -280,12 +280,12 @@ CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qwidget.h \
- /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/include/application/gui/theme/theme_manager.h \
+ /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/../include/application/gui/theme/theme_manager.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/QColor \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/qcolor.h \
- /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/include/application/gui/theme/colors.h \
+ /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/../include/application/gui/theme/colors.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QVBoxLayout \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qboxlayout.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayout.h \

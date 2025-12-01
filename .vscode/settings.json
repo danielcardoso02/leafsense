@@ -1,5 +1,16 @@
 {
     "files.associations": {
-        "ostream": "cpp"
-    }
+        "ostream": "cpp",
+        "*.h": "c",
+        "cdev.h": "c",
+        "module.h": "c",
+        "fs.h": "c",
+        "device.h": "c",
+        "init.h": "c",
+        "io.h": "c",
+        "timer.h": "c",
+        "err.h": "c",
+        "mm.h": "c"
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

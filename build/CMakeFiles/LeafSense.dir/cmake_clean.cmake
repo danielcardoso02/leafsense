@@ -30,6 +30,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o.d"
   "CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o"
   "CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o.d"
+  "CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o"
+  "CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o.d"
   "CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o"
   "CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o.d"
   "CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o"

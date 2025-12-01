@@ -74,6 +74,7 @@ set(PROJECT_SOURCES
     src/drivers/sensors/TDS.cpp
     src/drivers/sensors/ADC.cpp
     src/drivers/sensors/Cam.cpp
+    src/drivers/actuators/AlertLed.cpp
     src/drivers/actuators/Pumps.cpp
     src/drivers/actuators/Heater.cpp
     

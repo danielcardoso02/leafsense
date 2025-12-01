@@ -1,6 +1,16 @@
+/**
+ * @file Cam.cpp
+ * @brief Implementation of USB Camera Driver (Mock Mode)
+ */
+
 #include "Cam.h"
 
-// Mock: Returns a dummy path instead of taking a real photo
-std::string Cam::takePhoto() {
-    return "resources/images/logo_leafsense.png"; // Use existing logo as fake photo
+/* ============================================================================
+ * Photo Capture (Mock Implementation)
+ * ============================================================================ */
+
+std::string Cam::takePhoto() 
+{
+    // Mock: Returns path to existing placeholder image
+    return "resources/images/logo_leafsense.png";
 }

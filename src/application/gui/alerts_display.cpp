@@ -1,8 +1,17 @@
+/**
+ * @file alerts_display.cpp
+ * @brief Implementation of Alert Status Display Widget
+ */
+
 #include "../include/application/gui/alerts_display.h"
 #include "../include/application/gui/theme/theme_manager.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFont>
+
+/* ============================================================================
+ * Constructor
+ * ============================================================================ */
 
 AlertsDisplay::AlertsDisplay(QWidget *parent)
     : QWidget(parent)
@@ -10,6 +19,10 @@ AlertsDisplay::AlertsDisplay(QWidget *parent)
     setup_ui();
     apply_theme();
 }
+
+/* ============================================================================
+ * UI Setup
+ * ============================================================================ */
 
 void AlertsDisplay::setup_ui()
 {
@@ -20,12 +33,14 @@ void AlertsDisplay::setup_ui()
     QFont label_font;
     label_font.setPointSize(8);
 
+    // Centered content container
     QWidget *centered_widget = new QWidget();
     QVBoxLayout *centered_layout = new QVBoxLayout(centered_widget);
     centered_layout->setSpacing(2);
     centered_layout->setContentsMargins(0, 0, 0, 0);
     centered_layout->setAlignment(Qt::AlignCenter);
 
+    // Status row: indicator dot + message
     QHBoxLayout *status_layout = new QHBoxLayout();
     status_layout->setSpacing(8);
     status_layout->setAlignment(Qt::AlignCenter);
@@ -40,6 +55,7 @@ void AlertsDisplay::setup_ui()
     status_layout->addWidget(alert_label);
     centered_layout->addLayout(status_layout);
 
+    // Timestamp row
     time_label = new QLabel("Last check: --:--:-- UTC");
     time_label->setFont(label_font);
     time_label->setAlignment(Qt::AlignCenter);
@@ -51,10 +67,14 @@ void AlertsDisplay::setup_ui()
     setLayout(main_layout);
 }
 
+/* ============================================================================
+ * Theme Application
+ * ============================================================================ */
+
 void AlertsDisplay::apply_theme()
 {
-    ThemeManager& tm = ThemeManager::instance();
-    const ThemeColors& colors = tm.get_colors();
+    ThemeManager &tm = ThemeManager::instance();
+    const ThemeColors &colors = tm.get_colors();
 
     QFont label_font;
     label_font.setPointSize(8);
@@ -67,6 +87,10 @@ void AlertsDisplay::apply_theme()
 
     status_label->setStyleSheet(QString("color: %1;").arg(colors.status_healthy.name()));
 }
+
+/* ============================================================================
+ * Alert Update
+ * ============================================================================ */
 
 void AlertsDisplay::update_alerts()
 {

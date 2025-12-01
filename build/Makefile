@@ -478,6 +478,30 @@ src/application/ml/ML.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LeafSense.dir/build.make CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.s
 .PHONY : src/application/ml/ML.cpp.s
 
+src/drivers/actuators/AlertLed.o: src/drivers/actuators/AlertLed.cpp.o
+.PHONY : src/drivers/actuators/AlertLed.o
+
+# target to build an object file
+src/drivers/actuators/AlertLed.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LeafSense.dir/build.make CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o
+.PHONY : src/drivers/actuators/AlertLed.cpp.o
+
+src/drivers/actuators/AlertLed.i: src/drivers/actuators/AlertLed.cpp.i
+.PHONY : src/drivers/actuators/AlertLed.i
+
+# target to preprocess a source file
+src/drivers/actuators/AlertLed.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LeafSense.dir/build.make CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.i
+.PHONY : src/drivers/actuators/AlertLed.cpp.i
+
+src/drivers/actuators/AlertLed.s: src/drivers/actuators/AlertLed.cpp.s
+.PHONY : src/drivers/actuators/AlertLed.s
+
+# target to generate assembly for a file
+src/drivers/actuators/AlertLed.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LeafSense.dir/build.make CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.s
+.PHONY : src/drivers/actuators/AlertLed.cpp.s
+
 src/drivers/actuators/Heater.o: src/drivers/actuators/Heater.cpp.o
 .PHONY : src/drivers/actuators/Heater.o
 
@@ -842,6 +866,9 @@ help:
 	@echo "... src/application/ml/ML.o"
 	@echo "... src/application/ml/ML.i"
 	@echo "... src/application/ml/ML.s"
+	@echo "... src/drivers/actuators/AlertLed.o"
+	@echo "... src/drivers/actuators/AlertLed.i"
+	@echo "... src/drivers/actuators/AlertLed.s"
 	@echo "... src/drivers/actuators/Heater.o"
 	@echo "... src/drivers/actuators/Heater.i"
 	@echo "... src/drivers/actuators/Heater.s"

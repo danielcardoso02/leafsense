@@ -1,8 +1,18 @@
+/**
+ * @file Heater.cpp
+ * @brief Implementation of Heater Control Driver (Mock Mode)
+ */
+
 #include "Heater.h"
 #include <iostream>
 
-// Mock: Just prints to console
-void Heater::setState(bool on) {
+/* ============================================================================
+ * Heater Control (Mock Implementation)
+ * ============================================================================ */
+
+void Heater::setState(bool on) 
+{
     state = on;
+    // Mock: Output heater state change to console
     std::cout << "[Heater] " << (on ? "ON" : "OFF") << std::endl;
 }

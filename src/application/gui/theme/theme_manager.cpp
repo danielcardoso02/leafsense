@@ -1,12 +1,25 @@
+/**
+ * @file theme_manager.cpp
+ * @brief Implementation of Theme Manager Singleton
+ */
+
 #include "../include/application/gui/theme/theme_manager.h"
 #include <QDebug>
 #include <QApplication>
+
+/* ============================================================================
+ * Singleton Access
+ * ============================================================================ */
 
 ThemeManager& ThemeManager::instance()
 {
     static ThemeManager instance;
     return instance;
 }
+
+/* ============================================================================
+ * Theme Management
+ * ============================================================================ */
 
 void ThemeManager::set_theme(ThemeMode mode)
 {
@@ -31,6 +44,10 @@ ThemeMode ThemeManager::get_current_theme() const
     return current_theme;
 }
 
+/* ============================================================================
+ * Color Access
+ * ============================================================================ */
+
 const ThemeColors& ThemeManager::get_colors() const
 {
     return colors;
@@ -40,6 +57,10 @@ QColor ThemeManager::get_button_pressed_color() const
 {
     return colors.primary_green.darker(150);
 }
+
+/* ============================================================================
+ * Sensor Parameters
+ * ============================================================================ */
 
 void ThemeManager::set_sensor_parameters(const SensorParameters &params)
 {
@@ -51,6 +72,10 @@ SensorParameters ThemeManager::get_sensor_parameters() const
     return sensor_params;
 }
 
+/* ============================================================================
+ * Notification Settings
+ * ============================================================================ */
+
 void ThemeManager::set_notifications_enabled(bool enabled)
 {
     notifications_enabled = enabled;
@@ -61,47 +86,65 @@ bool ThemeManager::get_notifications_enabled() const
     return notifications_enabled;
 }
 
+/* ============================================================================
+ * Light Theme Setup
+ * ============================================================================ */
+
 void ThemeManager::setup_light_theme()
 {
-    colors.primary_green = QColor(76, 175, 80);     // CHANGED: Unified Green (#4CAF50)
+    // Brand colors
+    colors.primary_green = QColor(76, 175, 80);     // #4CAF50
     colors.secondary_green = QColor(102, 205, 170);
     colors.accent_orange = QColor(46, 139, 87);
     colors.alert_red = QColor(220, 20, 60);
 
+    // Background colors
     colors.bg_primary = QColor(248, 248, 248);
     colors.bg_secondary = QColor(255, 255, 255);
     colors.bg_tertiary = QColor(230, 230, 230);
 
+    // Text colors
     colors.text_primary = QColor(33, 33, 33);
     colors.text_secondary = QColor(89, 89, 89);
     colors.text_muted = QColor(140, 140, 140);
 
+    // Border colors
     colors.border_light = QColor(200, 200, 200);
     colors.border_dark = QColor(170, 170, 170);
 
-    colors.status_healthy = QColor(76, 175, 80);    // Matches Button Green
+    // Status colors
+    colors.status_healthy = QColor(76, 175, 80);
     colors.status_warning = QColor(255, 165, 0);
     colors.status_critical = QColor(220, 20, 60);
 }
 
+/* ============================================================================
+ * Dark Theme Setup
+ * ============================================================================ */
+
 void ThemeManager::setup_dark_theme()
 {
-    colors.primary_green = QColor(76, 175, 80);     // Matches Button Green
+    // Brand colors
+    colors.primary_green = QColor(76, 175, 80);
     colors.secondary_green = QColor(102, 205, 170);
     colors.accent_orange = QColor(102, 205, 170);
     colors.alert_red = QColor(255, 107, 107);
 
+    // Background colors
     colors.bg_primary = QColor(30, 30, 40);
     colors.bg_secondary = QColor(45, 45, 55);
     colors.bg_tertiary = QColor(60, 60, 75);
 
+    // Text colors
     colors.text_primary = QColor(240, 240, 240);
     colors.text_secondary = QColor(180, 180, 190);
     colors.text_muted = QColor(130, 130, 140);
 
+    // Border colors
     colors.border_light = QColor(70, 70, 90);
     colors.border_dark = QColor(50, 50, 70);
 
+    // Status colors
     colors.status_healthy = QColor(76, 175, 80);
     colors.status_warning = QColor(255, 165, 0);
     colors.status_critical = QColor(255, 107, 107);

@@ -398,10 +398,24 @@ CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.s"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Cam.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.s
 
+CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o: CMakeFiles/LeafSense.dir/flags.make
+CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o: ../src/drivers/actuators/AlertLed.cpp
+CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/AlertLed.cpp
+
+CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/AlertLed.cpp > CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.i
+
+CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/AlertLed.cpp -o CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.s
+
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o: ../src/drivers/actuators/Pumps.cpp
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Pumps.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.i: cmake_force
@@ -415,7 +429,7 @@ CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.s: cmake_force
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o: ../src/drivers/actuators/Heater.cpp
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Heater.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.i: cmake_force
@@ -429,7 +443,7 @@ CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.s: cmake_force
 CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o: ../src/application/ml/ML.cpp
 CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/ml/ML.cpp
 
 CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.i: cmake_force
@@ -443,7 +457,7 @@ CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.s: cmake_force
 CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o: LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp
 CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o -MF CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o.d -o CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp
 
 CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.i: cmake_force
@@ -479,6 +493,7 @@ LeafSense_OBJECTS = \
 "CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o" \
 "CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o" \
 "CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o" \
+"CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o" \
 "CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o" \
 "CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o" \
 "CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o" \
@@ -510,6 +525,7 @@ LeafSense: CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o
 LeafSense: CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o
 LeafSense: CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o
 LeafSense: CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o
+LeafSense: CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o
 LeafSense: CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o
 LeafSense: CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o
 LeafSense: CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o
@@ -576,7 +592,7 @@ LeafSense: /usr/lib/x86_64-linux-gnu/libopencv_photo.so.4.5.4d
 LeafSense: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.4.5.4d
 LeafSense: /usr/lib/x86_64-linux-gnu/libopencv_core.so.4.5.4d
 LeafSense: CMakeFiles/LeafSense.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Linking CXX executable LeafSense"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Linking CXX executable LeafSense"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/LeafSense.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
