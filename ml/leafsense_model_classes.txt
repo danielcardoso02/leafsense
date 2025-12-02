@@ -1,0 +1,4 @@
+disease
+healthy
+nutrient_deficiency
+pest_damage

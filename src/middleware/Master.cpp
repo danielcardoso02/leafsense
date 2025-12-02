@@ -31,7 +31,10 @@ Master::Master(MQueueHandler* queue)
     phSensor = new PH(adc, 0);
     tdsSensor = new TDS(adc, 1);
     camera = new Cam();
-    mlEngine = new ML("mock", "mock");
+    
+    // Initialize ML engine with model path
+    // Model located at: leafsense_model.onnx (in working directory)
+    mlEngine = new ML(".", "leafsense_model.onnx");
 
     // Initialize synchronization primitives
     createMutexes();

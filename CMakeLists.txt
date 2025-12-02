@@ -15,6 +15,19 @@ find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenCV REQUIRED)
 
+# --- ONNX Runtime ---
+# Look for ONNX Runtime in standard paths
+find_library(ONNXRUNTIME_LIB onnxruntime
+    PATHS /usr/local/lib /usr/lib
+)
+
+if(ONNXRUNTIME_LIB)
+    message(STATUS "Found ONNX Runtime: ${ONNXRUNTIME_LIB}")
+    set(ONNXRUNTIME_INCLUDE_DIR "/usr/local/include" CACHE PATH "ONNX Runtime include directory")
+else()
+    message(WARNING "ONNX Runtime not found - ML will run in mock mode")
+endif()
+
 # --- Include Paths ---
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
@@ -27,6 +40,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/include/drivers/actuators
     ${SQLite3_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
+    ${ONNXRUNTIME_INCLUDE_DIR}
 )
 
 # --- Source Files ---
@@ -89,4 +103,5 @@ target_link_libraries(LeafSense
     SQLite::SQLite3
     Threads::Threads
     ${OpenCV_LIBS}
+    ${ONNXRUNTIME_LIB}
 )
