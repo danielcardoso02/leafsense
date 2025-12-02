@@ -6,7 +6,7 @@
 #include <iostream>
 #include "../include/application/ml/ML.h"
 
-int main()
+int main(int argc, char* argv[])
 {
     std::cout << "=== LeafSense ML Test ===" << std::endl;
     
@@ -18,26 +18,27 @@ int main()
         return 1;
     }
     
-    std::cout << "\nTesting with logo image..." << std::endl;
-    
-    // Test with available image
-    std::string testImage = "../resources/images/logo_leafsense.png";
-    
-    // Test legacy interface
-    unsigned int result = ml.analyze(testImage);
-    std::cout << "Legacy analyze() returned: " << result << std::endl;
+    // Get test image from argument or use default
+    std::string testImage;
+    if (argc > 1) {
+        testImage = argv[1];
+        std::cout << "\nTesting with: " << testImage << std::endl;
+    } else {
+        testImage = "../resources/images/logo_leafsense.png";
+        std::cout << "\nTesting with default image..." << std::endl;
+    }
     
     // Test detailed interface
     MLResult detailed = ml.analyzeDetailed(testImage);
-    std::cout << "\nDetailed result:" << std::endl;
-    std::cout << "  Class ID: " << detailed.class_id << std::endl;
-    std::cout << "  Class Name: " << detailed.class_name << std::endl;
+    
+    std::cout << "\nResult:" << std::endl;
+    std::cout << "  Class: " << detailed.class_name << std::endl;
     std::cout << "  Confidence: " << (detailed.confidence * 100) << "%" << std::endl;
     
     std::cout << "\nAll class probabilities:" << std::endl;
-    const char* classNames[] = {"Healthy", "Nutrient Deficiency", "Disease", "Pest Damage"};
+    const char* classNames[] = {"Nutrient Deficiency", "Disease", "Healthy", "Pest Damage"};
     for (size_t i = 0; i < detailed.probs.size() && i < 4; i++) {
-        std::cout << "  " << i << ": " << classNames[i] << ": " 
+        std::cout << "  " << classNames[i] << ": " 
                   << (detailed.probs[i] * 100) << "%" << std::endl;
     }
     

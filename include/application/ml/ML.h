@@ -48,10 +48,10 @@ struct MLResult {
  * @class ML
  * @brief Plant disease detection via ONNX Runtime inference
  * 
- * Return codes:
- * - 0: Healthy
- * - 1: Nutrient Deficiency
- * - 2: Disease
+ * Return codes (alphabetical order from PyTorch ImageFolder):
+ * - 0: Nutrient Deficiency
+ * - 1: Disease
+ * - 2: Healthy
  * - 3: Pest Damage
  */
 class ML {

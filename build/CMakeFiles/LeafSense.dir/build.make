@@ -569,6 +569,7 @@ LeafSense: /usr/lib/x86_64-linux-gnu/libopencv_viz.so.4.5.4d
 LeafSense: /usr/lib/x86_64-linux-gnu/libopencv_wechat_qrcode.so.4.5.4d
 LeafSense: /usr/lib/x86_64-linux-gnu/libopencv_xobjdetect.so.4.5.4d
 LeafSense: /usr/lib/x86_64-linux-gnu/libopencv_xphoto.so.4.5.4d
+LeafSense: /usr/local/lib/libonnxruntime.so
 LeafSense: /usr/lib/x86_64-linux-gnu/libQt5Widgets.so.5.15.3
 LeafSense: /usr/lib/x86_64-linux-gnu/libQt5Gui.so.5.15.3
 LeafSense: /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.15.3

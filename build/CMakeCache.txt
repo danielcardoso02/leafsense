@@ -197,6 +197,12 @@ LeafSense_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 LeafSense_SOURCE_DIR:STATIC=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project
 
+//ONNX Runtime include directory
+ONNXRUNTIME_INCLUDE_DIR:PATH=/usr/local/include
+
+//Path to a library.
+ONNXRUNTIME_LIB:FILEPATH=/usr/local/lib/libonnxruntime.so
+
 //The directory containing a CMake configuration file for OpenCV.
 OpenCV_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/opencv4
 

@@ -4849,7 +4849,279 @@ CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o: ../src/application/ml/ML.c
   /usr/include/asm-generic/errno-base.h \
   /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
   /usr/include/c++/11/bits/charconv.h \
-  /usr/include/c++/11/bits/basic_string.tcc
+  /usr/include/c++/11/bits/basic_string.tcc \
+  /usr/include/c++/11/vector \
+  /usr/include/c++/11/bits/stl_uninitialized.h \
+  /usr/include/c++/11/bits/stl_vector.h \
+  /usr/include/c++/11/bits/stl_bvector.h \
+  /usr/include/c++/11/bits/vector.tcc \
+  /usr/include/c++/11/memory \
+  /usr/include/c++/11/bits/stl_tempbuf.h \
+  /usr/include/c++/11/bits/stl_raw_storage_iter.h \
+  /usr/include/c++/11/bits/align.h \
+  /usr/include/c++/11/bit \
+  /usr/include/c++/11/bits/uses_allocator.h \
+  /usr/include/c++/11/bits/unique_ptr.h \
+  /usr/include/c++/11/utility \
+  /usr/include/c++/11/bits/stl_relops.h \
+  /usr/include/c++/11/tuple \
+  /usr/include/c++/11/array \
+  /usr/include/c++/11/bits/invoke.h \
+  /usr/include/c++/11/bits/shared_ptr.h \
+  /usr/include/c++/11/bits/shared_ptr_base.h \
+  /usr/include/c++/11/typeinfo \
+  /usr/include/c++/11/bits/allocated_ptr.h \
+  /usr/include/c++/11/bits/refwrap.h \
+  /usr/include/c++/11/ext/aligned_buffer.h \
+  /usr/include/c++/11/ext/concurrence.h \
+  /usr/include/c++/11/exception \
+  /usr/include/c++/11/bits/exception_ptr.h \
+  /usr/include/c++/11/bits/cxxabi_init_exception.h \
+  /usr/include/c++/11/bits/nested_exception.h \
+  /usr/include/c++/11/bits/shared_ptr_atomic.h \
+  /usr/include/c++/11/bits/atomic_base.h \
+  /usr/include/c++/11/bits/atomic_lockfree_defines.h \
+  /usr/include/c++/11/backward/auto_ptr.h \
+  /usr/include/c++/11/pstl/glue_memory_defs.h \
+  /usr/include/c++/11/pstl/execution_defs.h \
+  /usr/include/c++/11/iostream \
+  /usr/include/c++/11/ostream \
+  /usr/include/c++/11/ios \
+  /usr/include/c++/11/bits/ios_base.h \
+  /usr/include/c++/11/bits/locale_classes.h \
+  /usr/include/c++/11/bits/locale_classes.tcc \
+  /usr/include/c++/11/system_error \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h \
+  /usr/include/c++/11/stdexcept \
+  /usr/include/c++/11/streambuf \
+  /usr/include/c++/11/bits/streambuf.tcc \
+  /usr/include/c++/11/bits/basic_ios.h \
+  /usr/include/c++/11/bits/locale_facets.h \
+  /usr/include/c++/11/cwctype \
+  /usr/include/wctype.h \
+  /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h \
+  /usr/include/c++/11/bits/streambuf_iterator.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h \
+  /usr/include/c++/11/bits/locale_facets.tcc \
+  /usr/include/c++/11/bits/basic_ios.tcc \
+  /usr/include/c++/11/bits/ostream.tcc \
+  /usr/include/c++/11/istream \
+  /usr/include/c++/11/bits/istream.tcc \
+  /usr/include/c++/11/fstream \
+  /usr/include/c++/11/bits/codecvt.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+  /usr/include/c++/11/bits/fstream.tcc \
+  /usr/include/c++/11/algorithm \
+  /usr/include/c++/11/bits/stl_algo.h \
+  /usr/include/c++/11/bits/algorithmfwd.h \
+  /usr/include/c++/11/bits/stl_heap.h \
+  /usr/include/c++/11/bits/uniform_int_dist.h \
+  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
+  /usr/include/c++/11/functional \
+  /usr/include/c++/11/bits/std_function.h \
+  /usr/include/c++/11/unordered_map \
+  /usr/include/c++/11/bits/hashtable.h \
+  /usr/include/c++/11/bits/hashtable_policy.h \
+  /usr/include/c++/11/bits/enable_special_members.h \
+  /usr/include/c++/11/bits/node_handle.h \
+  /usr/include/c++/11/bits/unordered_map.h \
+  /usr/include/c++/11/bits/erase_if.h \
+  /usr/include/c++/11/cmath \
+  /usr/include/math.h \
+  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+  /usr/include/c++/11/bits/specfun.h \
+  /usr/include/c++/11/limits \
+  /usr/include/c++/11/tr1/gamma.tcc \
+  /usr/include/c++/11/tr1/special_function_util.h \
+  /usr/include/c++/11/tr1/bessel_function.tcc \
+  /usr/include/c++/11/tr1/beta_function.tcc \
+  /usr/include/c++/11/tr1/ell_integral.tcc \
+  /usr/include/c++/11/tr1/exp_integral.tcc \
+  /usr/include/c++/11/tr1/hypergeometric.tcc \
+  /usr/include/c++/11/tr1/legendre_function.tcc \
+  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
+  /usr/include/c++/11/tr1/poly_hermite.tcc \
+  /usr/include/c++/11/tr1/poly_laguerre.tcc \
+  /usr/include/c++/11/tr1/riemann_zeta.tcc \
+  /usr/include/c++/11/numeric \
+  /usr/include/c++/11/bits/stl_numeric.h \
+  /usr/include/c++/11/pstl/glue_numeric_defs.h \
+  /usr/include/opencv4/opencv2/opencv.hpp \
+  /usr/include/opencv4/opencv2/opencv_modules.hpp \
+  /usr/include/opencv4/opencv2/core.hpp \
+  /usr/include/opencv4/opencv2/core/cvdef.h \
+  /usr/include/opencv4/opencv2/core/version.hpp \
+  /usr/include/opencv4/opencv2/core/hal/interface.h \
+  /usr/include/c++/11/cstddef \
+  /usr/include/opencv4/opencv2/core/cv_cpu_dispatch.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h \
+  /usr/include/c++/11/stdlib.h \
+  /usr/include/opencv4/opencv2/core/base.hpp \
+  /usr/include/c++/11/climits \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
+  /usr/include/limits.h \
+  /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+  /usr/include/linux/limits.h \
+  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/opencv4/opencv2/core/cvstd.hpp \
+  /usr/include/c++/11/cstring \
+  /usr/include/string.h \
+  /usr/include/strings.h \
+  /usr/include/opencv4/opencv2/core/cvstd_wrapper.hpp \
+  /usr/include/opencv4/opencv2/core/neon_utils.hpp \
+  /usr/include/opencv4/opencv2/core/vsx_utils.hpp \
+  /usr/include/assert.h \
+  /usr/include/opencv4/opencv2/core/check.hpp \
+  /usr/include/opencv4/opencv2/core/traits.hpp \
+  /usr/include/opencv4/opencv2/core/matx.hpp \
+  /usr/include/opencv4/opencv2/core/saturate.hpp \
+  /usr/include/opencv4/opencv2/core/fast_math.hpp \
+  /usr/include/opencv4/opencv2/core/types.hpp \
+  /usr/include/c++/11/cfloat \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
+  /usr/include/opencv4/opencv2/core/mat.hpp \
+  /usr/include/opencv4/opencv2/core/bufferpool.hpp \
+  /usr/include/opencv4/opencv2/core/mat.inl.hpp \
+  /usr/include/opencv4/opencv2/core/persistence.hpp \
+  /usr/include/opencv4/opencv2/core/operations.hpp \
+  /usr/include/opencv4/opencv2/core/cvstd.inl.hpp \
+  /usr/include/c++/11/complex \
+  /usr/include/c++/11/sstream \
+  /usr/include/c++/11/bits/sstream.tcc \
+  /usr/include/opencv4/opencv2/core/utility.hpp \
+  /usr/include/c++/11/mutex \
+  /usr/include/c++/11/chrono \
+  /usr/include/c++/11/ratio \
+  /usr/include/c++/11/ctime \
+  /usr/include/c++/11/bits/parse_numbers.h \
+  /usr/include/c++/11/bits/std_mutex.h \
+  /usr/include/c++/11/bits/unique_lock.h \
+  /usr/include/opencv4/opencv2/core/optim.hpp \
+  /usr/include/opencv4/opencv2/core/ovx.hpp \
+  /usr/include/opencv4/opencv2/core/cvdef.h \
+  /usr/include/opencv4/opencv2/calib3d.hpp \
+  /usr/include/opencv4/opencv2/features2d.hpp \
+  /usr/include/opencv4/opencv2/flann/miniflann.hpp \
+  /usr/include/opencv4/opencv2/flann/defines.h \
+  /usr/include/opencv4/opencv2/flann/config.h \
+  /usr/include/opencv4/opencv2/core/affine.hpp \
+  /usr/include/opencv4/opencv2/dnn.hpp \
+  /usr/include/opencv4/opencv2/dnn/dnn.hpp \
+  /usr/include/opencv4/opencv2/core/async.hpp \
+  /usr/include/opencv4/opencv2/dnn/version.hpp \
+  /usr/include/opencv4/opencv2/dnn/dict.hpp \
+  /usr/include/c++/11/map \
+  /usr/include/c++/11/bits/stl_tree.h \
+  /usr/include/c++/11/bits/stl_map.h \
+  /usr/include/c++/11/bits/stl_multimap.h \
+  /usr/include/opencv4/opencv2/dnn/layer.hpp \
+  /usr/include/opencv4/opencv2/dnn/dnn.inl.hpp \
+  /usr/include/opencv4/opencv2/dnn/utils/inference_engine.hpp \
+  /usr/include/opencv4/opencv2/dnn/dnn.hpp \
+  /usr/include/opencv4/opencv2/flann.hpp \
+  /usr/include/opencv4/opencv2/flann/flann_base.hpp \
+  /usr/include/opencv4/opencv2/flann/general.h \
+  /usr/include/opencv4/opencv2/flann/matrix.h \
+  /usr/include/opencv4/opencv2/flann/params.h \
+  /usr/include/opencv4/opencv2/flann/any.h \
+  /usr/include/opencv4/opencv2/flann/defines.h \
+  /usr/include/opencv4/opencv2/flann/saving.h \
+  /usr/include/opencv4/opencv2/flann/nn_index.h \
+  /usr/include/opencv4/opencv2/flann/result_set.h \
+  /usr/include/c++/11/set \
+  /usr/include/c++/11/bits/stl_set.h \
+  /usr/include/c++/11/bits/stl_multiset.h \
+  /usr/include/opencv4/opencv2/flann/all_indices.h \
+  /usr/include/opencv4/opencv2/flann/kdtree_index.h \
+  /usr/include/opencv4/opencv2/flann/dynamic_bitset.h \
+  /usr/include/opencv4/opencv2/flann/dist.h \
+  /usr/include/opencv4/opencv2/flann/heap.h \
+  /usr/include/opencv4/opencv2/flann/allocator.h \
+  /usr/include/opencv4/opencv2/flann/random.h \
+  /usr/include/opencv4/opencv2/flann/kdtree_single_index.h \
+  /usr/include/opencv4/opencv2/flann/kmeans_index.h \
+  /usr/include/opencv4/opencv2/flann/logger.h \
+  /usr/include/opencv4/opencv2/flann/composite_index.h \
+  /usr/include/opencv4/opencv2/flann/linear_index.h \
+  /usr/include/opencv4/opencv2/flann/hierarchical_clustering_index.h \
+  /usr/include/opencv4/opencv2/flann/lsh_index.h \
+  /usr/include/opencv4/opencv2/flann/lsh_table.h \
+  /usr/include/c++/11/iomanip \
+  /usr/include/c++/11/locale \
+  /usr/include/c++/11/bits/locale_facets_nonio.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+  /usr/include/libintl.h \
+  /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+  /usr/include/c++/11/bits/locale_conv.h \
+  /usr/include/c++/11/bits/quoted_string.h \
+  /usr/include/c++/11/math.h \
+  /usr/include/opencv4/opencv2/flann/autotuned_index.h \
+  /usr/include/opencv4/opencv2/flann/ground_truth.h \
+  /usr/include/opencv4/opencv2/flann/index_testing.h \
+  /usr/include/opencv4/opencv2/flann/timer.h \
+  /usr/include/opencv4/opencv2/flann/sampling.h \
+  /usr/include/opencv4/opencv2/highgui.hpp \
+  /usr/include/opencv4/opencv2/imgcodecs.hpp \
+  /usr/include/opencv4/opencv2/videoio.hpp \
+  /usr/include/opencv4/opencv2/imgproc.hpp \
+  /usr/include/opencv4/opencv2/imgproc/segmentation.hpp \
+  /usr/include/opencv4/opencv2/ml.hpp \
+  /usr/include/opencv4/opencv2/ml/ml.inl.hpp \
+  /usr/include/opencv4/opencv2/objdetect.hpp \
+  /usr/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp \
+  /usr/include/opencv4/opencv2/objdetect/face.hpp \
+  /usr/include/opencv4/opencv2/photo.hpp \
+  /usr/include/opencv4/opencv2/stitching.hpp \
+  /usr/include/opencv4/opencv2/stitching/warpers.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/warpers.hpp \
+  /usr/include/opencv4/opencv2/core/cuda.hpp \
+  /usr/include/opencv4/opencv2/core/cuda_types.hpp \
+  /usr/include/opencv4/opencv2/core/cuda.inl.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/warpers_inl.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/warpers.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/matchers.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/matchers.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/util.hpp \
+  /usr/include/c++/11/list \
+  /usr/include/c++/11/bits/stl_list.h \
+  /usr/include/c++/11/bits/list.tcc \
+  /usr/include/opencv4/opencv2/stitching/detail/util_inl.hpp \
+  /usr/include/c++/11/queue \
+  /usr/include/c++/11/deque \
+  /usr/include/c++/11/bits/stl_deque.h \
+  /usr/include/c++/11/bits/deque.tcc \
+  /usr/include/c++/11/bits/stl_queue.h \
+  /usr/include/opencv4/opencv2/stitching/detail/camera.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/exposure_compensate.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/seam_finders.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/blenders.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/camera.hpp \
+  /usr/include/opencv4/opencv2/video.hpp \
+  /usr/include/opencv4/opencv2/video/tracking.hpp \
+  /usr/include/opencv4/opencv2/video/background_segm.hpp \
+  /usr/local/include/onnxruntime_cxx_api.h \
+  /usr/local/include/onnxruntime_c_api.h \
+  /usr/local/include/onnxruntime_float16.h \
+  /usr/local/include/onnxruntime_cxx_inline.h
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o: ../src/drivers/actuators/AlertLed.cpp \
   /usr/include/stdc-predef.h \
@@ -6852,6 +7124,29 @@ CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o: ../src/middleware/Master.c
   ../include/drivers/actuators/Pumps.h \
   ../include/drivers/actuators/Heater.h \
   ../include/application/ml/ML.h \
+  /usr/include/c++/11/memory \
+  /usr/include/c++/11/bits/stl_tempbuf.h \
+  /usr/include/c++/11/bits/stl_raw_storage_iter.h \
+  /usr/include/c++/11/bits/align.h \
+  /usr/include/c++/11/bit \
+  /usr/include/c++/11/bits/unique_ptr.h \
+  /usr/include/c++/11/utility \
+  /usr/include/c++/11/bits/stl_relops.h \
+  /usr/include/c++/11/tuple \
+  /usr/include/c++/11/array \
+  /usr/include/c++/11/bits/invoke.h \
+  /usr/include/c++/11/bits/shared_ptr.h \
+  /usr/include/c++/11/bits/shared_ptr_base.h \
+  /usr/include/c++/11/bits/allocated_ptr.h \
+  /usr/include/c++/11/bits/refwrap.h \
+  /usr/include/c++/11/ext/aligned_buffer.h \
+  /usr/include/c++/11/ext/concurrence.h \
+  /usr/include/c++/11/bits/shared_ptr_atomic.h \
+  /usr/include/c++/11/bits/atomic_base.h \
+  /usr/include/c++/11/bits/atomic_lockfree_defines.h \
+  /usr/include/c++/11/backward/auto_ptr.h \
+  /usr/include/c++/11/pstl/glue_memory_defs.h \
+  /usr/include/c++/11/pstl/execution_defs.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc
 
@@ -7253,19 +7548,7 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 
 ../include/middleware/Master.h:
 
-/usr/include/c++/11/bits/sstream.tcc:
-
-/usr/include/c++/11/sstream:
-
 ../include/middleware/dDatabase.h:
-
-/usr/include/c++/11/bits/stl_queue.h:
-
-/usr/include/c++/11/bits/deque.tcc:
-
-/usr/include/c++/11/bits/stl_deque.h:
-
-/usr/include/c++/11/queue:
 
 ../include/middleware/MQueueHandler.h:
 
@@ -7274,8 +7557,6 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 ../include/drivers/sensors/TDS.h:
 
 ../include/drivers/sensors/PH.h:
-
-../src/drivers/sensors/Cam.cpp:
 
 ../include/drivers/sensors/ADC.h:
 
@@ -7286,8 +7567,6 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 ../src/drivers/actuators/Pumps.cpp:
 
 ../src/drivers/actuators/Heater.cpp:
-
-/usr/include/c++/11/cstring:
 
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 
@@ -7304,6 +7583,160 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 /usr/include/fcntl.h:
 
 ../include/drivers/actuators/AlertLed.h:
+
+/usr/local/include/onnxruntime_c_api.h:
+
+../src/drivers/sensors/Cam.cpp:
+
+/usr/include/opencv4/opencv2/video/background_segm.hpp:
+
+/usr/include/opencv4/opencv2/video/tracking.hpp:
+
+/usr/include/opencv4/opencv2/stitching/detail/seam_finders.hpp:
+
+/usr/include/opencv4/opencv2/stitching/detail/exposure_compensate.hpp:
+
+/usr/include/c++/11/bits/stl_queue.h:
+
+/usr/include/c++/11/bits/deque.tcc:
+
+/usr/include/c++/11/bits/stl_deque.h:
+
+/usr/include/c++/11/queue:
+
+/usr/include/opencv4/opencv2/stitching/detail/matchers.hpp:
+
+/usr/include/opencv4/opencv2/core/cuda_types.hpp:
+
+/usr/include/opencv4/opencv2/core/cuda.hpp:
+
+/usr/include/opencv4/opencv2/stitching.hpp:
+
+/usr/include/opencv4/opencv2/photo.hpp:
+
+/usr/include/opencv4/opencv2/objdetect/face.hpp:
+
+/usr/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp:
+
+/usr/include/opencv4/opencv2/ml/ml.inl.hpp:
+
+/usr/include/opencv4/opencv2/imgproc/segmentation.hpp:
+
+/usr/include/opencv4/opencv2/imgcodecs.hpp:
+
+/usr/include/opencv4/opencv2/highgui.hpp:
+
+/usr/include/opencv4/opencv2/flann/sampling.h:
+
+/usr/include/opencv4/opencv2/flann/timer.h:
+
+/usr/include/c++/11/math.h:
+
+/usr/include/c++/11/bits/quoted_string.h:
+
+/usr/include/c++/11/bits/locale_facets_nonio.tcc:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h:
+
+/usr/include/c++/11/bits/locale_facets_nonio.h:
+
+/usr/include/c++/11/locale:
+
+/usr/include/c++/11/iomanip:
+
+/usr/include/opencv4/opencv2/flann/lsh_table.h:
+
+/usr/include/opencv4/opencv2/flann/hierarchical_clustering_index.h:
+
+/usr/include/opencv4/opencv2/flann/linear_index.h:
+
+/usr/include/opencv4/opencv2/flann/logger.h:
+
+/usr/include/opencv4/opencv2/flann/kmeans_index.h:
+
+/usr/include/opencv4/opencv2/flann/kdtree_single_index.h:
+
+/usr/include/opencv4/opencv2/flann/allocator.h:
+
+/usr/include/opencv4/opencv2/flann/heap.h:
+
+/usr/include/c++/11/bits/stl_multiset.h:
+
+/usr/include/c++/11/bits/stl_set.h:
+
+/usr/include/opencv4/opencv2/flann/saving.h:
+
+/usr/include/opencv4/opencv2/flann/any.h:
+
+/usr/include/opencv4/opencv2/flann/matrix.h:
+
+/usr/include/opencv4/opencv2/flann.hpp:
+
+/usr/include/opencv4/opencv2/dnn/layer.hpp:
+
+/usr/include/opencv4/opencv2/dnn/dict.hpp:
+
+/usr/include/opencv4/opencv2/core/async.hpp:
+
+/usr/include/opencv4/opencv2/flann/config.h:
+
+/usr/include/opencv4/opencv2/flann/defines.h:
+
+/usr/include/c++/11/bits/unique_lock.h:
+
+/usr/include/c++/11/bits/std_mutex.h:
+
+/usr/include/c++/11/mutex:
+
+/usr/include/opencv4/opencv2/core/utility.hpp:
+
+/usr/include/c++/11/sstream:
+
+/usr/include/opencv4/opencv2/core/cvstd.inl.hpp:
+
+/usr/include/opencv4/opencv2/flann/dist.h:
+
+/usr/include/opencv4/opencv2/core/persistence.hpp:
+
+/usr/include/opencv4/opencv2/core/mat.hpp:
+
+/usr/include/c++/11/cfloat:
+
+/usr/include/opencv4/opencv2/core/types.hpp:
+
+/usr/include/opencv4/opencv2/core/saturate.hpp:
+
+/usr/include/opencv4/opencv2/core/traits.hpp:
+
+/usr/include/opencv4/opencv2/core/vsx_utils.hpp:
+
+/usr/include/opencv4/opencv2/core/neon_utils.hpp:
+
+/usr/include/c++/11/cstring:
+
+/usr/include/opencv4/opencv2/core/cvstd.hpp:
+
+/usr/include/c++/11/climits:
+
+/usr/include/opencv4/opencv2/core/base.hpp:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h:
+
+/usr/include/opencv4/opencv2/core/version.hpp:
+
+/usr/include/c++/11/bits/sstream.tcc:
+
+/usr/include/opencv4/opencv2/core/cvdef.h:
+
+/usr/include/opencv4/opencv2/core.hpp:
+
+/usr/include/opencv4/opencv2/opencv_modules.hpp:
+
+/usr/include/c++/11/bits/fstream.tcc:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
+
+/usr/include/c++/11/fstream:
 
 ../src/application/ml/ML.cpp:
 
@@ -7329,6 +7762,8 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 
 /usr/include/x86_64-linux-gnu/qt5/QtCharts/qdatetimeaxis.h:
 
+/usr/include/opencv4/opencv2/stitching/detail/warpers.hpp:
+
 /usr/include/c++/11/cstdio:
 
 ../include/drivers/sensors/Temp.h:
@@ -7337,11 +7772,15 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 
 ../src/application/gui/settings_window.cpp:
 
+/usr/include/opencv4/opencv2/flann/ground_truth.h:
+
 /usr/include/c++/11/bits/stream_iterator.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/QRandomGenerator:
 
 /usr/include/ctype.h:
+
+/usr/include/opencv4/opencv2/stitching/detail/blenders.hpp:
 
 /usr/include/c++/11/pstl/glue_numeric_defs.h:
 
@@ -7362,6 +7801,8 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 /usr/include/c++/11/bits/stl_iterator_base_types.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtwidgets-config.h:
+
+/usr/include/opencv4/opencv2/core/operations.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 
@@ -7389,9 +7830,15 @@ LeafSense_autogen/mocs_compilation.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
 
+/usr/include/c++/11/bits/codecvt.h:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qtypeinfo.h:
 
 /usr/include/c++/11/bits/stl_bvector.h:
+
+/usr/local/include/onnxruntime_cxx_api.h:
+
+/usr/include/opencv4/opencv2/flann/params.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
 
@@ -7455,9 +7902,13 @@ LeafSense_autogen/mocs_compilation.cpp:
 
 /usr/include/c++/11/bits/stl_algo.h:
 
+/usr/include/opencv4/opencv2/video.hpp:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qpoint.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qstringview.h:
+
+/usr/include/opencv4/opencv2/flann/all_indices.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qiterator.h:
 
@@ -7471,15 +7922,23 @@ LeafSense_autogen/mocs_compilation.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qobjectdefs.h:
 
+/usr/include/opencv4/opencv2/opencv.hpp:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qconfig.h:
 
 /usr/include/x86_64-linux-gnu/bits/select.h:
+
+/usr/include/opencv4/opencv2/dnn.hpp:
+
+/usr/include/opencv4/opencv2/core/hal/interface.h:
 
 /usr/include/x86_64-linux-gnu/bits/time.h:
 
 /usr/include/c++/11/clocale:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:
+
+/usr/include/opencv4/opencv2/flann/lsh_index.h:
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
 
@@ -7511,11 +7970,15 @@ LeafSense_autogen/mocs_compilation.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qkeysequence.h:
 
+/usr/include/c++/11/complex:
+
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
 /usr/include/c++/11/bits/atomic_lockfree_defines.h:
 
 /usr/include/c++/11/bits/shared_ptr_atomic.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qobject.h:
 
@@ -7533,6 +7996,8 @@ LeafSense_autogen/mocs_compilation.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
+/usr/include/opencv4/opencv2/stitching/detail/util.hpp:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCharts/QChart:
 
 /usr/include/c++/11/vector:
@@ -7540,6 +8005,8 @@ LeafSense_autogen/mocs_compilation.cpp:
 /usr/include/c++/11/bits/align.h:
 
 /usr/include/c++/11/typeinfo:
+
+/usr/include/opencv4/opencv2/core/cv_cpu_dispatch.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qregion.h:
 
@@ -7569,6 +8036,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_info_window.cpp:
 
 /usr/include/c++/11/bits/cxxabi_forced.h:
 
+/usr/include/opencv4/opencv2/flann/miniflann.hpp:
+
 /usr/include/c++/11/ext/alloc_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/sched.h:
@@ -7577,7 +8046,11 @@ LeafSense_autogen/2PYRYNOOPV/moc_info_window.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCharts/QDateTimeAxis:
 
+/usr/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp:
+
 ../include/application/gui/info_window.h:
+
+/usr/include/opencv4/opencv2/flann/flann_base.hpp:
 
 /usr/include/c++/11/bits/charconv.h:
 
@@ -7595,6 +8068,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_info_window.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/long-double.h:
 
+/usr/include/opencv4/opencv2/core/check.hpp:
+
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 
 /usr/include/stdc-predef.h:
@@ -7608,6 +8083,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_info_window.cpp:
 /usr/include/x86_64-linux-gnu/asm/errno.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
+
+/usr/include/opencv4/opencv2/core/affine.hpp:
 
 LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp:
 
@@ -7634,6 +8111,8 @@ LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp:
 ../src/drivers/sensors/PH.cpp:
 
 /usr/include/features.h:
+
+/usr/include/opencv4/opencv2/core/cuda.inl.hpp:
 
 /usr/include/c++/11/bits/random.tcc:
 
@@ -7679,6 +8158,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h:
+
 /usr/include/x86_64-linux-gnu/bits/time64.h:
 
 /usr/include/c++/11/initializer_list:
@@ -7697,7 +8178,13 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 
 /usr/include/c++/11/new:
 
+/usr/include/opencv4/opencv2/core/cvstd_wrapper.hpp:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCharts/qabstractseries.h:
+
+/usr/include/opencv4/opencv2/flann/autotuned_index.h:
+
+/usr/include/opencv4/opencv2/flann/random.h:
 
 /usr/include/c++/11/array:
 
@@ -7714,6 +8201,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qdatetime.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qsharedpointer_impl.h:
+
+/usr/include/opencv4/opencv2/stitching/detail/camera.hpp:
 
 /usr/include/c++/11/bits/locale_classes.h:
 
@@ -7787,6 +8276,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 
 /usr/include/c++/11/ext/type_traits.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/float.h:
+
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtwidgetsglobal.h:
 
 /usr/include/c++/11/bits/stl_function.h:
@@ -7813,6 +8304,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qpalette.h:
 
+/usr/include/opencv4/opencv2/core/bufferpool.hpp:
+
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractspinbox.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h:
@@ -7825,6 +8318,10 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 
 /usr/include/c++/11/bits/uniform_int_dist.h:
 
+/usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h:
+
+/usr/include/opencv4/opencv2/flann/composite_index.h:
+
 /usr/include/c++/11/bits/basic_ios.h:
 
 /usr/include/c++/11/bits/cxxabi_init_exception.h:
@@ -7832,6 +8329,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
 
 /usr/include/wchar.h:
+
+/usr/include/opencv4/opencv2/core/fast_math.hpp:
 
 /usr/include/locale.h:
 
@@ -7841,9 +8340,13 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qbasictimer.h:
 
+/usr/include/opencv4/opencv2/dnn/dnn.inl.hpp:
+
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qtgui-config.h:
 
 ../include/drivers/sensors/Sensor.h:
+
+/usr/include/opencv4/opencv2/stitching/warpers.hpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qslider.h:
 
@@ -7891,6 +8394,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 
 /usr/include/c++/11/ext/new_allocator.h:
 
+/usr/include/libintl.h:
+
 /usr/include/c++/11/bits/char_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
@@ -7923,7 +8428,11 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qheaderview.h:
 
+/usr/include/opencv4/opencv2/imgproc.hpp:
+
 /usr/include/c++/11/bits/unordered_map.h:
+
+/usr/include/opencv4/opencv2/objdetect.hpp:
 
 /usr/include/c++/11/bits/node_handle.h:
 
@@ -7993,9 +8502,13 @@ LeafSense_autogen/2PYRYNOOPV/moc_health_display.cpp:
 
 /usr/include/c++/11/bits/stl_numeric.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h:
+
 /usr/include/c++/11/list:
 
 /usr/include/c++/11/bits/stl_list.h:
+
+/usr/include/opencv4/opencv2/flann/kdtree_index.h:
 
 /usr/include/c++/11/ext/string_conversions.h:
 
@@ -8065,9 +8578,15 @@ LeafSense_autogen/2PYRYNOOPV/moc_health_display.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qpainter.h:
 
+/usr/include/opencv4/opencv2/calib3d.hpp:
+
 /usr/include/c++/11/bits/parse_numbers.h:
 
+/usr/include/opencv4/opencv2/videoio.hpp:
+
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qpaintdevice.h:
+
+/usr/include/opencv4/opencv2/core/matx.hpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmainwindow.h:
 
@@ -8094,6 +8613,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_health_display.cpp:
 /usr/include/c++/11/bits/allocator.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qline.h:
+
+/usr/include/opencv4/opencv2/stitching/detail/util_inl.hpp:
 
 /usr/include/c++/11/iosfwd:
 
@@ -8133,11 +8654,17 @@ LeafSense_autogen/2PYRYNOOPV/moc_settings_window.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qcursor.h:
 
+/usr/local/include/onnxruntime_float16.h:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCore/QVariant:
 
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel:
+
+/usr/include/opencv4/opencv2/dnn/version.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h:
 
@@ -8165,9 +8692,13 @@ LeafSense_autogen/2PYRYNOOPV/moc_settings_window.cpp:
 
 ../src/middleware/Master.cpp:
 
+/usr/include/opencv4/opencv2/core/mat.inl.hpp:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qmap.h:
 
 /usr/include/c++/11/variant:
+
+/usr/include/opencv4/opencv2/dnn/dnn.hpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qset.h:
 
@@ -8196,6 +8727,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_settings_window.cpp:
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyle.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabwidget.h:
+
+/usr/include/opencv4/opencv2/features2d.hpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/QTimer:
 
@@ -8251,6 +8784,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_logs_window.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/QBrush:
 
+/usr/include/c++/11/set:
+
 /usr/include/x86_64-linux-gnu/gnu/stubs.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmessagebox.h:
@@ -8259,9 +8794,13 @@ LeafSense_autogen/2PYRYNOOPV/moc_logs_window.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QGraphicsView:
 
+/usr/include/opencv4/opencv2/flann/nn_index.h:
+
 /usr/include/c++/11/bits/basic_string.tcc:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCharts/qlineseries.h:
+
+/usr/include/opencv4/opencv2/ml.hpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCharts/qxyseries.h:
 
@@ -8271,13 +8810,19 @@ LeafSense_autogen/2PYRYNOOPV/moc_logs_window.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QProgressBar:
 
+/usr/include/opencv4/opencv2/dnn/utils/inference_engine.hpp:
+
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qprogressbar.h:
 
 LeafSense_autogen/2PYRYNOOPV/moc_leafsense_data_bridge.cpp:
 
+/usr/include/opencv4/opencv2/flann/index_testing.h:
+
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qevent.h:
 
 ../src/application/gui/logs_window.cpp:
+
+/usr/local/include/onnxruntime_cxx_inline.h:
 
 LeafSense_autogen/2PYRYNOOPV/moc_login_dialog.cpp:
 
@@ -8288,6 +8833,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_login_dialog.cpp:
 ../include/application/gui/login_dialog.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLineEdit:
+
+/usr/include/opencv4/opencv2/flann/dynamic_bitset.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qbytearray.h:
 
@@ -8345,6 +8892,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_sensors_display.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qdebug.h:
 
+/usr/include/c++/11/bits/locale_conv.h:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qtextstream.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qapplication.h:
@@ -8356,6 +8905,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_sensors_display.cpp:
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qeventloop.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qinputmethod.h:
+
+/usr/include/opencv4/opencv2/core/ovx.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/endian.h:
 
@@ -8399,9 +8950,13 @@ LeafSense_autogen/2PYRYNOOPV/moc_sensors_display.cpp:
 
 /usr/include/c++/11/tr1/riemann_zeta.tcc:
 
+/usr/include/opencv4/opencv2/core/optim.hpp:
+
 /usr/include/c++/11/bits/random.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/QPixmap:
+
+/usr/include/opencv4/opencv2/stitching/detail/warpers_inl.hpp:
 
 ../src/application/gui/leafsense_data_bridge.cpp:
 
@@ -8419,6 +8974,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_sensors_display.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h:
 
+/usr/include/opencv4/opencv2/flann/result_set.h:
+
 /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h:
 
 ../include/application/gui/health_display.h:
@@ -8432,5 +8989,7 @@ LeafSense_autogen/2PYRYNOOPV/moc_sensors_display.cpp:
 /usr/include/x86_64-linux-gnu/qt5/QtCore/QFile:
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMessageBox:
+
+/usr/include/opencv4/opencv2/flann/general.h:
 
 ../src/application/gui/sensors_display.cpp:

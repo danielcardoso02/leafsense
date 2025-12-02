@@ -24,10 +24,15 @@
  * ============================================================================ */
 
 // Class names must match the order from training (alphabetical order)
+// PyTorch ImageFolder sorts folders alphabetically:
+//   0: deficiency -> Nutrient Deficiency
+//   1: disease    -> Disease
+//   2: healthy    -> Healthy
+//   3: pest       -> Pest Damage
 const std::vector<std::string> ML::CLASS_NAMES = {
+    "Nutrient Deficiency",
     "Disease",
     "Healthy",
-    "Nutrient Deficiency",
     "Pest Damage"
 };
 
