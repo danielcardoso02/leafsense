@@ -170,7 +170,7 @@ static int __init ledModule_init(void)
 	}
 
 	// Create device class
-	if (IS_ERR(ledDevice_class = class_create(THIS_MODULE, CLASS_NAME))) {
+	if (IS_ERR(ledDevice_class = class_create(CLASS_NAME))) {
 		unregister_chrdev_region(ledDevice_majorminor, 1);
 		return PTR_ERR(ledDevice_class);
 	}

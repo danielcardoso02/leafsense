@@ -6,7 +6,7 @@
  * storage and correction timing control.
  */
 
-#include "../include/drivers/sensors/Sensor.h"
+#include "../../include/drivers/sensors/Sensor.h"
 
 /* ============================================================================
  * Construction / Destruction
@@ -29,7 +29,7 @@ Sensor::~Sensor()
 /**
  * @brief Gets the last read sensor value
  */
-float Sensor::getValue() 
+float Sensor::readSensor()
 {
     return realValue;
 }
