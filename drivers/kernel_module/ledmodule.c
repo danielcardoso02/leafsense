@@ -195,9 +195,9 @@ static int __init ledModule_init(void)
 	}
 
 	// Map GPIO registers to virtual memory
-	s_pGpioRegisters = (struct GpioRegisters *)ioremap_nocache(GPIO_BASE, sizeof(struct GpioRegisters));
+	s_pGpioRegisters = (struct GpioRegisters *)ioremap(GPIO_BASE, sizeof(struct GpioRegisters));
 	
-	pr_alert("map to virtual adresse: 0x%x\n", (unsigned)s_pGpioRegisters);
+	pr_alert("map to virtual address: 0x%px\n", s_pGpioRegisters);
 	
 	// Configure LED pin as output
 	SetGPIOFunction(s_pGpioRegisters, LedGpioPin, 0b001);

@@ -1,0 +1,93 @@
+# Build directories
+build/
+build-arm/
+cmake-build-*/
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Compiled objects
+*.o
+*.ko
+*.obj
+*.elf
+*.mod
+*.mod.c
+*.order
+*.symvers
+.tmp_versions/
+
+# Libraries
+*.a
+*.so
+*.so.*
+*.dylib
+
+# Executables
+LeafSense
+*.exe
+*.out
+*.app
+
+# Temporary files
+*.tmp
+*.temp
+*~
+*.swp
+*.swo
+*.bak
+*.orig
+
+# Logs
+*.log
+
+# Database files (local)
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+*.egg
+
+# ML Dataset (too large for git)
+ml/dataset_4class/
+ml/dataset*/
+
+# ONNX Runtime (download separately)
+external/onnxruntime-arm64/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*.directory
+
+# Qt generated
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+*_autogen/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# Kernel module build artifacts
+*.mod
+*.mod.c
+.*.cmd
+modules.order
+Module.symvers
