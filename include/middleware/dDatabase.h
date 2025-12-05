@@ -1,6 +1,7 @@
 /**
  * @file dDatabase.h
  * @brief Database Daemon Worker Thread
+ * @author Daniel Cardoso, Marco Costa
  * @layer Middleware / Daemon Package
  */
 

@@ -1,6 +1,7 @@
 /**
  * @file Master.h
  * @brief Main Control System Orchestrator
+ * @author Daniel Cardoso, Marco Costa
  * @layer Middleware
  * 
  * Implements the multi-threaded control system architecture.

@@ -1,5 +1,6 @@
 /**
  * @file sensors_display.h
+ * @author Daniel Cardoso, Marco Costa
  * @brief Sensor Data Display Widget for LeafSense Dashboard
  * @layer Application/GUI
  * 

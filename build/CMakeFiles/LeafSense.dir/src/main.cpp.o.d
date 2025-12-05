@@ -340,6 +340,8 @@ CMakeFiles/LeafSense.dir/src/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/qtextformat.h \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/qpen.h \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/qtextoption.h \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/QEvent \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreevent.h \
  /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/../include/application/gui/theme/theme_manager.h \
  /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/../include/middleware/dDatabase.h \
  /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/../include/middleware/MQueueHandler.h \

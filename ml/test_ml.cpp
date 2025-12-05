@@ -1,6 +1,7 @@
 /**
  * @file test_ml.cpp
  * @brief Simple test for ML inference
+ * @author Daniel Cardoso, Marco Costa
  */
 
 #include <iostream>

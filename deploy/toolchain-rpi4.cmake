@@ -7,7 +7,7 @@ set(CMAKE_SYSTEM_PROCESSOR aarch64)
 # Buildroot toolchain path
 set(BUILDROOT_PATH "$ENV{HOME}/buildroot/buildroot-2025.08")
 set(TOOLCHAIN_PATH "${BUILDROOT_PATH}/output/host")
-set(SYSROOT_PATH "${BUILDROOT_PATH}/output/staging")
+set(SYSROOT_PATH "${BUILDROOT_PATH}/output/host/aarch64-buildroot-linux-gnu/sysroot")
 
 # Cross compiler
 set(CMAKE_C_COMPILER "${TOOLCHAIN_PATH}/bin/aarch64-linux-gcc")

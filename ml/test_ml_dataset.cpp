@@ -1,6 +1,7 @@
 /**
  * @file test_ml_dataset.cpp
  * @brief Test ML with dataset images
+ * @author Daniel Cardoso, Marco Costa
  */
 
 #include <iostream>

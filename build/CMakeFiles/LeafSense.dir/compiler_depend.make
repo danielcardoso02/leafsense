@@ -445,6 +445,8 @@ CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o: LeafSense_aut
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlineedit.h \
   /usr/include/x86_64-linux-gnu/qt5/QtGui/qtextcursor.h \
   /usr/include/x86_64-linux-gnu/qt5/QtGui/qtextformat.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QEvent \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreevent.h \
   LeafSense_autogen/2PYRYNOOPV/moc_logs_window.cpp \
   ../include/application/gui/logs_window.h \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QScrollArea \
@@ -2698,6 +2700,8 @@ CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o: ../src/applicat
   /usr/include/x86_64-linux-gnu/qt5/QtGui/qicon.h \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QEvent \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreevent.h \
   ../include/application/gui/theme/theme_manager.h \
   /usr/include/x86_64-linux-gnu/qt5/QtCore/QString \
   /usr/include/x86_64-linux-gnu/qt5/QtCore/qstring.h \
@@ -3126,7 +3130,19 @@ CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o: ../src/applicati
   /usr/include/x86_64-linux-gnu/qt5/QtGui/QTransform \
   /usr/include/x86_64-linux-gnu/qt5/QtGui/qtransform.h \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QFrame \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QScroller \
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qscroller.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QPointF \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qpoint.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QScrollerProperties \
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qscrollerproperties.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QScopedPointer \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qscopedpointer.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QMetaType \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qmetatype.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QVariant \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qvariant.h
 
 CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o: ../src/application/gui/mainwindow.cpp \
   /usr/include/stdc-predef.h \
@@ -4306,22 +4322,10 @@ CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o: ../src/appli
   /usr/include/c++/11/variant \
   /usr/include/x86_64-linux-gnu/qt5/QtCore/qlocale.h \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QDoubleSpinBox \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QComboBox \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qcombobox.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractitemdelegate.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyleoption.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtGui/qicon.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qslider.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractslider.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyle.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabbar.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabwidget.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qrubberband.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtCore/qabstractitemmodel.h \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QCheckBox \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qcheckbox.h \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractbutton.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtGui/qicon.h \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h \
   ../include/application/gui/theme/theme_manager.h \
@@ -4340,6 +4344,7 @@ CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o: ../src/appli
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QHBoxLayout \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QGroupBox \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qgroupbox.h \
   /usr/include/x86_64-linux-gnu/qt5/QtGui/QFont \
@@ -4371,7 +4376,19 @@ CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o: ../src/appli
   /usr/include/x86_64-linux-gnu/qt5/QtGui/qtransform.h \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QScrollArea \
   /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qscrollarea.h \
-  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractscrollarea.h
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractscrollarea.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QScroller \
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qscroller.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QPointF \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qpoint.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QScrollerProperties \
+  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qscrollerproperties.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QScopedPointer \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qscopedpointer.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QMetaType \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qmetatype.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QVariant \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qvariant.h
 
 CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o: ../src/application/gui/theme/theme_manager.cpp \
   /usr/include/stdc-predef.h \
@@ -6685,6 +6702,8 @@ CMakeFiles/LeafSense.dir/src/main.cpp.o: ../src/main.cpp \
   /usr/include/x86_64-linux-gnu/qt5/QtGui/qtextformat.h \
   /usr/include/x86_64-linux-gnu/qt5/QtGui/qpen.h \
   /usr/include/x86_64-linux-gnu/qt5/QtGui/qtextoption.h \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QEvent \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreevent.h \
   ../include/application/gui/theme/theme_manager.h \
   ../include/middleware/dDatabase.h \
   ../include/middleware/MQueueHandler.h \
@@ -7564,8 +7583,6 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 
 ../include/drivers/actuators/Pumps.h:
 
-../src/drivers/actuators/Pumps.cpp:
-
 ../src/drivers/actuators/Heater.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
@@ -7639,8 +7656,6 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h:
 
 /usr/include/c++/11/bits/locale_facets_nonio.h:
-
-/usr/include/c++/11/locale:
 
 /usr/include/c++/11/iomanip:
 
@@ -7744,6 +7759,18 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QGroupBox:
 
+../src/application/gui/settings_window.cpp:
+
+/usr/include/opencv4/opencv2/flann/general.h:
+
+../src/application/gui/sensors_display.cpp:
+
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStyle:
+
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMessageBox:
+
+/usr/include/x86_64-linux-gnu/qt5/QtCore/QScopedPointer:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qstringalgorithms.h:
 
 /usr/include/c++/11/utility:
@@ -7769,8 +7796,6 @@ CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbMan
 ../include/drivers/sensors/Temp.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
-
-../src/application/gui/settings_window.cpp:
 
 /usr/include/opencv4/opencv2/flann/ground_truth.h:
 
@@ -7852,6 +7877,8 @@ LeafSense_autogen/mocs_compilation.cpp:
 
 /usr/include/c++/11/bits/ptr_traits.h:
 
+/usr/include/x86_64-linux-gnu/qt5/QtCore/QPointF:
+
 /usr/include/x86_64-linux-gnu/bits/environments.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h:
@@ -7883,6 +7910,8 @@ LeafSense_autogen/mocs_compilation.cpp:
 ../include/application/gui/theme/theme_manager.h:
 
 /usr/include/c++/11/pstl/execution_defs.h:
+
+/usr/include/x86_64-linux-gnu/qt5/QtCore/QMetaType:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qiodevice.h:
 
@@ -8082,6 +8111,10 @@ LeafSense_autogen/2PYRYNOOPV/moc_info_window.cpp:
 
 /usr/include/x86_64-linux-gnu/asm/errno.h:
 
+../src/drivers/actuators/Pumps.cpp:
+
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QScrollerProperties:
+
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 
 /usr/include/opencv4/opencv2/core/affine.hpp:
@@ -8189,8 +8222,6 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 /usr/include/c++/11/array:
 
 /usr/include/c++/11/tr1/beta_function.tcc:
-
-/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStyle:
 
 /usr/include/c++/11/streambuf:
 
@@ -8426,6 +8457,12 @@ LeafSense_autogen/2PYRYNOOPV/moc_alerts_display.cpp:
 
 /usr/include/wctype.h:
 
+/usr/include/c++/11/set:
+
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmessagebox.h:
+
+/usr/include/x86_64-linux-gnu/gnu/stubs.h:
+
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qheaderview.h:
 
 /usr/include/opencv4/opencv2/imgproc.hpp:
@@ -8578,6 +8615,10 @@ LeafSense_autogen/2PYRYNOOPV/moc_health_display.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qpainter.h:
 
+/usr/include/c++/11/locale:
+
+/usr/include/x86_64-linux-gnu/qt5/QtCore/QEvent:
+
 /usr/include/opencv4/opencv2/calib3d.hpp:
 
 /usr/include/c++/11/bits/parse_numbers.h:
@@ -8712,6 +8753,8 @@ LeafSense_autogen/2PYRYNOOPV/moc_settings_window.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qlocale.h:
 
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qscroller.h:
+
 /usr/include/x86_64-linux-gnu/qt5/QtCore/QtGlobal:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h:
@@ -8783,12 +8826,6 @@ LeafSense_autogen/2PYRYNOOPV/moc_logs_window.cpp:
 /usr/include/c++/11/bits/stl_algobase.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/QBrush:
-
-/usr/include/c++/11/set:
-
-/usr/include/x86_64-linux-gnu/gnu/stubs.h:
-
-/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmessagebox.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qpair.h:
 
@@ -8988,8 +9025,6 @@ LeafSense_autogen/2PYRYNOOPV/moc_sensors_display.cpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/QFile:
 
-/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMessageBox:
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QScroller:
 
-/usr/include/opencv4/opencv2/flann/general.h:
-
-../src/application/gui/sensors_display.cpp:
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qscrollerproperties.h:

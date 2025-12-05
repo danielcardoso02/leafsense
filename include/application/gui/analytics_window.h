@@ -1,5 +1,6 @@
 /**
  * @file analytics_window.h
+ * @author Daniel Cardoso, Marco Costa
  * @brief Historical Data Analytics Window for LeafSense
  * @layer Application/GUI
  * 

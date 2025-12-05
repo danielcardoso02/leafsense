@@ -1,6 +1,7 @@
 /**
  * @file IdealConditions.h
  * @brief Ideal Sensor Value Range Storage
+ * @author Daniel Cardoso, Marco Costa
  * @layer Middleware
  * 
  * Stores and provides access to the ideal ranges for all monitored

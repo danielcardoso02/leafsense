@@ -23,6 +23,12 @@ InfoWindow::InfoWindow(const QString &username, const QString &login_time, QWidg
     , username(username)
     , login_time(login_time)
 {
+     /**
+      * @brief Constructs the info window dialog.
+      * @param username Username string
+      * @param login_time Login time string
+      * @param parent Parent widget (optional)
+      */
     setWindowTitle("System Information");
     setFixedSize(480, 320);
     setModal(true);
@@ -33,12 +39,20 @@ InfoWindow::InfoWindow(const QString &username, const QString &login_time, QWidg
     apply_theme();
 }
 
+/**
+ * @brief Destructor for InfoWindow.
+ * @author Daniel Cardoso, Marco Costa
+ */
 InfoWindow::~InfoWindow() {}
 
 /* ============================================================================
  * UI Setup
  * ============================================================================ */
 
+/**
+ * @brief Sets up the user interface components and layout for info window.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void InfoWindow::setup_ui()
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -122,6 +136,10 @@ void InfoWindow::setup_ui()
  * Theme Application
  * ============================================================================ */
 
+/**
+ * @brief Applies the current theme to the info window.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void InfoWindow::apply_theme() 
 {
     // Handled by ThemeManager global stylesheet

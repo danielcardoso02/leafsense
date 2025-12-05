@@ -72,401 +72,402 @@ include CMakeFiles/LeafSense.dir/flags.make
 LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/resources.qrc
 LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp: CMakeFiles/LeafSense_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json
 LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/images/logo_leafsense.png
+LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/images/logo_leafsense_dark.png
 LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp: /usr/lib/qt5/bin/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic RCC for resources/resources.qrc"
-	/usr/bin/cmake -E cmake_autorcc /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/LeafSense_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json Debug
+	/usr/bin/cmake -E cmake_autorcc /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/LeafSense_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json 
 
 CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o: LeafSense_autogen/mocs_compilation.cpp
 CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o -MF CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/mocs_compilation.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o -MF CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/mocs_compilation.cpp
 
 CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/mocs_compilation.cpp > CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/mocs_compilation.cpp > CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.i
 
 CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/mocs_compilation.cpp -o CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/mocs_compilation.cpp -o CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.s
 
 CMakeFiles/LeafSense.dir/src/main.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/main.cpp.o: ../src/main.cpp
 CMakeFiles/LeafSense.dir/src/main.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/LeafSense.dir/src/main.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/main.cpp.o -MF CMakeFiles/LeafSense.dir/src/main.cpp.o.d -o CMakeFiles/LeafSense.dir/src/main.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/main.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/main.cpp.o -MF CMakeFiles/LeafSense.dir/src/main.cpp.o.d -o CMakeFiles/LeafSense.dir/src/main.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/main.cpp
 
 CMakeFiles/LeafSense.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/main.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/main.cpp > CMakeFiles/LeafSense.dir/src/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/main.cpp > CMakeFiles/LeafSense.dir/src/main.cpp.i
 
 CMakeFiles/LeafSense.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/main.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/main.cpp -o CMakeFiles/LeafSense.dir/src/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/main.cpp -o CMakeFiles/LeafSense.dir/src/main.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o: ../src/application/gui/login_dialog.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/login_dialog.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/login_dialog.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/login_dialog.cpp > CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/login_dialog.cpp > CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/login_dialog.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/login_dialog.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/login_dialog.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o: ../src/application/gui/mainwindow.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/mainwindow.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/mainwindow.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/mainwindow.cpp > CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/mainwindow.cpp > CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/mainwindow.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/mainwindow.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/mainwindow.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o: ../src/application/gui/sensors_display.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/sensors_display.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/sensors_display.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/sensors_display.cpp > CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/sensors_display.cpp > CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/sensors_display.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/sensors_display.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/sensors_display.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o: ../src/application/gui/health_display.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/health_display.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/health_display.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/health_display.cpp > CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/health_display.cpp > CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/health_display.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/health_display.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/health_display.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o: ../src/application/gui/alerts_display.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/alerts_display.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/alerts_display.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/alerts_display.cpp > CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/alerts_display.cpp > CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/alerts_display.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/alerts_display.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/alerts_display.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o: ../src/application/gui/leafsense_data_bridge.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/leafsense_data_bridge.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/leafsense_data_bridge.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/leafsense_data_bridge.cpp > CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/leafsense_data_bridge.cpp > CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/leafsense_data_bridge.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/leafsense_data_bridge.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/leafsense_data_bridge.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o: ../src/application/gui/settings_window.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/settings_window.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/settings_window.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/settings_window.cpp > CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/settings_window.cpp > CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/settings_window.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/settings_window.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/settings_window.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o: ../src/application/gui/info_window.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/info_window.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/info_window.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/info_window.cpp > CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/info_window.cpp > CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/info_window.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/info_window.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/info_window.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o: ../src/application/gui/logs_window.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/logs_window.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/logs_window.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/logs_window.cpp > CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/logs_window.cpp > CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/logs_window.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/logs_window.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/logs_window.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o: ../src/application/gui/analytics_window.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/analytics_window.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/analytics_window.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/analytics_window.cpp > CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/analytics_window.cpp > CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/analytics_window.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/analytics_window.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/analytics_window.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o: ../src/application/gui/theme/theme_manager.cpp
 CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/theme/theme_manager.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/theme/theme_manager.cpp
 
 CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/theme/theme_manager.cpp > CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/theme/theme_manager.cpp > CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/theme/theme_manager.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/gui/theme/theme_manager.cpp -o CMakeFiles/LeafSense.dir/src/application/gui/theme/theme_manager.cpp.s
 
 CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o: ../src/middleware/Master.cpp
 CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/Master.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/Master.cpp
 
 CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/Master.cpp > CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/Master.cpp > CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.i
 
 CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/Master.cpp -o CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/Master.cpp -o CMakeFiles/LeafSense.dir/src/middleware/Master.cpp.s
 
 CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o: ../src/middleware/dDatabase.cpp
 CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dDatabase.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dDatabase.cpp
 
 CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dDatabase.cpp > CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dDatabase.cpp > CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.i
 
 CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dDatabase.cpp -o CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dDatabase.cpp -o CMakeFiles/LeafSense.dir/src/middleware/dDatabase.cpp.s
 
 CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: ../src/middleware/dbManager.cpp
 CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dbManager.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dbManager.cpp
 
 CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dbManager.cpp > CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dbManager.cpp > CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.i
 
 CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dbManager.cpp -o CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/dbManager.cpp -o CMakeFiles/LeafSense.dir/src/middleware/dbManager.cpp.s
 
 CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o: ../src/middleware/MQueueHandler.cpp
 CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/MQueueHandler.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/MQueueHandler.cpp
 
 CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/MQueueHandler.cpp > CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/MQueueHandler.cpp > CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.i
 
 CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/MQueueHandler.cpp -o CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/MQueueHandler.cpp -o CMakeFiles/LeafSense.dir/src/middleware/MQueueHandler.cpp.s
 
 CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o: ../src/middleware/IdealConditions.cpp
 CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/IdealConditions.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o -MF CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o.d -o CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/IdealConditions.cpp
 
 CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/IdealConditions.cpp > CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/IdealConditions.cpp > CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.i
 
 CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/IdealConditions.cpp -o CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/middleware/IdealConditions.cpp -o CMakeFiles/LeafSense.dir/src/middleware/IdealConditions.cpp.s
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o: ../src/drivers/sensors/Temp.cpp
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Temp.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Temp.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Temp.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Temp.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.i
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Temp.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Temp.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/Temp.cpp.s
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o: ../src/drivers/sensors/PH.cpp
 CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/PH.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/PH.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/PH.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/PH.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.i
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/PH.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/PH.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/PH.cpp.s
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o: ../src/drivers/sensors/TDS.cpp
 CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/TDS.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/TDS.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/TDS.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/TDS.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.i
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/TDS.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/TDS.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/TDS.cpp.s
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o: ../src/drivers/sensors/ADC.cpp
 CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/ADC.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/ADC.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/ADC.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/ADC.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.i
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/ADC.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/ADC.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/ADC.cpp.s
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o: ../src/drivers/sensors/Cam.cpp
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Cam.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Cam.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Cam.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Cam.cpp > CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.i
 
 CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Cam.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/sensors/Cam.cpp -o CMakeFiles/LeafSense.dir/src/drivers/sensors/Cam.cpp.s
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o: ../src/drivers/actuators/AlertLed.cpp
 CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/AlertLed.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/AlertLed.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/AlertLed.cpp > CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/AlertLed.cpp > CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.i
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/AlertLed.cpp -o CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/AlertLed.cpp -o CMakeFiles/LeafSense.dir/src/drivers/actuators/AlertLed.cpp.s
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o: ../src/drivers/actuators/Pumps.cpp
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Pumps.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Pumps.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Pumps.cpp > CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Pumps.cpp > CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.i
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Pumps.cpp -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Pumps.cpp -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Pumps.cpp.s
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o: ../src/drivers/actuators/Heater.cpp
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Heater.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o -MF CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o.d -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Heater.cpp
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Heater.cpp > CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Heater.cpp > CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.i
 
 CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Heater.cpp -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/drivers/actuators/Heater.cpp -o CMakeFiles/LeafSense.dir/src/drivers/actuators/Heater.cpp.s
 
 CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o: ../src/application/ml/ML.cpp
 CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/ml/ML.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o -MF CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o.d -o CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/ml/ML.cpp
 
 CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/ml/ML.cpp > CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/ml/ML.cpp > CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.i
 
 CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/ml/ML.cpp -o CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src/application/ml/ML.cpp -o CMakeFiles/LeafSense.dir/src/application/ml/ML.cpp.s
 
 CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o: CMakeFiles/LeafSense.dir/flags.make
 CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o: LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp
 CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o: CMakeFiles/LeafSense.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o -MF CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o.d -o CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o -MF CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o.d -o CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.o -c /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp
 
 CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp > CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp > CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.i
 
 CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp -o CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp -o CMakeFiles/LeafSense.dir/LeafSense_autogen/3YJK5W5UP7/qrc_resources.cpp.s
 
 # Object files for target LeafSense
 LeafSense_OBJECTS = \

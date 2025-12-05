@@ -1,5 +1,6 @@
 /**
  * @file sensors_display.cpp
+ * @author Daniel Cardoso, Marco Costa
  * @brief Implementation of the Sensor Data Display Widget
  * @layer Application/GUI
  */
@@ -25,6 +26,10 @@
 SensorsDisplay::SensorsDisplay(QWidget *parent)
     : QWidget(parent)
 {
+     /**
+      * @brief Constructs the sensors display widget.
+      * @param parent Parent widget (optional)
+      */
     setup_ui();
     apply_theme();
 }
@@ -33,6 +38,9 @@ SensorsDisplay::SensorsDisplay(QWidget *parent)
  * UI Setup
  * ============================================================================ */
 
+/**
+ * @brief Sets up the user interface components and layout for sensors display.
+ */
 void SensorsDisplay::setup_ui()
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -92,6 +100,10 @@ void SensorsDisplay::setup_ui()
  * Theme Application
  * ============================================================================ */
 
+/**
+ * @brief Applies current theme colors to widget.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void SensorsDisplay::apply_theme()
 {
     ThemeManager &tm = ThemeManager::instance();
@@ -117,6 +129,13 @@ void SensorsDisplay::apply_theme()
  * Value Update
  * ============================================================================ */
 
+/**
+ * @brief Update displayed sensor values.
+ * @param ph pH value
+ * @param temperature Temperature value (°C)
+ * @param ec Electrical conductivity (ppm)
+ * @author Daniel Cardoso, Marco Costa
+ */
 void SensorsDisplay::update_values(double ph, double temperature, double ec)
 {
     qDebug() << "[SensorsDisplay] update_values called: pH=" << ph 

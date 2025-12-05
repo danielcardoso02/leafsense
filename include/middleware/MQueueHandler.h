@@ -1,6 +1,7 @@
 /**
  * @file MQueueHandler.h
  * @brief Thread-safe Message Queue for Inter-Process/Thread Communication
+ * @author Daniel Cardoso, Marco Costa
  * @layer Middleware
  */
 

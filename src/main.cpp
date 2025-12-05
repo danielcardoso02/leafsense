@@ -8,7 +8,7 @@
  * - Master controller for sensor/actuator management
  * - Qt GUI with login and main window
  * 
- * @author LeafSense Team
+ * @author Daniel Cardoso, Marco Costa
  * @version 1.0
  */
 
@@ -87,6 +87,9 @@ void performCleanup()
  */
 int main(int argc, char *argv[]) 
 {
+    // Enable Qt Virtual Keyboard for touchscreen input
+    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+    
     QApplication app(argc, argv);
     app.setApplicationName("LeafSense");
 

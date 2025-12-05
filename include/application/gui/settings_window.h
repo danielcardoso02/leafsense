@@ -1,8 +1,9 @@
 /**
  * @file settings_window.h
  * @brief Application Settings Dialog
+ * @author Daniel Cardoso, Marco Costa
  * @layer Application/GUI
- * 
+ *
  * Modal dialog for configuring sensor parameters, display options, and theme.
  */
 
@@ -15,7 +16,6 @@
 #include <QDialog>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
-#include <QComboBox>
 #include <QCheckBox>
 #include <QPushButton>
 
@@ -50,14 +50,14 @@ public:
      * ------------------------------------------------------------------------ */
     
     /**
-     * @brief Gets the current sensor parameter settings
-     * @return SensorParameters struct with all values
+     * @brief Gets the current sensor parameter settings from the UI.
+     * @return SensorParameters struct with all values.
      */
     SensorParameters get_sensor_parameters() const;
-    
+
     /**
-     * @brief Sets the sensor parameter UI values
-     * @param params Values to populate in the UI
+     * @brief Sets the sensor parameter UI values.
+     * @param params Values to populate in the UI.
      */
     void set_sensor_parameters(const SensorParameters &params);
 
@@ -72,9 +72,20 @@ private:
     /* ------------------------------------------------------------------------
      * Private Methods
      * ------------------------------------------------------------------------ */
-    void setup_ui();      ///< Creates UI components
-    void apply_theme();   ///< Applies current theme
-    void load_settings(); ///< Loads current settings into UI
+    /**
+     * @brief Creates UI components and layouts for the settings dialog.
+     */
+    void setup_ui();
+
+    /**
+     * @brief Applies the current theme to the dialog.
+     */
+    void apply_theme();
+
+    /**
+     * @brief Loads current settings into the UI widgets.
+     */
+    void load_settings();
 
     /* ------------------------------------------------------------------------
      * UI Components - Sensor Parameters
@@ -92,7 +103,8 @@ private:
     /* ------------------------------------------------------------------------
      * UI Components - Display Options
      * ------------------------------------------------------------------------ */
-    QComboBox *theme_selector;         ///< Light/Dark theme dropdown
+    QPushButton *theme_light_btn;      ///< Light theme button
+    QPushButton *theme_dark_btn;       ///< Dark theme button
     QCheckBox *notifications_enabled;  ///< Enable/disable notifications
 
     /* ------------------------------------------------------------------------

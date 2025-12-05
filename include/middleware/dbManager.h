@@ -1,6 +1,7 @@
 /**
  * @file dbManager.h
  * @brief Database Management Class for SQLite interactions
+ * @author Daniel Cardoso, Marco Costa
  * @layer Middleware
  */
 

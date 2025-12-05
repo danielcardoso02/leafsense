@@ -33,6 +33,12 @@
  * Constructor / Destructor
  * ============================================================================ */
 
+/**
+ * @brief Constructs the AnalyticsWindow dialog.
+ * @param bridge Pointer to the data bridge for database access.
+ * @param parent Parent widget.
+ * @author Daniel Cardoso, Marco Costa
+ */
 AnalyticsWindow::AnalyticsWindow(LeafSenseDataBridge *bridge, QWidget *parent)
     : QDialog(parent)
     , data_bridge(bridge)
@@ -58,12 +64,20 @@ AnalyticsWindow::AnalyticsWindow(LeafSenseDataBridge *bridge, QWidget *parent)
     update_gallery_display();
 }
 
+/**
+ * @brief Destructor for AnalyticsWindow.
+ * @author Daniel Cardoso, Marco Costa
+ */
 AnalyticsWindow::~AnalyticsWindow() {}
 
 /* ============================================================================
  * UI Setup
  * ============================================================================ */
 
+/**
+ * @brief Sets up the UI components for the analytics window.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::setup_ui()
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -188,6 +202,10 @@ void AnalyticsWindow::setup_ui()
  * Theme Application
  * ============================================================================ */
 
+/**
+ * @brief Applies the current theme to the analytics window.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::apply_theme()
 {
     ThemeManager &tm = ThemeManager::instance();
@@ -209,6 +227,10 @@ void AnalyticsWindow::apply_theme()
  * Event Handlers
  * ============================================================================ */
 
+/**
+ * @brief Handles Close button click.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::on_close_clicked()
 {
     accept();
@@ -218,6 +240,10 @@ void AnalyticsWindow::on_close_clicked()
  * Sensor Data Loading
  * ============================================================================ */
 
+/**
+ * @brief Loads sensor data from the database and populates the table model.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::load_sensor_data()
 {
     mock_model->clear();
@@ -247,6 +273,10 @@ void AnalyticsWindow::load_sensor_data()
     }
 }
 
+/**
+ * @brief Refreshes sensor data and updates the chart.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::refresh_data()
 {
     load_sensor_data();
@@ -258,11 +288,21 @@ void AnalyticsWindow::refresh_data()
  * Chart Rendering
  * ============================================================================ */
 
+/**
+ * @brief Handles metric selection change for chart display.
+ * @param index Index of the selected metric.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::on_metric_changed(int index)
 {
     update_chart_series(metric_selector->itemData(index).toInt());
 }
 
+/**
+ * @brief Updates the chart series based on the selected metric column.
+ * @param column_index Index of the metric column.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::update_chart_series(int column_index)
 {
     // Clear existing chart data
@@ -442,6 +482,10 @@ void AnalyticsWindow::update_chart_series(int column_index)
  * Gallery - Data Loading
  * ============================================================================ */
 
+/**
+ * @brief Loads gallery image data (currently mock data).
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::load_gallery_data()
 {
     gallery_items.clear();
@@ -473,6 +517,10 @@ void AnalyticsWindow::load_gallery_data()
  * Gallery - Display Update
  * ============================================================================ */
 
+/**
+ * @brief Updates the gallery display with the current image and info.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::update_gallery_display()
 {
     if (gallery_items.empty()) return;
@@ -536,6 +584,10 @@ void AnalyticsWindow::update_gallery_display()
  * Gallery - Navigation
  * ============================================================================ */
 
+/**
+ * @brief Handles previous image navigation in gallery.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::on_gallery_prev()
 {
     if (current_img_index > 0) {
@@ -544,6 +596,10 @@ void AnalyticsWindow::on_gallery_prev()
     }
 }
 
+/**
+ * @brief Handles next image navigation in gallery.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::on_gallery_next()
 {
     if (current_img_index < gallery_items.size() - 1) {
@@ -552,6 +608,10 @@ void AnalyticsWindow::on_gallery_next()
     }
 }
 
+/**
+ * @brief Handles verification of the current gallery item.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AnalyticsWindow::on_verify_clicked()
 {
     // Mark current item as verified

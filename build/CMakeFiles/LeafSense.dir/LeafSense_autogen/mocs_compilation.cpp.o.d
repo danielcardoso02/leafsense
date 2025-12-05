@@ -394,6 +394,8 @@ CMakeFiles/LeafSense.dir/LeafSense_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlineedit.h \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/qtextcursor.h \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/qtextformat.h \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/QEvent \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreevent.h \
  /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/2PYRYNOOPV/moc_logs_window.cpp \
  /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/2PYRYNOOPV/../../../include/application/gui/logs_window.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QScrollArea \

@@ -1,6 +1,7 @@
 /**
  * @file mainwindow.cpp
  * @brief Implementation of the Main Application Window
+ * @author Daniel Cardoso, Marco Costa
  * @layer Application/GUI
  */
 
@@ -45,6 +46,10 @@ MainWindow::MainWindow(QWidget *parent)
     , logged_in_user("Unknown")
     , login_time("")
 {
+     /**
+      * @brief Constructs the main application window.
+      * @param parent Parent widget (optional)
+      */
     // Window configuration (480x320 for Raspberry Pi touchscreen)
     setFixedSize(480, 320);
     setWindowTitle("LeafSense - Hydroponic Monitoring");
@@ -74,6 +79,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    /**
+     * @brief Destructor for MainWindow. Cleans up resources.
+     */
     if (data_bridge) {
         delete data_bridge;
     }
@@ -85,6 +93,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::setup_ui()
 {
+     /**
+      * @brief Sets up the user interface components and layout.
+      */
     QWidget *central = centralWidget();
     QVBoxLayout *main_layout = new QVBoxLayout(central);
     main_layout->setContentsMargins(10, 10, 10, 10);
@@ -187,6 +198,9 @@ void MainWindow::setup_ui()
 
 void MainWindow::setup_connections()
 {
+    /**
+     * @brief Connects signals from the data bridge to update slots.
+     */
     if (!data_bridge) return;
 
     // Connect data bridge signals to update slots
@@ -206,6 +220,9 @@ void MainWindow::setup_connections()
 
 void MainWindow::apply_theme_deferred()
 {
+     /**
+      * @brief Applies the theme after all widgets are initialized.
+      */
     setup_logo();
     apply_theme();
     refresh_child_widgets_theme();
@@ -213,6 +230,9 @@ void MainWindow::apply_theme_deferred()
 
 void MainWindow::apply_theme()
 {
+     /**
+      * @brief Applies the current theme to the main window and widgets.
+      */
     const ThemeColors &colors = theme_mgr.get_colors();
 
     // Apply global stylesheet
@@ -235,6 +255,9 @@ void MainWindow::apply_theme()
 
 void MainWindow::refresh_child_widgets_theme()
 {
+     /**
+      * @brief Refreshes the theme for all child widgets.
+      */
     if (sensors_display) sensors_display->apply_theme();
     if (health_display)  health_display->apply_theme();
     if (alerts_display)  alerts_display->apply_theme();
@@ -242,6 +265,9 @@ void MainWindow::refresh_child_widgets_theme()
 
 void MainWindow::reload_logo_for_theme()
 {
+     /**
+      * @brief Reloads the logo and reapplies the theme when it changes.
+      */
     setup_logo();
     apply_theme();
     refresh_child_widgets_theme();
@@ -256,6 +282,9 @@ void MainWindow::reload_logo_for_theme()
 
 void MainWindow::setup_logo()
 {
+     /**
+      * @brief Sets up the logo based on the current theme.
+      */
     ThemeManager &tm = ThemeManager::instance();
     
     // Select logo based on current theme
@@ -263,9 +292,12 @@ void MainWindow::setup_logo()
         ? "logo_leafsense.png" 
         : "logo_leafsense_dark.png";
     
-    QString logo_path = "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/LeafSenseUI/resources/images/" + logo_filename;
-    
+    // Try Qt resource first, then fall back to local path
+    QString logo_path = ":/images/images/" + logo_filename;
     QPixmap logo_pixmap(logo_path);
+    if (logo_pixmap.isNull()) {
+        logo_pixmap = QPixmap("./images/" + logo_filename);
+    }
     if (!logo_pixmap.isNull()) {
         logo_label->setPixmap(logo_pixmap.scaled(50, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
@@ -279,6 +311,10 @@ void MainWindow::setup_logo()
 
 void MainWindow::on_sensor_data_updated(const SensorData &data)
 {
+    /**
+     * @brief Slot to handle updated sensor data.
+     * @param data Latest sensor readings
+     */
     if (sensors_display) {
         sensors_display->update_values(data.ph, data.temperature, data.ec);
     }
@@ -286,6 +322,10 @@ void MainWindow::on_sensor_data_updated(const SensorData &data)
 
 void MainWindow::on_health_updated(const HealthAssessment &health)
 {
+    /**
+     * @brief Slot to handle updated health assessment.
+     * @param health Latest health assessment
+     */
     if (health_display) {
         QString status_str;
         switch (health.status) {
@@ -300,6 +340,10 @@ void MainWindow::on_health_updated(const HealthAssessment &health)
 
 void MainWindow::on_alert_received(const SystemAlert &alert)
 {
+     /**
+      * @brief Slot to handle received system alerts.
+      * @param alert Latest system alert
+      */
     // Update the alerts widget
     alerts_display->update_alerts();
 
@@ -333,6 +377,10 @@ void MainWindow::on_alert_received(const SystemAlert &alert)
 
 void MainWindow::on_time_updated(const QString &time)
 {
+     /**
+      * @brief Slot to handle updated time string.
+      * @param time Current UTC time string
+      */
     time_label->setText(time);
 }
 
@@ -342,17 +390,29 @@ void MainWindow::on_time_updated(const QString &time)
 
 void MainWindow::set_logged_in_user(const QString &user)
 {
+     /**
+      * @brief Sets the currently logged-in user and updates greeting.
+      * @param user Username string
+      */
     logged_in_user = user;
     greeting_label->setText("Hi, " + user);
 }
 
 void MainWindow::set_login_time(const QString &time)
 {
+     /**
+      * @brief Sets the login time for the current session.
+      * @param time Login time string
+      */
     login_time = time;
 }
 
 void MainWindow::set_selected_plant(const Plant &plant)
 {
+     /**
+      * @brief Sets the selected plant and updates the display.
+      * @param plant Plant struct with details
+      */
     current_plant = plant;
     plant_name_label->setText(plant.name);
 }
@@ -363,12 +423,18 @@ void MainWindow::set_selected_plant(const Plant &plant)
 
 void MainWindow::on_analytics_button_clicked()
 {
+     /**
+      * @brief Opens the analytics window dialog.
+      */
     AnalyticsWindow w(data_bridge, this);
     w.exec();
 }
 
 void MainWindow::on_settings_button_clicked()
 {
+    /**
+     * @brief Opens the settings window dialog and reloads theme if changed.
+     */
     SettingsWindow w(this);
     ThemeMode before = ThemeManager::instance().get_current_theme();
     
@@ -381,18 +447,27 @@ void MainWindow::on_settings_button_clicked()
 
 void MainWindow::on_info_button_clicked()
 {
+     /**
+      * @brief Opens the info window dialog.
+      */
     InfoWindow w(logged_in_user, login_time, this);
     w.exec();
 }
 
 void MainWindow::on_logs_button_clicked()
 {
+     /**
+      * @brief Opens the logs window dialog.
+      */
     LogsWindow w(current_plant.name, this);
     w.exec();
 }
 
 void MainWindow::on_logout_button_clicked()
 {
+     /**
+      * @brief Handles logout button click and shows confirmation dialog.
+      */
     // Create confirmation dialog
     QDialog d(this);
     d.setWindowTitle("Logout");

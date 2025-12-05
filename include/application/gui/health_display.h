@@ -1,5 +1,6 @@
 /**
  * @file health_display.h
+ * @author Daniel Cardoso, Marco Costa
  * @brief Plant Health Assessment Display Widget
  * @layer Application/GUI
  * 

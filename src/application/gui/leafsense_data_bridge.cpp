@@ -46,6 +46,10 @@ LeafSenseDataBridge::LeafSenseDataBridge(QObject *parent)
     dbReader = new dbManager(dbPath.toStdString());
 }
 
+/**
+ * @brief Destructor for LeafSenseDataBridge.
+ * @author Daniel Cardoso, Marco Costa
+ */
 LeafSenseDataBridge::~LeafSenseDataBridge()
 {
     if (update_timer) {
@@ -59,6 +63,11 @@ LeafSenseDataBridge::~LeafSenseDataBridge()
  * Initialization
  * ============================================================================ */
 
+/**
+ * @brief Initializes the data bridge and starts the update timer.
+ * @return True if initialization succeeds.
+ * @author Daniel Cardoso, Marco Costa
+ */
 bool LeafSenseDataBridge::initialize()
 {
     qDebug() << "[DataBridge] Initializing timer...";
@@ -80,6 +89,11 @@ bool LeafSenseDataBridge::initialize()
  * Real-Time Data Retrieval
  * ============================================================================ */
 
+/**
+ * @brief Retrieves the latest sensor data from the database.
+ * @return SensorData struct with latest readings.
+ * @author Daniel Cardoso, Marco Costa
+ */
 SensorData LeafSenseDataBridge::get_sensor_data()
 {
     SensorData data{0, 0, 0, "--:--", false};
@@ -116,6 +130,11 @@ SensorData LeafSenseDataBridge::get_sensor_data()
     return data;
 }
 
+/**
+ * @brief Retrieves the latest system alert from the database.
+ * @return SystemAlert struct with alert details.
+ * @author Daniel Cardoso, Marco Costa
+ */
 SystemAlert LeafSenseDataBridge::get_latest_alert()
 {
     SystemAlert alert{"System OK", "No active alerts", PlantHealthStatus::HEALTHY, ""};
@@ -138,6 +157,11 @@ SystemAlert LeafSenseDataBridge::get_latest_alert()
     return alert;
 }
 
+/**
+ * @brief Retrieves the latest health assessment (mock/ML).
+ * @return HealthAssessment struct.
+ * @author Daniel Cardoso, Marco Costa
+ */
 HealthAssessment LeafSenseDataBridge::get_health_assessment()
 {
     // TODO: Implement ML-based health assessment retrieval
@@ -149,6 +173,12 @@ HealthAssessment LeafSenseDataBridge::get_health_assessment()
  * Historical Data Retrieval (for Analytics)
  * ============================================================================ */
 
+/**
+ * @brief Retrieves historical sensor data for analytics.
+ * @param days Number of days to retrieve.
+ * @return QVector of DailySensorSummary structs.
+ * @author Daniel Cardoso, Marco Costa
+ */
 QVector<DailySensorSummary> LeafSenseDataBridge::get_sensor_history(int days)
 {
     QVector<DailySensorSummary> history;
@@ -213,6 +243,11 @@ QVector<DailySensorSummary> LeafSenseDataBridge::get_sensor_history(int days)
  * Utility Methods
  * ============================================================================ */
 
+/**
+ * @brief Gets the current UTC time as a string.
+ * @return Current time string.
+ * @author Daniel Cardoso, Marco Costa
+ */
 QString LeafSenseDataBridge::get_current_time()
 {
     return QDateTime::currentDateTimeUtc().toString("HH:mm:ss UTC");
@@ -222,6 +257,10 @@ QString LeafSenseDataBridge::get_current_time()
  * Timer Callback
  * ============================================================================ */
 
+/**
+ * @brief Timer callback to update and emit latest data to GUI.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LeafSenseDataBridge::update_data()
 {
     // Emit signals with latest data (connected widgets will update)

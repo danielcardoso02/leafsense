@@ -10,11 +10,18 @@
 #include <QApplication>
 #include <QScreen>
 #include <QFrame>
+#include <QScroller>
 
 /* ============================================================================
  * Constructor / Destructor
  * ============================================================================ */
 
+/**
+ * @brief Constructs the LogsWindow dialog.
+ * @param plant_name Name of the plant for which logs are displayed.
+ * @param parent Parent widget.
+ * @author Daniel Cardoso, Marco Costa
+ */
 LogsWindow::LogsWindow(const QString &plant_name, QWidget *parent)
     : QDialog(parent)
     , plant_name(plant_name)
@@ -31,12 +38,20 @@ LogsWindow::LogsWindow(const QString &plant_name, QWidget *parent)
     display_filtered_logs("Alert");
 }
 
+/**
+ * @brief Destructor for LogsWindow.
+ * @author Daniel Cardoso, Marco Costa
+ */
 LogsWindow::~LogsWindow() {}
 
 /* ============================================================================
  * UI Setup
  * ============================================================================ */
 
+/**
+ * @brief Sets up the UI components for the logs window.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LogsWindow::setup_ui()
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -89,6 +104,10 @@ void LogsWindow::setup_ui()
     logs_container->setLayout(logs_layout);
     
     logs_scroll_area->setWidget(logs_container);
+    
+    // Enable touch scrolling
+    QScroller::grabGesture(logs_scroll_area->viewport(), QScroller::TouchGesture);
+    
     main_layout->addWidget(logs_scroll_area, 1);
 
     /* ------------------------------------------------------------------------
@@ -110,6 +129,10 @@ void LogsWindow::setup_ui()
  * Theme Application
  * ============================================================================ */
 
+/**
+ * @brief Applies the current theme to the logs window.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LogsWindow::apply_theme() 
 {
     // Handled by ThemeManager global stylesheet
@@ -119,6 +142,10 @@ void LogsWindow::apply_theme()
  * Data Loading
  * ============================================================================ */
 
+/**
+ * @brief Loads log entries from the database (currently mock data).
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LogsWindow::load_logs()
 {
     all_logs.clear();
@@ -139,6 +166,11 @@ void LogsWindow::load_logs()
  * Log Display
  * ============================================================================ */
 
+/**
+ * @brief Displays logs filtered by type.
+ * @param filter_type Type of log to display (Alert, Disease, Deficiency, Maintenance).
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LogsWindow::display_filtered_logs(const QString &filter_type)
 {
     // Clear existing log entries
@@ -215,6 +247,10 @@ void LogsWindow::display_filtered_logs(const QString &filter_type)
  * Filter Button Handlers
  * ============================================================================ */
 
+/**
+ * @brief Handles Alerts filter button click.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LogsWindow::on_alerts_button_clicked() 
 {
     alerts_btn->setChecked(true);
@@ -224,6 +260,10 @@ void LogsWindow::on_alerts_button_clicked()
     display_filtered_logs("Alert");
 }
 
+/**
+ * @brief Handles Diseases filter button click.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LogsWindow::on_diseases_button_clicked() 
 {
     alerts_btn->setChecked(false);
@@ -233,6 +273,10 @@ void LogsWindow::on_diseases_button_clicked()
     display_filtered_logs("Disease");
 }
 
+/**
+ * @brief Handles Deficiencies filter button click.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LogsWindow::on_deficiencies_button_clicked() 
 {
     alerts_btn->setChecked(false);
@@ -242,6 +286,10 @@ void LogsWindow::on_deficiencies_button_clicked()
     display_filtered_logs("Deficiency");
 }
 
+/**
+ * @brief Handles Maintenance filter button click.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LogsWindow::on_maintenance_button_clicked() 
 {
     alerts_btn->setChecked(false);
@@ -251,6 +299,10 @@ void LogsWindow::on_maintenance_button_clicked()
     display_filtered_logs("Maintenance");
 }
 
+/**
+ * @brief Handles Close button click.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LogsWindow::on_cancel_button_clicked() 
 { 
     reject(); 

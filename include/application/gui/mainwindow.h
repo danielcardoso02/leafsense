@@ -1,5 +1,6 @@
 /**
  * @file mainwindow.h
+ * @author Daniel Cardoso, Marco Costa
  * @brief Main Application Window for LeafSense Hydroponic Monitoring System
  * @layer Application/GUI
  * 

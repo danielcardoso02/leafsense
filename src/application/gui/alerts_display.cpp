@@ -16,6 +16,10 @@
 AlertsDisplay::AlertsDisplay(QWidget *parent)
     : QWidget(parent)
 {
+     /**
+      * @brief Constructs the alerts display widget.
+      * @param parent Parent widget (optional)
+      */
     setup_ui();
     apply_theme();
 }
@@ -24,6 +28,9 @@ AlertsDisplay::AlertsDisplay(QWidget *parent)
  * UI Setup
  * ============================================================================ */
 
+/**
+ * @brief Creates and configures all UI components for alerts display.
+ */
 void AlertsDisplay::setup_ui()
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -71,6 +78,10 @@ void AlertsDisplay::setup_ui()
  * Theme Application
  * ============================================================================ */
 
+/**
+ * @brief Applies the current theme colors to all UI elements.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AlertsDisplay::apply_theme()
 {
     ThemeManager &tm = ThemeManager::instance();
@@ -92,6 +103,10 @@ void AlertsDisplay::apply_theme()
  * Alert Update
  * ============================================================================ */
 
+/**
+ * @brief Updates the alert display with current system status.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void AlertsDisplay::update_alerts()
 {
     alert_label->setText("System OK");

@@ -157,6 +157,10 @@ QString ThemeManager::get_stylesheet() const
     // KEY FIX: Hardcoded #4CAF50 for buttons to ensure absolute uniformity across all windows/modes.
 
     return QString(R"(
+        /* Global: Disable focus rectangles for touchscreen */
+        *:focus {
+            outline: none;
+        }
         QMainWindow, QDialog {
             background-color: %1;
         }
@@ -209,9 +213,17 @@ QString ThemeManager::get_stylesheet() const
             min-width: 140px; padding: 8px 0px; margin-right: 2px;
             border-top-left-radius: 4px; border-top-right-radius: 4px;
             text-align: center;
+            outline: none;
         }
         QTabBar::tab:selected {
             background: %3; font-weight: bold; border-bottom: 2px solid #4CAF50;
+            outline: none;
+        }
+        QTabBar::tab:focus {
+            outline: none;
+        }
+        QTabBar:focus {
+            outline: none;
         }
         QProgressBar {
             border: 1px solid %9;

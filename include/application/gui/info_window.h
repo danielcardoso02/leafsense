@@ -1,5 +1,6 @@
 /**
  * @file info_window.h
+ * @author Daniel Cardoso, Marco Costa
  * @brief System Information Dialog
  * @layer Application/GUI
  * 

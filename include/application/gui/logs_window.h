@@ -1,5 +1,6 @@
 /**
  * @file logs_window.h
+ * @author Daniel Cardoso, Marco Costa
  * @brief System Logs Viewer Dialog
  * @layer Application/GUI
  * 

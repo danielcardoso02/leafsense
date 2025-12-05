@@ -1,6 +1,7 @@
 /**
  * @file ML.h
  * @brief Machine Learning Inference Engine
+ * @author Daniel Cardoso, Marco Costa
  * @layer Application/ML
  * 
  * Performs plant disease detection using ONNX Runtime inference.

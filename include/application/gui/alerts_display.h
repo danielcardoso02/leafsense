@@ -1,5 +1,6 @@
 /**
  * @file alerts_display.h
+ * @author Daniel Cardoso, Marco Costa
  * @brief Alert Status Display Widget
  * @layer Application/GUI
  * 

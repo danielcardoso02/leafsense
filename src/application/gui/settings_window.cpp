@@ -1,6 +1,10 @@
 /**
  * @file settings_window.cpp
  * @brief Implementation of Application Settings Dialog
+ * @author Daniel Cardoso, Marco Costa
+ *
+ * This file implements the SettingsWindow class, which provides a modal dialog
+ * for configuring sensor parameters, display options, and theme selection in the LeafSense application.
  */
 
 #include "../include/application/gui/settings_window.h"
@@ -14,6 +18,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QScrollArea>
+#include <QScroller>
 
 /* ============================================================================
  * Constructor / Destructor
@@ -22,6 +27,10 @@
 SettingsWindow::SettingsWindow(QWidget *parent)
     : QDialog(parent)
 {
+     /**
+      * @brief Constructs the settings window dialog.
+      * @param parent Parent widget (optional)
+      */
     setWindowTitle("Settings");
     setFixedSize(480, 320);
     setModal(true);
@@ -33,12 +42,20 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     load_settings();
 }
 
+/**
+ * @brief Destructor for SettingsWindow.
+ * @author Daniel Cardoso, Marco Costa
+ */
 SettingsWindow::~SettingsWindow() {}
 
 /* ============================================================================
  * UI Setup
  * ============================================================================ */
 
+/**
+ * @brief Sets up the user interface components and layout for settings.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void SettingsWindow::setup_ui()
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -109,18 +126,24 @@ void SettingsWindow::setup_ui()
     display_group->setFont(title_font);
     QVBoxLayout *display_layout = new QVBoxLayout(display_group);
 
-    // Theme selector row
+    // Theme selector row with touch-friendly buttons
     QHBoxLayout *theme_layout = new QHBoxLayout();
     QLabel *theme_label = new QLabel("Theme:");
     theme_label->setFont(label_font);
     
-    theme_selector = new QComboBox();
-    theme_selector->addItem("Light");
-    theme_selector->addItem("Dark");
-    theme_selector->setFixedSize(80, 24);
+    theme_light_btn = new QPushButton("Light");
+    theme_light_btn->setFixedSize(60, 28);
+    theme_light_btn->setCheckable(true);
+    theme_light_btn->setAutoExclusive(true);
+    
+    theme_dark_btn = new QPushButton("Dark");
+    theme_dark_btn->setFixedSize(60, 28);
+    theme_dark_btn->setCheckable(true);
+    theme_dark_btn->setAutoExclusive(true);
     
     theme_layout->addWidget(theme_label);
-    theme_layout->addWidget(theme_selector);
+    theme_layout->addWidget(theme_light_btn);
+    theme_layout->addWidget(theme_dark_btn);
     theme_layout->addStretch();
     display_layout->addLayout(theme_layout);
 
@@ -135,6 +158,10 @@ void SettingsWindow::setup_ui()
 
     scroll_content->setLayout(scroll_layout);
     scroll_area->setWidget(scroll_content);
+    
+    // Enable touch scrolling
+    QScroller::grabGesture(scroll_area->viewport(), QScroller::TouchGesture);
+    
     main_layout->addWidget(scroll_area, 1);
 
     /* ------------------------------------------------------------------------
@@ -164,6 +191,10 @@ void SettingsWindow::setup_ui()
  * Theme Application
  * ============================================================================ */
 
+/**
+ * @brief Applies the current theme to the settings dialog.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void SettingsWindow::apply_theme() 
 {
     // Handled by ThemeManager global stylesheet
@@ -173,6 +204,9 @@ void SettingsWindow::apply_theme()
  * Settings Management
  * ============================================================================ */
 
+/**
+ * @brief Loads current settings into the UI widgets.
+ */
 void SettingsWindow::load_settings() 
 {
     ThemeManager &tm = ThemeManager::instance();
@@ -185,10 +219,16 @@ void SettingsWindow::load_settings()
     ideal_ec_min->setValue(p.ec_min);
     ideal_ec_max->setValue(p.ec_max);
     
-    theme_selector->setCurrentIndex((tm.get_current_theme() == ThemeMode::LIGHT) ? 0 : 1);
+    bool is_light = (tm.get_current_theme() == ThemeMode::LIGHT);
+    theme_light_btn->setChecked(is_light);
+    theme_dark_btn->setChecked(!is_light);
     notifications_enabled->setChecked(tm.get_notifications_enabled());
 }
 
+/**
+ * @brief Gets the current sensor parameter settings from the UI.
+ * @return SensorParameters struct with current values
+ */
 SensorParameters SettingsWindow::get_sensor_parameters() const 
 {
     SensorParameters p;
@@ -201,6 +241,10 @@ SensorParameters SettingsWindow::get_sensor_parameters() const
     return p;
 }
 
+/**
+ * @brief Sets the sensor parameter UI values.
+ * @param p SensorParameters struct with values to set
+ */
 void SettingsWindow::set_sensor_parameters(const SensorParameters &p) 
 {
     ideal_ph_min->setValue(p.ph_min);
@@ -215,6 +259,9 @@ void SettingsWindow::set_sensor_parameters(const SensorParameters &p)
  * Button Handlers
  * ============================================================================ */
 
+/**
+ * @brief Handles the save button click, applies and saves settings.
+ */
 void SettingsWindow::on_save_button_clicked() 
 {
     ThemeManager &tm = ThemeManager::instance();
@@ -224,7 +271,7 @@ void SettingsWindow::on_save_button_clicked()
     tm.set_notifications_enabled(notifications_enabled->isChecked());
     
     // Apply theme if changed
-    ThemeMode new_theme = (theme_selector->currentIndex() == 0) ? ThemeMode::LIGHT : ThemeMode::DARK;
+    ThemeMode new_theme = theme_light_btn->isChecked() ? ThemeMode::LIGHT : ThemeMode::DARK;
     if (new_theme != tm.get_current_theme()) {
         tm.set_theme(new_theme);
     }
@@ -232,6 +279,9 @@ void SettingsWindow::on_save_button_clicked()
     accept();
 }
 
+/**
+ * @brief Handles the cancel button click, closes the dialog without saving.
+ */
 void SettingsWindow::on_cancel_button_clicked() 
 { 
     reject(); 

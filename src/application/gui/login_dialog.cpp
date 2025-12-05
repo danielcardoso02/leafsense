@@ -1,5 +1,6 @@
 /**
  * @file login_dialog.cpp
+ * @author Daniel Cardoso, Marco Costa
  * @brief Implementation of User Authentication Dialog
  */
 
@@ -23,6 +24,10 @@
 LoginDialog::LoginDialog(QWidget *parent)
     : QDialog(parent)
 {
+     /**
+      * @brief Constructs the login dialog.
+      * @param parent Parent widget (optional)
+      */
     setWindowTitle("Login");
     setFixedSize(480, 320);
     setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
@@ -32,12 +37,20 @@ LoginDialog::LoginDialog(QWidget *parent)
     apply_theme();
 }
 
+/**
+ * @brief Destructor for LoginDialog.
+ * @author Daniel Cardoso, Marco Costa
+ */
 LoginDialog::~LoginDialog() {}
 
 /* ============================================================================
  * UI Setup
  * ============================================================================ */
 
+/**
+ * @brief Sets up the user interface components and layout for login.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LoginDialog::setup_ui()
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -55,8 +68,12 @@ void LoginDialog::setup_ui()
     QString logo_filename = (tm.get_current_theme() == ThemeMode::LIGHT) 
         ? "logo_leafsense.png" 
         : "logo_leafsense_dark.png";
-    QString logo_path = "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/LeafSenseUI/resources/images/" + logo_filename;
+    // Try Qt resource first, then fall back to local path
+    QString logo_path = ":/images/images/" + logo_filename;
     QPixmap logo_pixmap(logo_path);
+    if (logo_pixmap.isNull()) {
+        logo_pixmap = QPixmap("./images/" + logo_filename);
+    }
 
     if (!logo_pixmap.isNull()) {
         logo_label->setPixmap(logo_pixmap.scaled(200, 80, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -79,6 +96,8 @@ void LoginDialog::setup_ui()
     username_label->setFont(label_font);
 
     username_input = new QLineEdit();
+    username_input->setText("admin"); // Pre-fill for touch-only devices
+    // Remove event filter - no automatic keyboard
     connect(username_input, &QLineEdit::returnPressed, this, &LoginDialog::on_username_return_pressed);
 
     main_layout->addWidget(username_label);
@@ -93,6 +112,8 @@ void LoginDialog::setup_ui()
 
     password_input = new QLineEdit();
     password_input->setEchoMode(QLineEdit::Password);
+    password_input->setText("admin"); // Pre-fill for touch-only devices
+    // Remove event filter - no automatic keyboard
     connect(password_input, &QLineEdit::returnPressed, this, &LoginDialog::on_password_return_pressed);
 
     main_layout->addWidget(password_label);
@@ -133,6 +154,10 @@ void LoginDialog::setup_ui()
  * Theme Application
  * ============================================================================ */
 
+/**
+ * @brief Applies the current theme to the login dialog.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void LoginDialog::apply_theme() 
 {
     // Handled by ThemeManager global stylesheet
@@ -142,11 +167,19 @@ void LoginDialog::apply_theme()
  * Public Accessors
  * ============================================================================ */
 
+/**
+ * @brief Gets the authenticated username.
+ * @return Username string
+ */
 QString LoginDialog::get_username() const 
 { 
     return logged_in_user; 
 }
 
+/**
+ * @brief Gets the login timestamp.
+ * @return Login time string
+ */
 QString LoginDialog::get_login_time() const 
 { 
     return login_timestamp; 
@@ -156,6 +189,12 @@ QString LoginDialog::get_login_time() const
  * Credential Validation
  * ============================================================================ */
 
+/**
+ * @brief Validates user credentials.
+ * @param u Username string
+ * @param p Password string
+ * @return true if credentials are valid
+ */
 bool LoginDialog::validate_credentials(const QString &u, const QString &p) 
 {
     // TODO: Replace with database lookup
@@ -170,6 +209,9 @@ bool LoginDialog::validate_credentials(const QString &u, const QString &p)
  * Event Handlers
  * ============================================================================ */
 
+/**
+ * @brief Handles login button click, validates credentials and logs in.
+ */
 void LoginDialog::on_login_button_clicked() 
 {
     if (validate_credentials(username_input->text(), password_input->text())) {
@@ -179,17 +221,37 @@ void LoginDialog::on_login_button_clicked()
     }
 }
 
+/**
+ * @brief Handles cancel button click, closes the dialog.
+ */
 void LoginDialog::on_cancel_button_clicked() 
 { 
     reject(); 
 }
 
+/**
+ * @brief Handles return pressed in username field, focuses password input.
+ */
 void LoginDialog::on_username_return_pressed() 
 { 
     password_input->setFocus(); 
 }
 
+/**
+ * @brief Handles return pressed in password field, triggers login.
+ */
 void LoginDialog::on_password_return_pressed() 
 { 
     on_login_button_clicked(); 
+}
+
+/**
+ * @brief Event filter for custom event handling (default: base class).
+ * @param obj Event object
+ * @param event Event type
+ * @return true if event handled
+ */
+bool LoginDialog::eventFilter(QObject *obj, QEvent *event)
+{
+    return QDialog::eventFilter(obj, event);
 }

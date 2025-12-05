@@ -1,5 +1,6 @@
 /**
  * @file login_dialog.h
+ * @author Daniel Cardoso, Marco Costa
  * @brief User Authentication Dialog
  * @layer Application/GUI
  * 
@@ -17,6 +18,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLabel>
+#include <QEvent>
 
 /**
  * @class LoginDialog
@@ -73,6 +75,7 @@ private:
     
     void setup_ui();                     ///< Creates UI components
     void apply_theme();                  ///< Applies current theme
+    bool eventFilter(QObject *obj, QEvent *event) override; ///< Handle focus events
     
     /**
      * @brief Validates user credentials

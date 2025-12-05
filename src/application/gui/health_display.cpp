@@ -1,5 +1,6 @@
 /**
  * @file health_display.cpp
+ * @author Daniel Cardoso, Marco Costa
  * @brief Implementation of Plant Health Assessment Display Widget
  */
 
@@ -16,6 +17,10 @@
 HealthDisplay::HealthDisplay(QWidget *parent)
     : QWidget(parent)
 {
+     /**
+      * @brief Constructs the health display widget.
+      * @param parent Parent widget (optional)
+      */
     setup_ui();
     apply_theme();
 }
@@ -24,6 +29,9 @@ HealthDisplay::HealthDisplay(QWidget *parent)
  * UI Setup
  * ============================================================================ */
 
+/**
+ * @brief Sets up the user interface components and layout for health display.
+ */
 void HealthDisplay::setup_ui()
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -102,6 +110,10 @@ void HealthDisplay::setup_ui()
  * Theme Application
  * ============================================================================ */
 
+/**
+ * @brief Applies the current theme colors to all UI elements.
+ * @author Daniel Cardoso, Marco Costa
+ */
 void HealthDisplay::apply_theme()
 {
     ThemeManager &tm = ThemeManager::instance();
@@ -150,6 +162,12 @@ void HealthDisplay::apply_theme()
  * Value Update
  * ============================================================================ */
 
+/**
+ * @brief Updates the health display with new values.
+ * @param health_score Health score percentage
+ * @param status Status string (e.g., "Healthy")
+ * @author Daniel Cardoso, Marco Costa
+ */
 void HealthDisplay::update_values(int health_score, const QString &status)
 {
     score_value->setText(QString::number(health_score) + "%");

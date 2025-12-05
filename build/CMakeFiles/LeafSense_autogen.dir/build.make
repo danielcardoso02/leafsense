@@ -68,7 +68,7 @@ include CMakeFiles/LeafSense_autogen.dir/progress.make
 
 CMakeFiles/LeafSense_autogen:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC for target LeafSense"
-	/usr/bin/cmake -E cmake_autogen /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/LeafSense_autogen.dir/AutogenInfo.json Debug
+	/usr/bin/cmake -E cmake_autogen /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/LeafSense_autogen.dir/AutogenInfo.json ""
 
 LeafSense_autogen: CMakeFiles/LeafSense_autogen
 LeafSense_autogen: CMakeFiles/LeafSense_autogen.dir/build.make

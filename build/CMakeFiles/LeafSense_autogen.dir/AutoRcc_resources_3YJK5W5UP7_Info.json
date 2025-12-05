@@ -7,7 +7,8 @@
 	"INCLUDE_DIR" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/LeafSense_autogen/include",
 	"INPUTS" : 
 	[
-		"/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/resources/images/logo_leafsense.png"
+		"/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/resources/images/logo_leafsense.png",
+		"/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/resources/images/logo_leafsense_dark.png"
 	],
 	"LOCK_FILE" : "/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/CMakeFiles/LeafSense_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Lock.lock",
 	"MULTI_CONFIG" : false,
