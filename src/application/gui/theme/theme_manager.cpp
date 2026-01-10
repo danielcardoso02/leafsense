@@ -289,6 +289,111 @@ QString ThemeManager::get_stylesheet() const
             border: none;
             background-color: transparent;
         }
+        
+        /* Scrollbar Styling with Working Arrows */
+        QScrollBar:vertical {
+            background: %3;
+            width: 16px;
+            margin: 16px 0 16px 0;
+            border: 1px solid %9;
+            border-radius: 0px;
+        }
+        QScrollBar::handle:vertical {
+            background: #4CAF50;
+            min-height: 20px;
+            border-radius: 7px;
+            margin: 2px;
+        }
+        QScrollBar::handle:vertical:hover {
+            background: #66BB6A;
+        }
+        QScrollBar::add-line:vertical {
+            border: 1px solid %9;
+            background: %4;
+            height: 16px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+        }
+        QScrollBar::sub-line:vertical {
+            border: 1px solid %9;
+            background: %4;
+            height: 16px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+        }
+        QScrollBar::add-line:vertical:hover,
+        QScrollBar::sub-line:vertical:hover {
+            background: #4CAF50;
+        }
+        QScrollBar::add-line:vertical:pressed,
+        QScrollBar::sub-line:vertical:pressed {
+            background: #388E3C;
+        }
+        QScrollBar::up-arrow:vertical {
+            width: 8px;
+            height: 8px;
+            image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB2aWV3Qm94PSIwIDAgOCA4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik00IDBMOCA4TDAgOFoiIGZpbGw9IiUyMiIvPjwvc3ZnPg==);
+        }
+        QScrollBar::down-arrow:vertical {
+            width: 8px;
+            height: 8px;
+            image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB2aWV3Qm94PSIwIDAgOCA4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0wIDBIOEw0IDhaIiBmaWxsPSIlMjIiLz48L3N2Zz4=);
+        }
+        QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+            background: none;
+        }
+        
+        QScrollBar:horizontal {
+            background: %3;
+            height: 16px;
+            margin: 0 16px 0 16px;
+            border: 1px solid %9;
+            border-radius: 0px;
+        }
+        QScrollBar::handle:horizontal {
+            background: #4CAF50;
+            min-width: 20px;
+            border-radius: 7px;
+            margin: 2px;
+        }
+        QScrollBar::handle:horizontal:hover {
+            background: #66BB6A;
+        }
+        QScrollBar::add-line:horizontal {
+            border: 1px solid %9;
+            background: %4;
+            width: 16px;
+            subcontrol-position: right;
+            subcontrol-origin: margin;
+        }
+        QScrollBar::sub-line:horizontal {
+            border: 1px solid %9;
+            background: %4;
+            width: 16px;
+            subcontrol-position: left;
+            subcontrol-origin: margin;
+        }
+        QScrollBar::add-line:horizontal:hover,
+        QScrollBar::sub-line:horizontal:hover {
+            background: #4CAF50;
+        }
+        QScrollBar::add-line:horizontal:pressed,
+        QScrollBar::sub-line:horizontal:pressed {
+            background: #388E3C;
+        }
+        QScrollBar::left-arrow:horizontal {
+            width: 8px;
+            height: 8px;
+            image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB2aWV3Qm94PSIwIDAgOCA4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik04IDBMMCA0TDggOFoiIGZpbGw9IiUyMiIvPjwvc3ZnPg==);
+        }
+        QScrollBar::right-arrow:horizontal {
+            width: 8px;
+            height: 8px;
+            image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB2aWV3Qm94PSIwIDAgOCA4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0wIDBMOCA0TDAgOFoiIGZpbGw9IiUyMiIvPjwvc3ZnPg==);
+        }
+        QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+            background: none;
+        }
     )")
         .arg(c.bg_primary.name())           // %1
         .arg(c.text_primary.name())         // %2

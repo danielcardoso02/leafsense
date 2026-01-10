@@ -11,8 +11,11 @@ This guide explains how to integrate real hardware sensors and actuators into th
 1. [Architecture Overview](#architecture-overview)
 2. [Sensor Integration](#sensor-integration)
 3. [Actuator Integration](#actuator-integration)
-4. [Testing & Calibration](#testing--calibration)
-5. [Troubleshooting](#troubleshooting)
+4. [Additional Hardware Modules](#additional-hardware-modules)
+   - [Real-Time Clock (RTC)](#1-real-time-clock-rtc-module-ds3231)
+   - [Relay Module](#2-relay-module-for-power-control)
+5. [Testing & Calibration](#testing--calibration)
+6. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -557,6 +560,197 @@ ls /lib/modules/$(uname -r)/extra/
 
 ---
 
+## Additional Hardware Modules
+
+### 1. Real-Time Clock (RTC) Module (DS3231)
+
+**Purpose**: Maintain accurate time when Pi is powered off
+
+**Hardware Interface**: I2C (GPIO 2 = SDA, GPIO 3 = SCL)
+
+**Setup**:
+
+1. **Enable I2C in Buildroot**:
+   ```bash
+   # In Buildroot menuconfig:
+   # Kernel → Device Drivers → I2C support → Enable
+   # Kernel → Device Drivers → I2C Hardware Drivers → Raspberry Pi → Enable
+   ```
+
+2. **Update `/boot/config.txt`**:
+   ```
+   dtparam=i2c_arm=on
+   dtparam=i2c1=on
+   ```
+
+3. **Verify Device**:
+   ```bash
+   i2cdetect -y 1
+   # Should show device at address 0x68 (DS3231)
+   ```
+
+4. **Set System Time from RTC**:
+   ```bash
+   # Install hwclock
+   hwclock -r          # Read RTC
+   hwclock -w          # Write system time to RTC
+   hwclock -s          # Set system time from RTC
+   ```
+
+5. **Automatic Sync (in `/etc/rc.local`)**:
+   ```bash
+   #!/bin/sh -e
+   hwclock -s
+   ntpd -S /usr/sbin/ntpdate-sync
+   exit 0
+   ```
+
+**Integration in LeafSense**:
+- Timestamps for all sensor readings
+- Photo capture timing
+- Scheduled maintenance tasks
+- Data synchronization with external servers
+
+---
+
+### 2. Relay Module (for Power Control)
+
+**Purpose**: Control high-power devices (heater, pump backup, etc.)
+
+**Hardware Interface**: GPIO (configurable pin, typically GPIO 26)
+
+**Setup**:
+
+1. **GPIO Configuration**:
+   ```bash
+   # Identify available GPIO pins
+   cat /sys/kernel/debug/gpio
+   
+   # Export GPIO for control
+   echo 26 > /sys/class/gpio/export
+   echo out > /sys/class/gpio/gpio26/direction
+   ```
+
+2. **Control Relay**:
+   ```bash
+   # Turn ON
+   echo 1 > /sys/class/gpio/gpio26/value
+   
+   # Turn OFF
+   echo 0 > /sys/class/gpio/gpio26/value
+   
+   # Check status
+   cat /sys/class/gpio/gpio26/value
+   ```
+
+3. **Create C++ Wrapper Class**:
+   ```cpp
+   // include/drivers/actuators/Relay.h
+   #ifndef RELAY_H
+   #define RELAY_H
+   
+   #include <string>
+   
+   class Relay {
+   private:
+       int gpio_pin;
+       std::string gpio_path;
+       
+   public:
+       Relay(int pin = 26);
+       ~Relay();
+       
+       bool initialize();
+       bool activate();
+       bool deactivate();
+       bool getStatus() const;
+       void cleanup();
+   };
+   
+   #endif
+   ```
+
+4. **Implementation Example** (`src/drivers/actuators/Relay.cpp`):
+   ```cpp
+   #include "../../include/drivers/actuators/Relay.h"
+   #include <fstream>
+   #include <filesystem>
+   
+   Relay::Relay(int pin) : gpio_pin(pin) {
+       gpio_path = "/sys/class/gpio/gpio" + std::to_string(pin);
+   }
+   
+   bool Relay::initialize() {
+       std::ofstream export_file("/sys/class/gpio/export");
+       export_file << gpio_pin;
+       export_file.close();
+       
+       std::ofstream direction("/sys/class/gpio/gpio" + std::to_string(gpio_pin) + "/direction");
+       direction << "out";
+       direction.close();
+       
+       return std::filesystem::exists(gpio_path);
+   }
+   
+   bool Relay::activate() {
+       std::ofstream value(gpio_path + "/value");
+       value << "1";
+       value.close();
+       return true;
+   }
+   
+   bool Relay::deactivate() {
+       std::ofstream value(gpio_path + "/value");
+       value << "0";
+       value.close();
+       return true;
+   }
+   
+   bool Relay::getStatus() const {
+       std::ifstream value(gpio_path + "/value");
+       std::string state;
+       value >> state;
+       return state == "1";
+   }
+   
+   void Relay::cleanup() {
+       std::ofstream unexport("/sys/class/gpio/unexport");
+       unexport << gpio_pin;
+       unexport.close();
+   }
+   
+   Relay::~Relay() {
+       cleanup();
+   }
+   ```
+
+5. **Integration with Master.cpp**:
+   ```cpp
+   // In middleware/Master.cpp
+   Relay backup_pump_relay(26);
+   
+   void Master::initializeActuators() {
+       backup_pump_relay.initialize();
+   }
+   
+   void Master::controlRelayBasedOnSensors() {
+       // Example: activate backup pump if main pump fails
+       if (should_activate_backup) {
+           backup_pump_relay.activate();
+       } else {
+           backup_pump_relay.deactivate();
+       }
+   }
+   ```
+
+**Use Cases**:
+- Pump backup power control
+- Emergency shutdown
+- Heater auxiliary power
+- Water level pump triggering
+
+---
+
 ## Integration Checklist
 
 Before deployment:
@@ -569,6 +763,10 @@ Before deployment:
 - [ ] Pump timing matches desired dose volume
 - [ ] Heater toggles based on temperature threshold
 - [ ] LED responds to alert conditions
+- [ ] **RTC module maintaining accurate time**
+- [ ] **RTC syncs on system startup**
+- [ ] **Relay responds to GPIO commands**
+- [ ] **Relay safely controls high-power devices**
 - [ ] Database logs all sensor readings
 - [ ] ML captures photos every 30 minutes
 - [ ] System runs stable for 24+ hours

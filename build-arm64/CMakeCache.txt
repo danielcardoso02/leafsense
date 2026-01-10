@@ -189,8 +189,8 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 //Path to a program.
 CMAKE_STRIP:FILEPATH=/home/daniel/buildroot/buildroot-2025.08/output/host/bin/aarch64-linux-strip
 
-//The CMake toolchain file
-CMAKE_TOOLCHAIN_FILE:FILEPATH=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/deploy/toolchain-rpi4.cmake
+//No help, variable specified on the command line.
+CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=../deploy/toolchain-rpi4.cmake
 
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console

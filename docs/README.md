@@ -11,18 +11,19 @@
 1. [Overview do Projeto](01-OVERVIEW.md)
 2. [Architecture do System](02-ARCHITECTURE.md)
 3. [Machine Learning](03-MACHINE-LEARNING.md)
-4. [Buildroot Image Configuration](04-BUILDROOT-IMAGE.md)
-5. [Deployment - Raspberry Pi](05-RASPBERRY-PI-DEPLOYMENT.md)
-6. [Device Driver (LED Module)](06-DEVICE-DRIVER.md)
-7. [Base de Data](07-DATABASE.md)
-8. [Interface Gráfica (Qt5)](08-GUI.md)
-9. [Guide de Troubleshooting](09-TROUBLESHOOTING.md)
-10. [Changelog e History](10-CHANGELOG.md)
-11. [Secção de Implementation (Report)](11-IMPLEMENTATION-REPORT.md)
-12. [Testing Guide](11-TESTING-GUIDE.md)
-13. [Sensor & Actuator Integration](11-SENSOR-ACTUATOR-INTEGRATION.md)
-14. [Demo Guide](12-DEMO-GUIDE.md)
-15. [Kernel Module - Low Level](13-KERNEL-MODULE.md)
+4. [Networking Guide - Connection Types](04-NETWORKING.md) ⭐ **NEW**
+5. [Buildroot Image Configuration](04-BUILDROOT-IMAGE.md)
+6. [Deployment - Raspberry Pi](05-RASPBERRY-PI-DEPLOYMENT.md)
+7. [Device Driver (LED Module)](06-DEVICE-DRIVER.md)
+8. [Base de Data](07-DATABASE.md)
+9. [Interface Gráfica (Qt5)](08-GUI.md)
+10. [Guide de Troubleshooting](09-TROUBLESHOOTING.md)
+11. [Changelog e History](10-CHANGELOG.md)
+12. [Secção de Implementation (Report)](11-IMPLEMENTATION-REPORT.md)
+13. [Testing Guide](11-TESTING-GUIDE.md)
+14. [Sensor & Actuator Integration (with RTC & Relay)](11-SENSOR-ACTUATOR-INTEGRATION.md) ⭐ **UPDATED**
+15. [Demo Guide](12-DEMO-GUIDE.md)
+16. [Kernel Module - Low Level](13-KERNEL-MODULE.md)
 
 ---
 
