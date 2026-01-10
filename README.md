@@ -1,83 +1,156 @@
 # LeafSense - Intelligent Hydroponic Monitoring System
 
 **Version:** 1.4.0  
-**Status:** ✅ Production Ready  
-**Platform:** Raspberry Pi 4B (ARM64)
+**Status:** ✅ Production Ready (Camera integration in progress)
+**Platform:** Raspberry Pi 4B (ARM64) + Buildroot Linux  
+**Architecture:** Cross-compiled C++17 with Qt5, OpenCV, ONNX Runtime
 
 ---
 
 ## 🌱 Overview
 
-LeafSense is a complete embedded system for intelligent hydroponic plant monitoring and control. It combines real-time sensor data acquisition, automatic control logic, machine learning-based disease detection, and a touchscreen interface—all running on a Raspberry Pi 4B.
+LeafSense is a complete embedded system for intelligent hydroponic plant monitoring and control. It combines real-time sensor data acquisition, automatic control logic, machine learning-based disease detection, and a touchscreen interface—all running on a Raspberry Pi 4B with custom Buildroot Linux.
 
 ### Key Features
 
 - **Real-Time Monitoring** - Temperature, pH, EC sensors (2-second update cycle)
 - **Automatic Control** - pH adjustment, nutrient dosing, temperature regulation
-- **ML Disease Detection** - ONNX Runtime with 99.39% accuracy (4 classes)
-- **Touchscreen UI** - Qt5-based interface on Waveshare 3.5" LCD
-- **Camera Integration** - Periodic image capture with ML analysis
-- **Database Logging** - SQLite persistence for all sensor data and events
-- **LED Alerts** - Kernel module-based alert indication
+- **ML Disease Detection** - ONNX Runtime with 99.39% accuracy (4 classes: Healthy, Nutrient Deficiency, Pest Damage, Disease)
+- **Touchscreen UI** - Qt5-based interface on Waveshare 3.5" LCD (480×320)
+- **Camera Integration** - Raspberry Pi Camera Module v1 with periodic image capture
+- **Database Logging** - SQLite persistence for all sensor data, ML detections, and events
+- **LED Alerts** - Custom kernel module for hardware alert indication
+- **Cross-Platform** - Both PC (x86_64) and ARM64 builds supported
+
+---
+
+## 🏗️ System Architecture
+
+**Hardware Stack:**
+- Raspberry Pi 4B (ARM Cortex-A72, 2GB RAM)
+- Waveshare 3.5" LCD-C (ILI9486 + ADS7846 touchscreen)
+- DS18B20 temperature sensor (1-Wire)
+- pH sensor (analog via ADC)
+- EC/TDS sensor (analog via ADC)
+- Raspberry Pi Camera Module v1 (OV5647, 5MP)
+- Peristaltic pumps for dosing
+- PWM heater for temperature control
+- LED alert indicator
+
+**Software Stack:**
+- **OS:** Custom Buildroot Linux 6.12.41-v8 (minimal ~289 MB image)
+- **GUI:** Qt5 5.15.x (Widgets, Charts, SQL, linuxfb platform)
+- **ML:** ONNX Runtime 1.20.1 with custom trained model
+- **Vision:** OpenCV 4.11.0 (image preprocessing, CLAHE enhancement)
+- **Database:** SQLite 3.48.0
+- **Build:** CMake 3.22+ with cross-compilation toolchain
 
 ---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Raspberry Pi 4B (2GB+ RAM)
-- Waveshare 3.5" LCD (C) with touchscreen
-- Raspberry Pi Camera Module (optional)
-- Development machine with ARM64 cross-compiler
 
-### Deployment
+**Hardware:**
+- Raspberry Pi 4B (2GB+ RAM recommended)
+- Waveshare 3.5" LCD (C) with touchscreen
+- MicroSD card (16GB+, camera-enabled Buildroot image)
+- USB cable for SSH/deployment
+- Raspberry Pi Camera Module (optional, test patterns used if unavailable)
+
+**Development Machine:**
+- Ubuntu 22.04+ or similar Linux distribution
+- GCC/G++ 11.4+
+- CMake 3.16+
+- Buildroot toolchain (for ARM64 cross-compilation)
+
+### Installation
+
+#### Option 1: Use Pre-Built Binary (Quick)
 
 ```bash
-# 1. Connect to Raspberry Pi
+# 1. Flash Buildroot image to SD card (see docs/04-BUILDROOT-IMAGE.md)
+sudo dd if=sdcard.img of=/dev/sdX bs=4M status=progress && sync
+
+# 2. Insert SD card into Pi and power on
+
+# 3. Connect via USB-Ethernet (Pi will appear at 10.42.0.196)
 ssh root@10.42.0.196
+# Password: (none - passwordless root)
 
-# 2. Check if LeafSense is running
-ps aux | grep LeafSense
+# 4. Deploy binary
+scp build-arm64/src/LeafSense root@10.42.0.196:/opt/leafsense/
 
-# 3. View live logs
-tail -f /var/log/leafsense.log
-
-# 4. Access touchscreen interface
-# Touch the 480x320 display - login with admin/admin
+# 5. Start application
+ssh root@10.42.0.196 '/opt/leafsense/LeafSense &'
 ```
 
-### From Source
+#### Option 2: Build from Source
 
+**PC Build (x86_64 - for development/testing):**
 ```bash
-# Build for ARM64
-cd build-arm64
+cd leafsense-project
+rm -rf build && mkdir build && cd build
 cmake ..
-make -j4
+make -j$(nproc)
+./src/LeafSense  # Run on PC
+```
 
-# Deploy to Pi
-scp LeafSense root@10.42.0.196:/opt/leafsense/
+**ARM64 Build (for Raspberry Pi deployment):**
+```bash
+cd leafsense-project
 
-# Initialize database
-ssh root@10.42.0.196 'cd /opt/leafsense/database && sqlite3 leafsense.db < schema.sql'
+# Setup ONNX Runtime for ARM64 (first time only)
+./deploy/setup-onnxruntime-arm64.sh
 
-# Start application
-ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
+# Configure cross-compilation build
+rm -rf build-arm64 && mkdir build-arm64 && cd build-arm64
+cmake -DCMAKE_TOOLCHAIN_FILE=../deploy/toolchain-rpi4.cmake ..
+
+# Compile (uses all CPU cores)
+make -j$(nproc)
+
+# Output: build-arm64/src/LeafSense (ARM64 ELF executable)
+```
+
+**Deploy to Raspberry Pi:**
+```bash
+# Copy binary
+scp build-arm64/src/LeafSense root@10.42.0.196:/opt/leafsense/
+
+# Restart application
+ssh root@10.42.0.196 'killall LeafSense; /opt/leafsense/LeafSense &'
+
+# View logs
+ssh root@10.42.0.196 'tail -f /var/log/leafsense.log'
 ```
 
 ---
 
 ## 📚 Documentation
 
+**Start here:** [docs/00-TERMINOLOGY.md](docs/00-TERMINOLOGY.md) - Explains all technical terms
+
 Complete documentation available in [`docs/`](docs/) directory:
 
-| Document | Description |
-|----------|-------------|
-| [01-OVERVIEW.md](docs/01-OVERVIEW.md) | Project overview and objectives |
-| [02-ARCHITECTURE.md](docs/02-ARCHITECTURE.md) | System architecture and design |
-| [03-MACHINE-LEARNING.md](docs/03-MACHINE-LEARNING.md) | ML model details and training |
-| [04-RASPBERRY-PI-DEPLOYMENT.md](docs/04-RASPBERRY-PI-DEPLOYMENT.md) | Deployment procedures |
-| [11-SENSOR-ACTUATOR-INTEGRATION.md](docs/11-SENSOR-ACTUATOR-INTEGRATION.md) | Hardware integration guide |
-| [12-DEMO-GUIDE.md](docs/12-DEMO-GUIDE.md) | **Comprehensive demonstration guide** |
+| # | Document | Description |
+|---|----------|-------------|
+| 0 | [00-TERMINOLOGY.md](docs/00-TERMINOLOGY.md) | **Comprehensive terminology guide** (read first!) |
+| 1 | [01-OVERVIEW.md](docs/01-OVERVIEW.md) | Project overview and objectives |
+| 2 | [02-ARCHITECTURE.md](docs/02-ARCHITECTURE.md) | System architecture and design patterns |
+| 3 | [03-MACHINE-LEARNING.md](docs/03-MACHINE-LEARNING.md) | ML model training, inference, and dataset |
+| 4 | [04-BUILDROOT-IMAGE.md](docs/04-BUILDROOT-IMAGE.md) | **Buildroot configuration and SD card creation** |
+| 5 | [05-RASPBERRY-PI-DEPLOYMENT.md](docs/05-RASPBERRY-PI-DEPLOYMENT.md) | Deployment procedures and SSH access |
+| 6 | [06-DEVICE-DRIVER.md](docs/06-DEVICE-DRIVER.md) | LED kernel module development |
+| 7 | [07-DATABASE.md](docs/07-DATABASE.md) | SQLite schema and data persistence |
+| 8 | [08-GUI.md](docs/08-GUI.md) | Qt5 interface and framebuffer rendering |
+| 9 | [09-TROUBLESHOOTING.md](docs/09-TROUBLESHOOTING.md) | Common issues and solutions |
+| 10 | [10-CHANGELOG.md](docs/10-CHANGELOG.md) | Version history and release notes |
+| 11 | [11-IMPLEMENTATION-REPORT.md](docs/11-IMPLEMENTATION-REPORT.md) | Technical implementation report |
+| 12 | [11-SENSOR-ACTUATOR-INTEGRATION.md](docs/11-SENSOR-ACTUATOR-INTEGRATION.md) | Hardware integration guide |
+| 13 | [11-TESTING-GUIDE.md](docs/11-TESTING-GUIDE.md) | Testing procedures and validation |
+| 14 | [12-DEMO-GUIDE.md](docs/12-DEMO-GUIDE.md) | Demonstration and presentation guide |
+| 15 | [13-KERNEL-MODULE.md](docs/13-KERNEL-MODULE.md) | Kernel module development (low-level) |
 | [FINAL-STATUS.md](FINAL-STATUS.md) | **Complete system status** |
 
 **Quick Links:**
