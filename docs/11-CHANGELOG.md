@@ -1,6 +1,113 @@
 # LeafSense - Changelog and Development History
 
-## Current Version: 1.4.0 (January 11, 2026)
+## Current Version: 1.4.2 (January 10, 2026)
+
+---
+
+## [1.4.2] - 2026-01-10
+
+### ✅ Complete Hardware Integration - Camera, Display, Touchscreen
+
+This release achieves full hardware integration on Raspberry Pi 4 with Waveshare 3.5" LCD-C.
+
+### Fixed
+
+#### Display Configuration
+- **Fixed framebuffer selection**: GUI now renders to `/dev/fb1` (ILI9486 LCD) instead of `/dev/fb0` (HDMI)
+- **Display working**: 480x320 resolution on Waveshare 3.5" LCD-C
+
+#### Camera System
+- **Downloaded and installed `start4x.elf`** camera-enabled GPU firmware
+- **Camera hardware detected**: OV5647 sensor on i2c-10 at address 0x36
+- **V4L2 interface working**: unicam-image device at /dev/video0
+- **ISP available**: bcm2835-isp for image processing
+
+#### Touchscreen Calibration
+- **Fixed calibration values** for 480x320 landscape orientation
+- **tslib environment** configured with proper TSLIB_* variables
+- **Calibration file**: `/etc/pointercal` with tested values
+
+#### Configuration Cleanup
+- **Removed USB gadget mode** (dtoverlay=dwc2) from config.txt
+- **Reverted scrollbar CSS** to default Qt styling
+- **Created proper init script** at `/etc/init.d/S99leafsense`
+
+### Added
+
+#### Deploy Files
+- **deploy/config.txt**: Complete Pi 4 configuration template
+- **Camera firmware**: start4x.elf and fixup4x.dat for camera support
+- **Auto-start script**: LeafSense starts automatically on boot
+
+#### Documentation
+- Updated [05-BUILDROOT-IMAGE.md](05-BUILDROOT-IMAGE.md) with camera firmware requirements
+- Updated [10-TROUBLESHOOTING.md](10-TROUBLESHOOTING.md) with camera debugging section
+
+### System Status (January 10, 2026)
+
+| Component | Status | Details |
+|-----------|--------|---------|
+| Display | ✅ Working | fb1 (fb_ili9486), 480x320 |
+| Touchscreen | ✅ Configured | ADS7846 on /dev/input/event0 |
+| Camera | ✅ Detected | OV5647 via unicam-image |
+| GUI | ✅ Running | Qt5 linuxfb on fb1 |
+| Database | ✅ Working | SQLite with all tables |
+| ML Model | ✅ Loaded | ONNX Runtime inference |
+
+---
+
+## [1.4.1] - 2026-01-10
+
+### ✅ GUI Deployment Fix & Documentation Reorganization
+
+This patch fixes critical GUI deployment issues and reorganizes all documentation with proper sequential numbering.
+
+### Fixed
+
+#### GUI/Stylesheet Issues
+- **Fixed QString::arg placeholder mismatch**
+  - Removed unused %6, %7, %8, %10 placeholders from theme_manager.cpp
+  - Changed all %9 references to %6 in stylesheet
+  - Matched .arg() call count to actual placeholder usage (6 args for 6 placeholders)
+  - Eliminated "QString::arg: Argument missing" warnings at runtime
+- **Removed problematic SVG data URLs** from scrollbar arrows (contained %22 which conflicted with Qt arg parsing)
+- **GUI now displays correctly** on Raspberry Pi Waveshare 3.5" LCD
+
+#### Database Initialization
+- Created `/opt/leafsense/init_db.sql` on Pi with proper schema
+- Resolved "no such table: sensor_readings/logs" errors
+
+### Changed
+
+#### Documentation Reorganization
+- **Removed letter suffixes** (a, b, c) from all document filenames
+- **Sequential numbering** now from 00 to 16
+- **Removed duplicate** `10-CHANGELOG.md` (was duplicate of 09b)
+- **Updated README.md** with clean table-formatted index
+
+**New Document Order:**
+| # | Filename |
+|---|----------|
+| 00 | TERMINOLOGY |
+| 01 | OVERVIEW |
+| 02 | ARCHITECTURE |
+| 03 | MACHINE-LEARNING |
+| 04 | NETWORKING |
+| 05 | BUILDROOT-IMAGE |
+| 06 | RASPBERRY-PI-DEPLOYMENT |
+| 07 | DEVICE-DRIVER |
+| 08 | DATABASE |
+| 09 | GUI |
+| 10 | TROUBLESHOOTING |
+| 11 | CHANGELOG |
+| 12 | IMPLEMENTATION-REPORT |
+| 13 | SENSOR-ACTUATOR-INTEGRATION |
+| 14 | TESTING-GUIDE |
+| 15 | DEMO-GUIDE |
+| 16 | KERNEL-MODULE |
+
+### Known Issues
+- **Camera not detected** (`supported=0 detected=0`) - Hardware connection issue, ribbon cable needs checking
 
 ---
 
@@ -41,7 +148,7 @@ This version adds professional image processing techniques using OpenCV and comp
   - Machine learning and database terms
   - Common commands and file system locations
   - 700+ lines of comprehensive explanations
-- **Complete device driver documentation** (`docs/06-DEVICE-DRIVER.md`)
+- **Complete device driver documentation** (`docs/05-DEVICE-DRIVER.md`)
   - LED kernel module architecture and design
   - Hardware interface and circuit diagrams
   - Complete API reference (kernel-space and user-space)
@@ -51,7 +158,7 @@ This version adds professional image processing techniques using OpenCV and comp
   - Troubleshooting and development guide
   - 400+ lines of comprehensive technical documentation
 - **Documentation reorganized:**
-  - 06-DEVICE-DRIVER.md (was 13, then 05) - Now at position 6
+  - 05-DEVICE-DRIVER.md (was 13) - Now earlier in sequence
   - 13-KERNEL-MODULE.md (was 05) - Low-level details moved later
 
 ### Technical Details

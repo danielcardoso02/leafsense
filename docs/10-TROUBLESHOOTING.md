@@ -301,6 +301,57 @@ i2cdetect -y 1
 # Check wiring for shorts
 ```
 
+### Camera Not Detected
+```
+vcgencmd get_camera
+supported=0 detected=0, libcamera interfaces=0
+```
+
+**Diagnosis:**
+- `supported=0` = GPU firmware doesn't support camera (config.txt issue)
+- `detected=0` = Camera hardware not physically detected
+
+**Solution - Check config.txt:**
+```bash
+# Mount boot partition
+mount /dev/mmcblk0p1 /mnt/boot
+
+# Verify camera is enabled
+cat /mnt/boot/config.txt | grep -E "start_x|gpu_mem|ov5647"
+```
+
+Required settings in `/mnt/boot/config.txt`:
+```ini
+# Enable camera support
+start_x=1
+gpu_mem=128
+
+# Camera driver (OV5647 = Pi Camera v1)
+dtoverlay=ov5647
+```
+
+**Solution - Check Hardware:**
+1. **Ribbon cable orientation**: Blue side toward Ethernet port on Pi
+2. **Secure connection**: Both ends of ribbon must be fully seated
+3. **Clean contacts**: Gently clean cable contacts with isopropyl alcohol
+4. **Try different cable**: 15-pin flex cables are fragile
+5. **Try different camera**: Module may be defective
+
+**Verify camera module:**
+```bash
+# Check kernel messages for camera
+dmesg | grep -i "ov5647\|camera\|csi"
+
+# Look for errors like:
+# "failed to open vchiq instance" = GPU firmware issue
+# "ov5647: chip id mismatch" = Wrong camera model
+# "Fixed dependency cycle" = Device tree issue (usually harmless)
+```
+
+**If still not working:**
+- Ensure `start4.elf` and `fixup4.dat` are present in boot partition
+- Try Camera v2 (IMX219) with `dtoverlay=imx219` instead
+
 ### GPIO access denied
 ```
 [GPIO] Error: Cannot access GPIO

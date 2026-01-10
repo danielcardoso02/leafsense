@@ -1,0 +1,94 @@
+# LeafSense - Raspberry Pi 4 Configuration
+# =========================================
+# Version: 1.4.2
+# Date: January 10, 2026
+#
+# This is the complete config.txt for LeafSense on Raspberry Pi 4
+# Copy to: /boot/config.txt (or mount boot partition and copy there)
+
+# ================================
+# Camera-Enabled Firmware (REQUIRED)
+# ================================
+# Use start4x.elf for camera support
+# Download from: https://github.com/raspberrypi/firmware/raw/master/boot/start4x.elf
+
+start_file=start4x.elf
+fixup_file=fixup4x.dat
+
+# Kernel
+kernel=Image
+
+# Disable overscan (prevents black borders)
+disable_overscan=1
+
+# 64-bit ARM mode
+arm_64bit=1
+
+# UART for serial console
+dtoverlay=miniuart-bt
+
+# ================================
+# GPU & Camera Configuration
+# ================================
+
+# GPU memory allocation (256MB for camera)
+gpu_mem=256
+
+# Enable camera support
+start_x=1
+
+# Camera module overlay (OV5647 = Pi Camera v1)
+dtoverlay=ov5647
+
+# ================================
+# I2C Configuration
+# ================================
+
+# Enable I2C bus (for ADC ADS1115, RTC DS3231, LCD sensors)
+dtparam=i2c_arm=on
+dtparam=i2c1=on
+
+# ================================
+# 1-Wire Configuration
+# ================================
+
+# DS18B20 temperature sensor on GPIO 19
+dtoverlay=w1-gpio,gpiopin=19
+
+# ================================
+# SPI Configuration
+# ================================
+
+# Enable SPI (required for Waveshare LCD)
+dtparam=spi=on
+
+# ================================
+# Waveshare 3.5" LCD-C Display
+# ================================
+
+# Load Waveshare 3.5" LCD (C) overlay
+# Controller: ILI9486 (SPI)
+# Touch: ADS7846 (SPI CS1)
+# Resolution: 480x320
+dtoverlay=waveshare35c
+
+# HDMI settings (for framebuffer copy to SPI display)
+hdmi_force_hotplug=1
+hdmi_group=2
+hdmi_mode=87
+hdmi_cvt=480 320 60 6 0 0 0
+hdmi_drive=2
+
+# Framebuffer dimensions
+framebuffer_width=480
+framebuffer_height=320
+
+# ================================
+# Display Information
+# ================================
+# fb0 = HDMI (BCM2708 FB)
+# fb1 = Waveshare LCD (fb_ili9486)
+#
+# LeafSense GUI runs on fb1 with:
+# QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+# QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/event0

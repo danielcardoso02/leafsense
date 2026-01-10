@@ -484,14 +484,22 @@ The final image is a **complete bootable SD card image** containing:
 ├── bcm2711-rpi-4-b.dtb        # Device tree (hardware description)
 ├── config.txt                 # Pi firmware config
 ├── cmdline.txt                # Kernel boot parameters
-├── start4.elf                 # GPU firmware
+├── start4.elf                 # GPU firmware (basic)
+├── start4x.elf                # GPU firmware with camera support (REQUIRED for camera!)
 ├── fixup4.dat                 # GPU memory split config
+├── fixup4x.dat                # GPU memory split for camera
 ├── Image                      # Linux kernel (compressed)
 └── overlays/                  # Device tree overlays
     ├── ov5647.dtbo           # Camera overlay
+    ├── waveshare35c.dtbo     # Waveshare 3.5" LCD overlay
     ├── vc4-kms-v3d.dtbo      # Graphics driver
     └── ...
 ```
+
+> **⚠️ Camera Requirement**: To use `start_x=1` in config.txt (required for camera),
+> you MUST have `start4x.elf` and `fixup4x.dat`. The basic `start4.elf` does NOT
+> support the camera interface. Enable `BR2_PACKAGE_RPI_FIRMWARE_X=y` in Buildroot
+> to include these files.
 
 #### Partition 2: Root Filesystem (ext4, 256MB)
 ```
