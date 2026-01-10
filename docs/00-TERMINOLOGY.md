@@ -150,33 +150,89 @@ Inter-process communication mechanism:
 
 ### **Cross-Compilation**
 Building software on one platform (x86 PC) for another platform (ARM64 Pi):
-- **Host:** Development machine (your laptop/desktop)
-- **Target:** Deployment machine (Raspberry Pi)
+- **Host:** Development machine (your laptop/desktop) - typically x86_64 architecture
+- **Target:** Deployment machine (Raspberry Pi) - ARM64/aarch64 architecture
 - **Toolchain:** Set of compilers and libraries for target architecture
+- **Why needed:** ARM and x86 are incompatible instruction sets - code must be compiled specifically for each
+
+### **Architecture**
+CPU instruction set type:
+- **x86_64 (AMD64):** 64-bit Intel/AMD processors (typical PCs)
+- **ARM64 (aarch64):** 64-bit ARM processors (Raspberry Pi 4)
+- **Compatibility:** Executables are architecture-specific and not interchangeable
+
+### **Toolchain**
+Complete set of tools for compiling software:
+- **Compiler:** `aarch64-linux-g++` (converts C++ to ARM64 machine code)
+- **Linker:** Combines object files into executable
+- **Standard Library:** ARM64 versions of libc, libstdc++
+- **Headers:** Include files for target system
+- **Location:** `/home/daniel/buildroot/buildroot-2025.08/output/host/`
+
+### **Sysroot**
+Root filesystem of target system used during cross-compilation:
+- **Purpose:** Provides libraries and headers for target architecture
+- **Location:** `/home/daniel/buildroot/buildroot-2025.08/output/host/aarch64-buildroot-linux-gnu/sysroot/`
+- **Contains:** Target's `/usr/lib/`, `/usr/include/`, etc.
+- **Why needed:** Compiler needs to link against ARM64 libraries, not host's x86_64 libraries
+
+### **Native Build**
+Building software on the same platform where it will run:
+- **PC Build:** Compiling on x86_64 for x86_64 (for testing GUI on development machine)
+- **No cross-compilation:** Uses system's default compiler and libraries
+- **Faster development:** Immediate testing without deploying to Pi
 
 ### **Buildroot**
 System for generating embedded Linux systems:
-- **Kernel:** Linux 6.12.41-v8 (custom compiled)
+- **Kernel:** Linux 6.12.41-v8 (custom compiled for Raspberry Pi)
 - **Root Filesystem:** Minimal Linux with only required components
 - **Configuration:** `.config` files specify what to include
+- **Output:** Complete bootable SD card image
+- **Size:** ~289 MB (much smaller than full Raspberry Pi OS)
 
 ### **CMake**
-Build system generator:
-- **CMakeLists.txt:** Build configuration file
+Build system generator (creates Makefiles):
+- **CMakeLists.txt:** Build configuration file (project structure, dependencies, compiler flags)
 - **Targets:** Executables, libraries to build
-- **Out-of-source build:** Build artifacts in separate directory (build-arm64/)
+- **Out-of-source build:** Build artifacts in separate directory (`build/` or `build-arm64/`)
+- **Variables:**
+  - `CMAKE_SOURCE_DIR` - Project root directory
+  - `CMAKE_CURRENT_SOURCE_DIR` - Directory of current CMakeLists.txt
+  - `PROJECT_SOURCE_DIR` - Directory where `project()` was called
 
 ### **Toolchain File**
 CMake file that specifies cross-compilation settings:
 - **Compiler paths:** Where to find ARM64 g++, gcc
 - **System root:** Where ARM64 libraries are located
 - **Example:** `toolchain-rpi4.cmake`
+- **Usage:** `cmake -DCMAKE_TOOLCHAIN_FILE=../deploy/toolchain-rpi4.cmake ..`
+
+### **Build Directory**
+Separate directory for compilation output (keeps source clean):
+- **build/:** PC build (x86_64) - for development/testing
+- **build-arm64/:** ARM64 cross-compiled build - for Raspberry Pi deployment
+- **Contains:** Object files (.o), Makefiles, executables
+- **Advantage:** Can have multiple builds (Debug/Release, different architectures) simultaneously
+
+### **MOC (Meta-Object Compiler)**
+Qt tool that generates code for signals/slots:
+- **Input:** Header files with Q_OBJECT macro
+- **Output:** moc_*.cpp files with Qt metadata
+- **Automatic:** CMake's AUTOMOC setting handles this
+- **Generated files:** Found in `build*/LeafSense_autogen/`
+
+### **RCC (Resource Compiler)**
+Qt tool that embeds resources (images, fonts) into executable:
+- **Input:** resources.qrc file
+- **Output:** qrc_resources.cpp
+- **Advantage:** No need to deploy separate image files
+- **Automatic:** CMake's AUTORCC handles this
 
 ### **Deploy**
 The process of copying the compiled binary to the Raspberry Pi and starting it:
 ```bash
-scp LeafSense root@10.42.0.196:/opt/leafsense/
-ssh root@10.42.0.196 './LeafSense &'
+scp build-arm64/src/LeafSense root@10.42.0.196:/opt/leafsense/
+ssh root@10.42.0.196 'killall LeafSense && /opt/leafsense/LeafSense &'
 ```
 
 ### **SCP (Secure Copy)**
@@ -301,36 +357,114 @@ Converting source code (.cpp) to machine code (.o):
 ```bash
 g++ -c Temp.cpp -o Temp.o
 ```
+- **Preprocessor:** Expands #include directives and macros
+- **Compiler:** Converts C++ to assembly language
+- **Assembler:** Converts assembly to machine code (object file)
+
+### **Object File**
+Compiled but not yet linked code:
+- **Extension:** `.o` (Unix/Linux) or `.obj` (Windows)
+- **Contents:** Machine code + symbol table (function names, variables)
+- **Not executable:** Missing library code and entry point resolution
 
 ### **Linking**
-Combining object files (.o) into executable:
+Combining object files (.o) and libraries into final executable:
 ```bash
-g++ Temp.o PHSensor.o ... -o LeafSense
+g++ Temp.o PHSensor.o main.o -o LeafSense -lonnxruntime -lopencv_core
 ```
+- **Symbol Resolution:** Matches function calls to implementations
+- **Address Assignment:** Determines final memory addresses
+- **Output:** Executable binary (ELF format on Linux)
 
 ### **Library**
-Collection of reusable code:
-- **Static (.a):** Embedded in final binary
-- **Shared (.so):** Loaded at runtime
-- **Example:** libonnxruntime.so (ONNX Runtime)
+Collection of reusable compiled code:
+- **Static (.a):** Embedded in final binary at link time
+  - Advantage: No runtime dependencies
+  - Disadvantage: Larger executable size
+- **Shared (.so):** Loaded at runtime from separate file
+  - Advantage: Smaller executable, shared between programs
+  - Disadvantage: Must be present on target system
+- **Example:** libonnxruntime.so (ONNX Runtime shared library)
+
+### **Dependencies**
+External libraries required by the program:
+- **Build-time:** Libraries needed during compilation (headers + .so/.a files)
+- **Runtime:** Libraries needed when program runs (.so files)
+- **LeafSense deps:** Qt5, SQLite3, OpenCV, ONNX Runtime, pthread
+
+### **Header File**
+C++ file containing declarations (.h):
+- **Purpose:** Tells compiler what functions/classes exist
+- **Example:** `Temp.h` declares `Temp` class interface
+- **Not compiled directly:** Included by .cpp files that use them
 
 ### **Include Path**
 Where compiler looks for header files:
 ```bash
 -I/path/to/headers
+-I${CMAKE_SOURCE_DIR}/include
 ```
+- **System paths:** `/usr/include/`, `/usr/local/include/`
+- **Project paths:** `include/`, `include/drivers/sensors/`
 
 ### **Library Path**
 Where linker looks for libraries:
 ```bash
 -L/path/to/libs -lonnxruntime
 ```
+- **-L:** Adds directory to library search path
+- **-l:** Links specific library (libonnxruntime.so → `-lonnxruntime`)
 
 ### **RPATH**
 Runtime library search path embedded in binary:
 ```bash
 -Wl,-rpath,/opt/onnxruntime/lib
 ```
+- **Purpose:** Tells dynamic linker where to find .so files at runtime
+- **Alternative:** LD_LIBRARY_PATH environment variable
+- **LeafSense:** Uses RPATH for ONNX Runtime location
+
+### **Makefile**
+Build script generated by CMake:
+- **Targets:** Compilation steps (all, clean, LeafSense)
+- **Dependencies:** Which files depend on which headers
+- **Parallel build:** `make -j$(nproc)` uses all CPU cores
+- **Incremental:** Only recompiles changed files
+
+### **Clean Build**
+Deleting all build artifacts and recompiling from scratch:
+```bash
+rm -rf build-arm64/
+mkdir build-arm64 && cd build-arm64
+cmake -DCMAKE_TOOLCHAIN_FILE=../deploy/toolchain-rpi4.cmake ..
+make -j$(nproc)
+```
+- **When needed:** After changing CMakeLists.txt or fixing build errors
+- **Slower:** Recompiles everything, but ensures consistency
+
+### **Incremental Build**
+Recompiling only changed files:
+```bash
+make -j$(nproc)
+```
+- **Faster:** Only processes modified .cpp files
+- **Risk:** May miss dependency changes (headers)
+
+### **Build Type**
+Compilation mode:
+- **Debug:** Includes symbols for debugger, no optimization (-g -O0)
+- **Release:** Optimized for speed, no debug info (-O3)
+- **CMake option:** `-DCMAKE_BUILD_TYPE=Release`
+- **Default:** Debug (for development)
+
+### **Strip**
+Removing debug symbols from binary to reduce size:
+```bash
+strip LeafSense
+```
+- **Effect:** 790K → ~300K (typical reduction)
+- **Trade-off:** Can't debug stripped binary
+- **When:** Production deployment, not development
 
 ---
 
