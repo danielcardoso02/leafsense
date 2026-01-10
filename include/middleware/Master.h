@@ -67,6 +67,7 @@ private:
     MQueueHandler* msgQueue;     ///< Queue for database logging
     bool running;                ///< Thread run flag
     bool sensorsCorrecting;      ///< Flag: correction in progress
+    int cameraCaptureCounter;    ///< Counter for periodic camera capture
 
     /* ------------------------------------------------------------------------
      * Configuration
@@ -129,6 +130,15 @@ private:
      * @param m Associated mutex
      */
     void triggerSignal(pthread_cond_t* c, pthread_mutex_t* m);
+    
+    /**
+     * @brief Updates alert LED based on sensor readings
+     * 
+     * Checks if any parameter is out of ideal range and controls
+     * the LED via kernel module (/dev/leddev).
+     * LED ON = Alert active, LED OFF = All parameters normal
+     */
+    void updateAlertLED();
 
 public:
     /* ------------------------------------------------------------------------

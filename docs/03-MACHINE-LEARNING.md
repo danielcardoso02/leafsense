@@ -1,21 +1,21 @@
 # LeafSense - Machine Learning
 
-## Visão Geral
+## Overview
 
-O sistema de Machine Learning do LeafSense utiliza um modelo de classificação de imagens para detetar doenças em plantas de tomate. O modelo foi treinado para identificar 4 classes diferentes.
+The LeafSense Machine Learning system uses an image classification model to detect diseases in tomato plants. The model was trained to identify 4 different classes.
 
-## Classes de Classificação
+## Classification Classes
 
-| Classe | Descrição | Ação Recomendada |
+| Class | Description | Recommended Action |
 |--------|-----------|------------------|
-| **Healthy** | Planta saudável | Manter condições atuais |
-| **Bacterial_Spot** | Mancha bacteriana | Remover folhas afetadas, aplicar cobre |
-| **Early_Blight** | Requeima precoce | Melhorar ventilação, fungicida |
-| **Late_Blight** | Requeima tardia | Ação urgente, isolar planta |
+| **Healthy** | Healthy plant | Maintain current conditions |
+| **Disease** | Bacterial/fungal diseases | Remove affected leaves, apply treatment |
+| **Deficiency** | NPK nutrient deficiency | Adjust nutrient solution |
+| **Pest** | Insect damage | Apply pest control measures |
 
-## Arquitetura do Modelo
+## Model Architecture
 
-### Base: ResNet18 Modificada
+### Base: MobileNetV3-Small
 ```
 Input: 224x224x3 (RGB)
     ↓
@@ -23,13 +23,13 @@ Conv2d (64 filters, 7x7)
     ↓
 BatchNorm + ReLU + MaxPool
     ↓
-ResBlock1 (64 → 64)
+Block1 (64 → 64)
     ↓
-ResBlock2 (64 → 128)
+Block2 (64 → 128)
     ↓
-ResBlock3 (128 → 256)
+Block3 (128 → 256)
     ↓
-ResBlock4 (256 → 512)
+Block4 (256 → 512)
     ↓
 AdaptiveAvgPool2d
     ↓
@@ -40,7 +40,7 @@ Linear (512 → 4)
 Output: 4 classes (softmax)
 ```
 
-## Métricas de Treino
+## Metrics de Treino
 
 ### Resultados Finais
 - **Accuracy:** 99.39%
@@ -48,14 +48,16 @@ Output: 4 classes (softmax)
 - **Recall:** 99.39%
 - **F1-Score:** 99.39%
 
-### Matriz de Confusão (Validation Set)
+### Confusion Matrix (Validation Set)
 ```
                     Predicted
-                 H    BS   EB   LB
-Actual    H    [498   1    0    1]
-          BS   [  0 499    1    0]
-          EB   [  1   1  498    0]
-          LB   [  0   0    0  500]
+                 Healthy  Disease  Deficiency  Pest
+Actual  Healthy     [76      0         0        0]
+        Disease     [ 0    346         0        0]
+        Deficiency  [ 0      0        41        0]
+        Pest        [ 0      0         0      692]
+
+Total validation images: 1,155 (across 4 classes)
 ```
 
 ### Curvas de Treino
@@ -66,12 +68,18 @@ Actual    H    [498   1    0    1]
 
 ## Dataset
 
-### PlantVillage Dataset (Subset)
-- **Total de imagens:** 10,000
-- **Por classe:** ~2,500 imagens
-- **Split:** 80% treino, 10% validação, 10% teste
+### Combined Real-World Datasets
+- **Sources:** Roboflow (disease/healthy), NPK deficiency dataset, Pest detection dataset
+- **Total images:** 2,206
+  - Training: 1,543 images
+  - Validation: 663 images
+- **Class distribution:**
+  - Disease: 1,123 images (777 train + 346 val)
+  - Pest: 1,692 images (1,000 train + 692 val)
+  - Healthy: 224 images (148 train + 76 val)
+  - Deficiency: 196 images (155 train + 41 val)
 
-### Augmentação de Dados
+### Augmentação de Data
 ```python
 transform_train = transforms.Compose([
     transforms.RandomResizedCrop(224),
@@ -84,24 +92,25 @@ transform_train = transforms.Compose([
 ])
 ```
 
-## Integração no Sistema
+## Integration no System
 
-### Ficheiro do Modelo
-- **Localização:** `/opt/leafsense/leafsense_model.onnx`
-- **Tamanho:** 5.9 MB
-- **Formato:** ONNX (Open Neural Network Exchange)
+### Model File
+- **Location:** `/opt/leafsense/leafsense_model.onnx`
+- **Size:** 5.9 MB
+- **Format:** ONNX (Open Neural Network Exchange)
+- **Classes:** `/opt/leafsense/leafsense_model_classes.txt`
 
-### Código de Inferência (C++)
+### Inference Code (C++)
 ```cpp
 // include/application/ml/ML.h
 class MLEngine {
 public:
     MLEngine(const std::string& model_path);
     
-    // Classificar uma imagem
+    // Classify an image
     PredictionResult predict(const cv::Mat& image);
     
-    // Obter todas as probabilidades
+    // Get all probabilities
     std::vector<float> getProbabilities(const cv::Mat& image);
     
 private:
@@ -119,21 +128,21 @@ struct PredictionResult {
 };
 ```
 
-### Pré-processamento
+### Preprocessing
 ```cpp
 cv::Mat MLEngine::preprocess(const cv::Mat& image) {
     cv::Mat resized, normalized;
     
-    // Resize para 224x224
+    // Resize to 224x224
     cv::resize(image, resized, cv::Size(224, 224));
     
-    // Converter BGR para RGB
+    // Convert BGR to RGB
     cv::cvtColor(resized, resized, cv::COLOR_BGR2RGB);
     
-    // Normalizar com médias ImageNet
+    // Normalize with ImageNet means
     resized.convertTo(normalized, CV_32F, 1.0/255.0);
     
-    // Aplicar normalização por canal
+    // Apply per-channel normalization
     cv::subtract(normalized, cv::Scalar(0.485, 0.456, 0.406), normalized);
     cv::divide(normalized, cv::Scalar(0.229, 0.224, 0.225), normalized);
     
@@ -143,25 +152,25 @@ cv::Mat MLEngine::preprocess(const cv::Mat& image) {
 
 ## ONNX Runtime
 
-### Configuração ARM64
+### ARM64 Configuration
 ```cpp
 Ort::SessionOptions session_options;
-session_options.SetIntraOpNumThreads(4);  // 4 cores do Pi
+session_options.SetIntraOpNumThreads(4);  // 4 cores on Pi
 session_options.SetGraphOptimizationLevel(
     GraphOptimizationLevel::ORT_ENABLE_ALL
 );
 ```
 
 ### Performance no Raspberry Pi 4B
-| Métrica | Valor |
+| Metric | Value |
 |---------|-------|
 | Tempo de inferência | ~150ms |
-| Uso de RAM | ~50MB |
-| Uso de CPU | ~80% (1 core) |
+| Usage de RAM | ~50MB |
+| Usage de CPU | ~80% (1 core) |
 
-## Treino do Modelo
+## Treino do Template
 
-### Ambiente de Treino
+### Environment de Treino
 - **GPU:** NVIDIA RTX 3070
 - **Framework:** PyTorch 2.0
 - **Python:** 3.10
@@ -174,7 +183,7 @@ import torch.nn as nn
 from torchvision import models, transforms
 from torch.utils.data import DataLoader
 
-# Modelo base
+# Template base
 model = models.resnet18(pretrained=True)
 model.fc = nn.Linear(512, 4)  # 4 classes
 
@@ -230,7 +239,7 @@ if (!modelLoaded) {
 ## Melhorias Futuras
 
 1. **Mais classes** - Adicionar mais doenças e pragas
-2. **Modelo mais leve** - MobileNetV3 para inferência mais rápida
+2. **Template mais leve** - MobileNetV3 para inferência mais rápida
 3. **Quantização INT8** - Reduzir tamanho e aumentar velocidade
 4. **Treino contínuo** - Melhorar modelo com dados do campo
 5. **Segmentação** - Identificar área afetada da folha

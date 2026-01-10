@@ -93,11 +93,11 @@ void dDatabase::run() {
         // 3. Execution Layer
         if (!sqlCommand.empty()) {
             bool success = db->insert(sqlCommand);
-            if (!success) {
-                std::cerr << "[Daemon] Failed to execute: " << sqlCommand << std::endl;
+            if (success) {
+                std::cout << "[Daemon] SUCCESS - Inserted: " << msg << std::endl;
             } else {
-                // Debug output
-                std::cout << "[Daemon] Processed: " << msg << std::endl;
+                std::cerr << "[Daemon] FAILED to insert: " << msg << std::endl;
+                std::cerr << "[Daemon] SQL: " << sqlCommand << std::endl;
             }
         }
     }

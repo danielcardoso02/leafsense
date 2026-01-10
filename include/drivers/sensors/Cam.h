@@ -1,10 +1,11 @@
 /**
  * @file Cam.h
- * @brief USB Camera Driver for Plant Imaging
+ * @brief Camera Driver for Plant Imaging (Raspberry Pi Camera Module)
  * @layer Drivers/Sensors
  * 
- * Captures images from USB camera for ML disease detection.
- * Uses OpenCV for image capture in real mode.
+ * Captures images from Raspberry Pi Camera Module (OV5647) for ML disease detection.
+ * Uses OpenCV VideoCapture for image acquisition.
+ * Images are saved to /opt/leafsense/gallery/ with timestamp.
  */
 
 #ifndef CAM_H
@@ -17,10 +18,10 @@
 
 /**
  * @class Cam
- * @brief USB camera driver
+ * @brief Raspberry Pi camera driver
  * 
- * Real mode: Captures image using OpenCV VideoCapture
- * Mock mode: Returns path to a placeholder image
+ * Captures images from /dev/video0 (OV5647 camera module) using OpenCV.
+ * Photos are automatically saved with timestamp to gallery directory.
  */
 class Cam {
 public:
@@ -30,8 +31,11 @@ public:
     Cam() {}
     
     /**
-     * @brief Captures a photo
-     * @return Filepath to the captured image
+     * @brief Captures a photo from the camera
+     * @return Filepath to the captured image, or empty string on failure
+     * 
+     * The image is saved to /opt/leafsense/gallery/plant_YYYYMMDD_HHMMSS.jpg
+     * Returns empty string if camera cannot be opened or capture fails.
      */
     std::string takePhoto();
 };

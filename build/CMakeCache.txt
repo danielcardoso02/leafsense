@@ -124,6 +124,21 @@ CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 //Value Computed by CMake
 CMAKE_PROJECT_NAME:STATIC=LeafSense
 
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION:STATIC=1.4.0
+
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION_MAJOR:STATIC=1
+
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION_MINOR:STATIC=4
+
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION_PATCH:STATIC=0
+
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION_TWEAK:STATIC=
+
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
 
@@ -187,13 +202,13 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-LeafSense_BINARY_DIR:STATIC=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build
+LeafSense_BINARY_DIR:STATIC=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build/src
 
 //Value Computed by CMake
-LeafSense_IS_TOP_LEVEL:STATIC=ON
+LeafSense_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-LeafSense_SOURCE_DIR:STATIC=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project
+LeafSense_SOURCE_DIR:STATIC=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/src
 
 //ONNX Runtime include directory
 ONNXRUNTIME_INCLUDE_DIR:PATH=/usr/local/include
@@ -324,7 +339,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=2
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

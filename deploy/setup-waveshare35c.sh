@@ -114,7 +114,7 @@ export TSLIB_PLUGINDIR=/usr/lib/ts
 # Qt5 platform settings
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
 export QT_QPA_FB_HIDECURSOR=1
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/event1:rotate=0
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/event0:rotate=90
 export QT_QPA_FONTDIR=/usr/share/fonts
 EOF
 
@@ -130,20 +130,19 @@ case "$1" in
     start)
         echo "Starting LeafSense..."
         
-        # Source environment
-        . /etc/profile.d/qt-touchscreen.sh
-        
-        # Start ts_uinput for calibrated touch
-        ts_uinput -d &
-        sleep 2
-        
-        # Start application
+        # Start application with Qt touchscreen plugin
+        # Touchscreen requires rotate=90 for Waveshare 3.5" LCD (C)
         cd /opt/leafsense
-        ./LeafSense >> /var/log/leafsense.log 2>&1 &
+        exec env \
+            QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1 \
+            QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins \
+            QT_QPA_FONTDIR=/usr/share/fonts \
+            QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90" \
+            ./LeafSense -platform linuxfb:fb=/dev/fb1 >> /var/log/leafsense.log 2>&1 &
         ;;
     stop)
         echo "Stopping LeafSense..."
-        killall LeafSense ts_uinput 2>/dev/null
+        killall LeafSense 2>/dev/null
         ;;
     restart)
         $0 stop

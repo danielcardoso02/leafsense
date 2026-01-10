@@ -1,23 +1,26 @@
-# LeafSense - Documentação
+# LeafSense - Documentation
 
-## Índice
+## Index
 
-1. [Visão Geral do Projeto](01-OVERVIEW.md)
-2. [Arquitetura do Sistema](02-ARCHITECTURE.md)
+1. [Overview do Projeto](01-OVERVIEW.md)
+2. [Architecture do System](02-ARCHITECTURE.md)
 3. [Machine Learning](03-MACHINE-LEARNING.md)
-4. [Deployment - Raspberry Pi](04-RASPBERRY-PI-DEPLOYMENT.md)
-5. [Kernel Module - LED Driver](05-KERNEL-MODULE.md)
-6. [Base de Dados](06-DATABASE.md)
-7. [Interface Gráfica (Qt5)](07-GUI.md)
-8. [Guia de Troubleshooting](08-TROUBLESHOOTING.md)
-9. [Changelog e Histórico](09-CHANGELOG.md)
-10. [Secção de Implementação (Relatório)](10-IMPLEMENTATION-REPORT.md)
+4. [Buildroot Image Configuration](04-BUILDROOT-IMAGE.md)
+5. [Deployment - Raspberry Pi](05-RASPBERRY-PI-DEPLOYMENT.md)
+6. [Device Driver (LED Module)](06-DEVICE-DRIVER.md)
+7. [Base de Data](07-DATABASE.md)
+8. [Interface Gráfica (Qt5)](08-GUI.md)
+9. [Guide de Troubleshooting](09-TROUBLESHOOTING.md)
+10. [Changelog e History](10-CHANGELOG.md)
+11. [Secção de Implementation (Report)](11-IMPLEMENTATION-REPORT.md)
+12. [**Testing Guide**](11-TESTING-GUIDE.md)
+13. [Kernel Module - Low Level](13-KERNEL-MODULE.md)
 
 ---
 
 ## Quick Start
 
-### Compilar para Desktop (Desenvolvimento)
+### Compilar para Desktop (Development)
 ```bash
 cd /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project
 mkdir build && cd build
@@ -29,7 +32,7 @@ make -j$(nproc)
 ### Compilar para Raspberry Pi (Cross-Compilation)
 ```bash
 cd /home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project
-mkdir build-arm && cd build-arm
+mkdir build-arm64 && cd build-arm64
 cmake -DCMAKE_TOOLCHAIN_FILE=../deploy/toolchain-rpi4.cmake ..
 make -j$(nproc)
 ```
@@ -38,6 +41,11 @@ make -j$(nproc)
 ```bash
 ssh root@10.42.0.196
 # Password: leafsense
+```
+
+### Start Application (on Pi)
+```bash
+/opt/leafsense/start_leafsense.sh
 ```
 
 ---

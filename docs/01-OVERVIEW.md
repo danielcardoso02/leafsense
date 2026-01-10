@@ -1,126 +1,171 @@
-# LeafSense - Visão Geral do Projeto
+# LeafSense - Project Overview
 
-## Descrição
+## Description
 
-O **LeafSense** é um sistema inteligente de monitorização e controlo para cultivo hidropónico, desenvolvido para Raspberry Pi 4B. O sistema combina sensores de ambiente, atuadores automáticos e Machine Learning para deteção de doenças em plantas.
+**LeafSense** is an intelligent monitoring and control system for hydroponic cultivation, developed for Raspberry Pi 4B. The system combines environmental sensors, automatic actuators, and Machine Learning for plant disease detection.
 
-## Objetivos
+## Objectives
 
-1. **Monitorização em tempo real** de parâmetros ambientais (temperatura, pH, EC)
-2. **Controlo automático** de bombas doseadoras para manutenção de pH e nutrientes
-3. **Deteção de doenças** em plantas usando visão computacional e ML
-4. **Interface gráfica** para visualização e controlo manual
-5. **Logging e analytics** para histórico e análise de tendências
+1. **Real-time monitoring** of environmental parameters (temperature, pH, EC)
+2. **Automatic control** of dosing pumps for pH and nutrient maintenance
+3. **Disease detection** in plants using computer vision and ML
+4. **Graphical interface** for visualization and manual control
+5. **Logging and analytics** for historical data and trend analysis
 
-## Hardware Utilizado
+## Hardware Used
 
 ### Raspberry Pi 4 Model B
 - **RAM:** 2GB
 - **CPU:** Cortex-A72 (ARM64/aarch64) @ 1.5GHz
-- **Conectividade:** WiFi, Ethernet, USB 3.0
-- **GPIO:** 40 pinos para sensores e atuadores
+- **Connectivity:** WiFi, Ethernet, USB 3.0
+- **GPIO:** 40 pins for sensors and actuators
 
-### Sensores
-| Sensor | Interface | Função |
-|--------|-----------|--------|
-| DS18B20 | 1-Wire (GPIO4) | Temperatura da água |
-| pH Sensor | I2C | Medição de pH |
-| EC Sensor | I2C | Condutividade elétrica |
-| Câmara | CSI/USB | Captura de imagens para ML |
+### Display
+| Component | Model | Resolution |
+|-----------|-------|------------|
+| Touchscreen | Waveshare 3.5" LCD (C) | 480x320 |
+| Controller | ILI9486 (SPI) | 16-bit color |
+| Touch | ADS7846 (SPI) | Resistive |
 
-### Atuadores
-| Atuador | Interface | Função |
-|---------|-----------|--------|
-| Bomba pH Up | GPIO (Relé) | Aumentar pH |
-| Bomba pH Down | GPIO (Relé) | Diminuir pH |
-| Bomba Nutrientes | GPIO (Relé) | Adicionar nutrientes |
-| LED Indicador | GPIO (Kernel Module) | Estado do sistema |
+### Sensors
+| Sensor | Interface | Function |
+|--------|-----------|----------|
+| DS18B20 | 1-Wire (GPIO19) | Water temperature |
+| pH Sensor | I2C | pH measurement |
+| EC Sensor | I2C | Electrical conductivity |
+| Camera | CSI/USB | Image capture for ML |
 
-## Stack Tecnológico
+### Actuators
+| Actuator | Interface | Function |
+|----------|-----------|----------|
+| pH Up Pump | GPIO (Relay) | Increase pH |
+| pH Down Pump | GPIO (Relay) | Decrease pH |
+| Nutrient Pump | GPIO (Relay) | Add nutrients |
+| LED Indicator | GPIO (Kernel Module) | System status |
+
+## Technology Stack
 
 ### Software
-- **Linguagem:** C++17
+- **Language:** C++17
 - **GUI Framework:** Qt 5.15.14 (Widgets, Charts, Sql)
 - **ML Runtime:** ONNX Runtime 1.16.3
-- **Visão Computacional:** OpenCV 4.11.0
-- **Base de Dados:** SQLite 3.48.0
+- **Computer Vision:** OpenCV 4.11.0
+- **Database:** SQLite 3.48.0
 - **Build System:** CMake 3.22+
 
-### Sistema Operativo
-- **Buildroot 2025.08** - Sistema Linux embebido customizado
+### Operating System
+- **Buildroot 2025.08** - Custom embedded Linux system
 - **Kernel:** Linux 6.12.41-v8 (64-bit ARM)
 - **Init System:** BusyBox init
 
-## Estrutura do Projeto
+## Project Structure
 
 ```
 leafsense-project/
-├── CMakeLists.txt              # Configuração de build principal
+├── CMakeLists.txt              # Main build configuration
 ├── database/
-│   └── schema.sql              # Schema da base de dados
+│   └── schema.sql              # Database schema
 ├── deploy/
-│   ├── toolchain-rpi4.cmake    # Toolchain para cross-compilation
-│   ├── configure-buildroot.sh  # Script de configuração Buildroot
+│   ├── toolchain-rpi4.cmake    # Toolchain for cross-compilation
+│   ├── configure-buildroot.sh  # Buildroot configuration script
 │   └── setup-onnxruntime-arm64.sh
-├── docs/                       # Documentação
+├── docs/                       # Documentation
 ├── drivers/
-│   ├── kernel_module/          # Módulo de kernel para LED
-│   ├── actuators/              # Drivers de atuadores
-│   └── sensors/                # Drivers de sensores
+│   ├── kernel_module/          # Kernel module for LED
+│   ├── actuators/              # Actuator drivers
+│   └── sensors/                # Sensor drivers
 ├── external/
-│   └── onnxruntime-arm64/      # ONNX Runtime pré-compilado
+│   └── onnxruntime-arm64/      # Pre-compiled ONNX Runtime
 ├── include/
 │   ├── application/
-│   │   ├── gui/                # Headers da interface gráfica
-│   │   └── ml/                 # Headers do sistema ML
-│   ├── drivers/                # Headers dos drivers
-│   └── middleware/             # Headers do middleware
+│   │   ├── gui/                # GUI headers
+│   │   └── ml/                 # ML system headers
+│   ├── drivers/                # Driver headers
+│   └── middleware/             # Middleware headers
 ├── ml/
-│   ├── leafsense_model.onnx    # Modelo treinado (5.9MB)
-│   └── training/               # Scripts de treino Python
+│   ├── leafsense_model.onnx    # Trained model (5.9MB)
+│   └── training/               # Python training scripts
 ├── resources/
-│   ├── resources.qrc           # Recursos Qt
-│   └── images/                 # Imagens da GUI
+│   ├── resources.qrc           # Qt resources
+│   └── images/                 # GUI images
 └── src/
-    ├── main.cpp                # Ponto de entrada
+    ├── main.cpp                # Entry point
     ├── application/
-    │   ├── gui/                # Implementação da GUI
-    │   └── ml/                 # Implementação do ML
-    ├── drivers/                # Implementação dos drivers
-    └── middleware/             # Implementação do middleware
+    │   ├── gui/                # GUI implementation
+    │   └── ml/                 # ML implementation
+    ├── drivers/                # Driver implementation
+    └── middleware/             # Middleware implementation
 ```
 
-## Funcionalidades Implementadas
+## Implemented Features
 
-### ✅ Concluídas
-- [x] Interface gráfica Qt5 com dashboard, gráficos e configurações
-- [x] Sistema de base de dados SQLite com schema completo
-- [x] Integração ONNX Runtime para inferência ML
-- [x] Modelo de ML treinado (4 classes, 99.39% accuracy)
-- [x] Cross-compilation para ARM64
-- [x] Módulo de kernel para controlo de LED
-- [x] Sistema de logging e alertas
-- [x] Auto-start no boot da Raspberry Pi
+### ✅ Completed
+- [x] Qt5 graphical interface with dashboard, charts, and settings
+- [x] SQLite database system with complete schema
+- [x] ONNX Runtime integration for ML inference
+- [x] Trained ML model (4 classes, 99.39% accuracy)
+- [x] Cross-compilation for ARM64
+- [x] Kernel module for LED control
+- [x] LED alert system integration (automatic control based on sensor thresholds)
+- [x] Logging and alerting system
+- [x] Auto-start on Raspberry Pi boot
+- [x] Waveshare 3.5" touchscreen integration (ILI9486 + ADS7846)
+- [x] Touch calibration for Waveshare display (rotate=90)
+- [x] Static IP network configuration
+- [x] SSH remote access via Dropbear
+- [x] Camera driver implementation (OV5647 Pi Camera Module v1)
+- [x] Camera capture system with multi-device fallback and test pattern generation
+- [x] Periodic camera capture system (30-minute intervals)
+- [x] ML-based plant disease detection with captured images
+- [x] Gallery interface for viewing captured images
+- [x] Database integration for sensor readings, ML predictions, and logs
+- [x] Complete system integration and testing
 
-### 🔄 Em Progresso
-- [ ] Integração de sensores reais (atualmente em modo mock)
-- [ ] Calibração de sensores pH e EC
-- [ ] Interface de câmara para ML em tempo real
+### 🔄 In Progress
+- [ ] Real sensor hardware integration (mock mode working - guide available)
+- [ ] pH and EC sensor calibration procedures (documented and ready)
 
-### 📋 Planeado
-- [ ] Servidor web para acesso remoto
-- [ ] Notificações push
-- [ ] Integração com serviços cloud
+### 📋 Planned
+- [ ] Web server for remote access
+- [ ] Push notifications
+- [ ] Cloud service integration
 
-## Autores
+## Documentation
 
-**Grupo 11**
+Complete documentation available in `docs/` directory:
+
+0. **00-TERMINOLOGY.md** - Technical terms and concepts explained
+1. **01-OVERVIEW.md** - This file
+2. **02-ARCHITECTURE.md** - System architecture and design patterns
+3. **03-MACHINE-LEARNING.md** - ML model details and training
+4. **04-BUILDROOT-IMAGE.md** - Custom Linux image configuration and building
+5. **05-RASPBERRY-PI-DEPLOYMENT.md** - Deployment procedures
+6. **06-DEVICE-DRIVER.md** - LED kernel module comprehensive guide
+7. **07-DATABASE.md** - Database schema and queries
+8. **08-GUI.md** - GUI design and implementation
+9. **09-TROUBLESHOOTING.md** - Common issues and solutions
+10. **10-CHANGELOG.md** - Version history
+11. **11-IMPLEMENTATION-REPORT.md** - Technical implementation report
+11. **11-SENSOR-ACTUATOR-INTEGRATION.md** - Hardware integration
+12. **11-TESTING-GUIDE.md** - Testing procedures
+13. **12-DEMO-GUIDE.md** - Demonstration guide
+14. **13-KERNEL-MODULE.md** - LED driver low-level implementation
+15. **FINAL-STATUS.md** - System status report
+16. **PROJECT-STATUS.md** - Development status
+17. **README.md** - Quick start guide
+10. **10-IMPLEMENTATION-REPORT.md** - Final project report
+11. **11-SENSOR-ACTUATOR-INTEGRATION.md** - Hardware integration guide
+12. **12-DEMO-GUIDE.md** - Comprehensive demonstration guide
+
+## Authors
+
+**Group 11**
 
 - Daniel Gonçalo Silva Cardoso, PG53753
 - Marco Xavier Leite Costa, PG60210
 
-**Orientador:** Professor Adriano José Conceição Tavares
+**Advisor:** Professor Adriano José Conceição Tavares
 
-## Licença
+## License
 
-Este projeto foi desenvolvido no âmbito da unidade curricular de Embedded Systems and Computers - Master's in Industrial Electronics and Computers Engineering.
+This project was developed as part of the Embedded Systems and Computers course - Master's in Industrial Electronics and Computers Engineering.

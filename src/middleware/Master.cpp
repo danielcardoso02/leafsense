@@ -6,6 +6,8 @@
 #include "Master.h"
 #include <iostream>
 #include <sstream>
+#include <fcntl.h>
+#include <unistd.h>
 
 /* ============================================================================
  * Constructor / Destructor
@@ -14,7 +16,8 @@
 Master::Master(MQueueHandler* queue) 
     : msgQueue(queue)
     , running(false)
-    , sensorsCorrecting(false) 
+    , sensorsCorrecting(false)
+    , cameraCaptureCounter(0)
 {
     // Initialize configuration
     idealConditions = new IdealConditions();
@@ -139,6 +142,33 @@ void Master::tReadSensorsFunc()
         ss << "SENSOR|" << t << "|" << p << "|" << e;
         msgQueue->sendMessage(ss.str());
 
+        /* --------------------------------------------------------------------
+         * Periodic Camera Capture & ML Analysis (every 30 minutes)
+         * -------------------------------------------------------------------- */
+        cameraCaptureCounter++;
+        if (cameraCaptureCounter >= 900) {  // 900 * 2s = 1800s = 30 minutes
+            cameraCaptureCounter = 0;
+            
+            std::cout << "[Master] Capturing photo for ML analysis..." << std::endl;
+            std::string photoPath = camera->takePhoto();
+            
+            if (!photoPath.empty()) {
+                // Run ML inference on captured image
+                MLResult mlResult = mlEngine->analyzeDetailed(photoPath);
+                
+                // Log ML prediction to database
+                std::stringstream mlLog;
+                mlLog << "LOG|ML Analysis|" << mlResult.class_name 
+                      << "|Confidence: " << (mlResult.confidence * 100) << "%";
+                msgQueue->sendMessage(mlLog.str());
+                
+                std::cout << "[Master] ML Result: " << mlResult.class_name 
+                          << " (" << (mlResult.confidence * 100) << "%)" << std::endl;
+            } else {
+                std::cerr << "[Master] Failed to capture photo" << std::endl;
+            }
+        }
+
         // Get ideal ranges for control decisions
         idealConditions->getTemp(tempRange);
         idealConditions->getPH(phRange);
@@ -168,6 +198,11 @@ void Master::tReadSensorsFunc()
         if (e < tdsRange[0]) {
             triggerSignal(&condN, &mutexN);
         }
+        
+        /* --------------------------------------------------------------------
+         * Update Alert LED (kernel module integration)
+         * -------------------------------------------------------------------- */
+        updateAlertLED();
     }
 }
 
@@ -320,4 +355,47 @@ void Master::destroyConds()
     pthread_cond_destroy(&condPHU);
     pthread_cond_destroy(&condPHD);
     pthread_cond_destroy(&condWH);
+}
+
+/* ============================================================================
+ * LED Alert Control
+ * ============================================================================ */
+
+void Master::updateAlertLED() 
+{
+    // Get ideal ranges
+    float tempRange[2], phRange[2], tdsRange[2];
+    idealConditions->getTemp(tempRange);
+    idealConditions->getPH(phRange);
+    idealConditions->getTDS(tdsRange);
+    
+    // Get current sensor values
+    float t = tempSensor->readSensor();
+    float p = phSensor->readSensor();
+    float e = tdsSensor->readSensor();
+    
+    // Check if any parameter is out of range
+    bool alertActive = (t < tempRange[0] || t > tempRange[1] ||
+                        p < phRange[0] || p > phRange[1] ||
+                        e < tdsRange[0] || e > tdsRange[1]);
+    
+    // Control LED via kernel module
+    static int ledFd = -1;
+    
+    // Open LED device on first call
+    if (ledFd == -1) {
+        ledFd = open("/dev/leddev", O_WRONLY);
+        if (ledFd < 0) {
+            // LED module not loaded, skip LED control
+            return;
+        }
+    }
+    
+    // Write '1' or '0' to LED device
+    const char* cmd = alertActive ? "1" : "0";
+    ssize_t written = write(ledFd, cmd, 1);
+    
+    if (written != 1) {
+        std::cerr << "[Master] Failed to write to LED device" << std::endl;
+    }
 }

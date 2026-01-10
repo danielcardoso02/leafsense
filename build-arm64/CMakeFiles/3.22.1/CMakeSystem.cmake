@@ -1,6 +1,6 @@
-set(CMAKE_HOST_SYSTEM "Linux-6.8.0-87-generic")
+set(CMAKE_HOST_SYSTEM "Linux-6.8.0-90-generic")
 set(CMAKE_HOST_SYSTEM_NAME "Linux")
-set(CMAKE_HOST_SYSTEM_VERSION "6.8.0-87-generic")
+set(CMAKE_HOST_SYSTEM_VERSION "6.8.0-90-generic")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "x86_64")
 
 include("/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/deploy/toolchain-rpi4.cmake")

@@ -28,6 +28,8 @@
 #include <QRandomGenerator>
 #include <QPainter>
 #include <QPixmap>
+#include <QDir>
+#include <QFileInfo>
 
 /* ============================================================================
  * Constructor / Destructor
@@ -172,9 +174,12 @@ void AnalyticsWindow::setup_ui()
     gallery_layout->addLayout(controls);
     tabs->addTab(tab_gallery, "Gallery");
 
-    // Refresh gallery when tab is selected (fixes scaling issues)
+    // Refresh gallery when tab is selected (fixes scaling issues and reloads images)
     connect(tabs, &QTabWidget::currentChanged, this, [this](int index) {
         if (index == 2) {
+            qDebug() << "[Gallery] Tab selected - reloading images...";
+            load_gallery_data();  // Reload images from disk
+            current_img_index = 0;  // Reset to first image
             QApplication::processEvents();
             update_gallery_display();
         }
@@ -483,34 +488,45 @@ void AnalyticsWindow::update_chart_series(int column_index)
  * ============================================================================ */
 
 /**
- * @brief Loads gallery image data (currently mock data).
+ * @brief Loads gallery image data from the gallery directory.
  * @author Daniel Cardoso, Marco Costa
  */
 void AnalyticsWindow::load_gallery_data()
 {
     gallery_items.clear();
 
-    // TODO: Load from database (plant_images + ml_predictions tables)
-    // Currently using mock data for demonstration
-
-    // Mock Image 1: Healthy plant
-    GalleryItem item1;
-    item1.image_id = 1;
-    item1.filepath = ":/images/images/logo_leafsense.png";
-    item1.timestamp = "2025-11-29 10:00";
-    item1.prediction_label = "Healthy";
-    item1.is_verified = true;
-    gallery_items.append(item1);
-
-    // Mock Image 2: Disease detected
-    GalleryItem item2;
-    item2.image_id = 2;
-    item2.filepath = ":/images/images/logo_leafsense.png";
-    item2.timestamp = "2025-11-30 14:00";
-    item2.prediction_label = "Powdery Mildew";
-    item2.bounding_box = "80,20,60,60";  // x,y,width,height
-    item2.is_verified = false;
-    gallery_items.append(item2);
+    // Gallery directory where camera saves images
+    QString gallery_dir = "/opt/leafsense/gallery/";
+    
+    QDir dir(gallery_dir);
+    if (!dir.exists()) {
+        qDebug() << "[Gallery] Directory does not exist:" << gallery_dir;
+        return;
+    }
+    
+    // Get all JPEG images sorted by name (which includes timestamp)
+    QStringList filters;
+    filters << "*.jpg" << "*.jpeg" << "*.JPG" << "*.JPEG";
+    QFileInfoList files = dir.entryInfoList(filters, QDir::Files, QDir::Name | QDir::Reversed);
+    
+    qDebug() << "[Gallery] Found" << files.size() << "images in" << gallery_dir;
+    
+    // Load each image as a gallery item
+    int id = 1;
+    for (const QFileInfo &fileInfo : files) {
+        GalleryItem item;
+        item.image_id = id++;
+        item.filepath = fileInfo.absoluteFilePath();
+        item.timestamp = fileInfo.lastModified().toString("yyyy-MM-dd HH:mm:ss");
+        item.prediction_label = "Processing...";  // Will be updated by ML
+        item.is_verified = false;
+        
+        gallery_items.append(item);
+    }
+    
+    if (gallery_items.isEmpty()) {
+        qDebug() << "[Gallery] No images found. Capture a photo from the main window.";
+    }
 }
 
 /* ============================================================================
@@ -523,13 +539,24 @@ void AnalyticsWindow::load_gallery_data()
  */
 void AnalyticsWindow::update_gallery_display()
 {
-    if (gallery_items.empty()) return;
+    if (gallery_items.empty()) {
+        qDebug() << "[Gallery] No images to display";
+        image_label->setText("No Images Available\n\nImages will appear here after camera capture");
+        info_label->setText("Waiting for images...");
+        btn_prev->setEnabled(false);
+        btn_next->setEnabled(false);
+        btn_verify->setEnabled(false);
+        return;
+    }
+
+    qDebug() << "[Gallery] Displaying image" << current_img_index + 1 << "of" << gallery_items.size();
 
     GalleryItem &item = gallery_items[current_img_index];
 
     // Load and display image
     QPixmap pixmap(item.filepath);
     if (!pixmap.isNull()) {
+        qDebug() << "[Gallery] Loaded image:" << item.filepath;
         QPixmap drawing = pixmap.copy();
 
         // Draw bounding box if present
@@ -555,14 +582,28 @@ void AnalyticsWindow::update_gallery_display()
         if (labelSize.width() < 10) {
             labelSize = QSize(300, 200);  // Fallback size
         }
+        qDebug() << "[Gallery] Scaling to" << labelSize;
         image_label->setPixmap(drawing.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
-        image_label->setText("Image not found");
+        qCritical() << "[Gallery] Failed to load image:" << item.filepath;
+        image_label->setText("Failed to load image:\n" + item.filepath);
     }
 
     // Update info label
     QString status = item.is_verified ? "[VERIFIED] " : "[PENDING] ";
-    info_label->setText(item.timestamp + " - " + status + item.prediction_label);
+    QString info = QString("%1/%2 - %3%4%5")
+        .arg(current_img_index + 1)
+        .arg(gallery_items.size())
+        .arg(item.timestamp)
+        .arg(status)
+        .arg(item.prediction_label);
+    info_label->setText(info);
+    
+    qDebug() << "[Gallery] Info:" << info;
+
+    // Enable/disable navigation buttons
+    btn_prev->setEnabled(current_img_index > 0);
+    btn_next->setEnabled(current_img_index < gallery_items.size() - 1);
 
     // Update verify button state
     if (item.is_verified) {
