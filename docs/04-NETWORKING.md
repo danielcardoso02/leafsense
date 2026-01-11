@@ -283,6 +283,6 @@ ssh -i ~/.ssh/leafsense_rsa root@10.42.0.196
 ---
 
 ## Related Documentation
-- [Raspberry Pi Deployment](05-RASPBERRY-PI-DEPLOYMENT.md)
-- [Troubleshooting Guide](09-TROUBLESHOOTING.md)
+- [Raspberry Pi Deployment](06-RASPBERRY-PI-DEPLOYMENT.md)
+- [Troubleshooting Guide](10-TROUBLESHOOTING.md)
 - [Terminology](19-TERMINOLOGY.md)

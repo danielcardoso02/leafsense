@@ -50,7 +50,7 @@ make menuconfig
 
 **Enabled options:**
 
-| Categoria | Packages |
+| Category | Packages |
 |-----------|---------|
 | Toolchain | glibc, C++ support, GCC 14.3.0 |
 | Qt5 | qt5base, qt5charts, qt5svg, qt5sql |
@@ -353,7 +353,7 @@ The deployment process involves:
 
 4. **Auto-start configuration**
    ```bash
-   # /etc/init.d/S98leafsense
+   # /etc/init.d/S99leafsense
    export QT_QPA_PLATFORM=offscreen
    cd /opt/leafsense && ./LeafSense &
    ```
@@ -373,7 +373,7 @@ Raspberry Pi 4B
 ├── /lib/modules/6.12.41-v8/
 │   └── led.ko                 # Kernel module (13KB)
 ├── /etc/init.d/
-│   └── S98leafsense           # Startup script
+│   └── S99leafsense           # Startup script
 └── /var/log/
     └── leafsense.log          # Application logs
 ```
@@ -392,7 +392,7 @@ System validation was performed through:
 | ONNX model loading | ✅ Model loaded |
 | LeafSense application | ✅ Running |
 | Sensor readings (mock) | ✅ Data being recorded |
-| Auto-start on boot | ✅ S98leafsense |
+| Auto-start on boot | ✅ S99leafsense |
 
 **System metrics:**
 

@@ -2,10 +2,10 @@
 
 ## Overview
 
-The LeafSense LED Alert Driver is a Linux kernel module that provides a character device interface for controlling an LED indicator used for system alerts. The driver implements a simple write-only interface at `/dev/leddev` where user-space applications can send commands ('1' or '0') to turn the LED on or off.
+The LeafSense LED Alert Driver is a Linux kernel module that provides a character device interface for controlling an LED indicator used for system alerts. The driver implements a simple write-only interface at `/dev/led0` where user-space applications can send commands ('1' or '0') to turn the LED on or off.
 
 **Driver Type:** Character Device  
-**Device Node:** `/dev/leddev`  
+**Device Node:** `/dev/led0`  
 **Major Number:** Dynamic (assigned by kernel)  
 **Minor Number:** 0  
 **Module Name:** `ledmodule`  
@@ -47,7 +47,7 @@ ledmodule/
 |  LeafSense App    |
 +-------------------+
         |
-        | open("/dev/leddev", O_WRONLY)
+        | open("/dev/led0", O_WRONLY)
         | write(fd, "1", 1)
         | close(fd)
         v
@@ -125,7 +125,7 @@ To change the GPIO pin, modify the driver source:
 1. Allocates major/minor device numbers
 2. Initializes character device structure
 3. Creates device class
-4. Creates device node `/dev/leddev`
+4. Creates device node `/dev/led0`
 5. Initializes GPIO pin for LED control
 6. Sets initial LED state to OFF
 
@@ -136,7 +136,7 @@ To change the GPIO pin, modify the driver source:
 **Example Output:**
 ```
 [LED Module] Registered with major number 240
-[LED Module] Device created: /dev/leddev
+[LED Module] Device created: /dev/led0
 [LED Module] LED initialized (GPIO: 17)
 ```
 
@@ -165,7 +165,7 @@ To change the GPIO pin, modify the driver source:
 
 **Prototype:** `static int led_open(struct inode *inodep, struct file *filep)`
 
-**Description:** Called when a process opens `/dev/leddev`
+**Description:** Called when a process opens `/dev/led0`
 
 **Actions:**
 - Acquires mutex lock to prevent concurrent access
@@ -223,9 +223,9 @@ write(fd, &cmd, 1);  // Turn LED ON
 #include <fcntl.h>
 #include <unistd.h>
 
-int fd = open("/dev/leddev", O_WRONLY);
+int fd = open("/dev/led0", O_WRONLY);
 if (fd < 0) {
-    perror("Failed to open /dev/leddev");
+    perror("Failed to open /dev/led0");
     return -1;
 }
 ```
@@ -461,20 +461,20 @@ sudo udevadm trigger
 
 ```bash
 # Turn LED ON
-echo 1 > /dev/leddev
+echo 1 > /dev/led0
 
 # Turn LED OFF
-echo 0 > /dev/leddev
+echo 0 > /dev/led0
 ```
 
 #### Using printf
 
 ```bash
 # Turn LED ON
-printf "1" > /dev/leddev
+printf "1" > /dev/led0
 
 # Turn LED OFF
-printf "0" > /dev/leddev
+printf "0" > /dev/led0
 ```
 
 ### Shell Script
@@ -485,9 +485,9 @@ printf "0" > /dev/leddev
 
 for i in {1..5}; do
     echo "Blink $i"
-    echo 1 > /dev/leddev
+    echo 1 > /dev/led0
     sleep 0.5
-    echo 0 > /dev/leddev
+    echo 0 > /dev/led0
     sleep 0.5
 done
 
@@ -518,9 +518,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    fd = open("/dev/leddev", O_WRONLY);
+    fd = open("/dev/led0", O_WRONLY);
     if (fd < 0) {
-        perror("Failed to open /dev/leddev");
+        perror("Failed to open /dev/led0");
         return 1;
     }
 
@@ -554,7 +554,7 @@ def led_control(state):
     Args:
         state: True for ON, False for OFF
     """
-    with open('/dev/leddev', 'w') as f:
+    with open('/dev/led0', 'w') as f:
         f.write('1' if state else '0')
 
 def led_blink(times=5, interval=0.5):
@@ -611,7 +611,7 @@ void Master::updateAlertLED()
     
     // Open LED device on first call
     if (ledFd == -1) {
-        ledFd = open("/dev/leddev", O_WRONLY);
+        ledFd = open("/dev/led0", O_WRONLY);
         if (ledFd < 0) {
             // LED module not loaded, skip LED control
             return;
@@ -646,7 +646,7 @@ void Master::updateAlertLED()
 insmod /lib/modules/$(uname -r)/extra/ledmodule.ko 2>/dev/null
 
 # Set permissions
-chmod 666 /dev/leddev 2>/dev/null
+chmod 666 /dev/led0 2>/dev/null
 
 # Start LeafSense
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
@@ -673,7 +673,7 @@ make
 
 ### Device Node Not Created
 
-**Error:** `/dev/leddev` doesn't exist after `insmod`
+**Error:** `/dev/led0` doesn't exist after `insmod`
 
 **Check kernel log:**
 ```bash
@@ -691,8 +691,8 @@ dmesg | grep -i led
 lsmod | grep led
 
 # If loaded but no device, manually create
-sudo mknod /dev/leddev c $(cat /proc/devices | grep leddev | awk '{print $1}') 0
-sudo chmod 666 /dev/leddev
+sudo mknod /dev/led0 c $(cat /proc/devices | grep leddev | awk '{print $1}') 0
+sudo chmod 666 /dev/led0
 ```
 
 ### Permission Denied
@@ -702,10 +702,10 @@ sudo chmod 666 /dev/leddev
 **Solution:**
 ```bash
 # Change device permissions
-sudo chmod 666 /dev/leddev
+sudo chmod 666 /dev/led0
 
 # Or run as root
-sudo echo 1 > /dev/leddev
+sudo echo 1 > /dev/led0
 ```
 
 ### LED Doesn't Turn On
@@ -722,14 +722,14 @@ cat /sys/class/gpio/gpio17/value  # Replace 17 with your pin
 
 # Monitor kernel log
 dmesg -w &
-echo 1 > /dev/leddev
+echo 1 > /dev/led0
 ```
 
 ### Module in Use (Can't Unload)
 
 **Error:** `rmmod: ERROR: Module ledmodule is in use`
 
-**Check:** LeafSense or another process has `/dev/leddev` open
+**Check:** LeafSense or another process has `/dev/led0` open
 
 **Solution:**
 ```bash
@@ -826,14 +826,14 @@ static struct file_operations fops = {
 echo "Testing LED Driver..."
 
 # Test 1: Device exists
-if [ ! -c /dev/leddev ]; then
-    echo "FAIL: Device /dev/leddev does not exist"
+if [ ! -c /dev/led0 ]; then
+    echo "FAIL: Device /dev/led0 does not exist"
     exit 1
 fi
 echo "PASS: Device exists"
 
 # Test 2: Can write to device
-if echo 1 > /dev/leddev 2>/dev/null; then
+if echo 1 > /dev/led0 2>/dev/null; then
     echo "PASS: Can turn LED ON"
 else
     echo "FAIL: Cannot write to device"
@@ -842,7 +842,7 @@ fi
 
 sleep 1
 
-if echo 0 > /dev/leddev 2>/dev/null; then
+if echo 0 > /dev/led0 2>/dev/null; then
     echo "PASS: Can turn LED OFF"
 else
     echo "FAIL: Cannot write to device"
@@ -850,7 +850,7 @@ else
 fi
 
 # Test 3: Invalid commands
-if echo 2 > /dev/leddev 2>/dev/null; then
+if echo 2 > /dev/led0 2>/dev/null; then
     echo "WARN: Accepted invalid command"
 else
     echo "PASS: Rejects invalid commands"
@@ -869,8 +869,8 @@ COUNT=1000
 echo "Stress testing LED driver ($COUNT cycles)..."
 
 for i in $(seq 1 $COUNT); do
-    echo 1 > /dev/leddev
-    echo 0 > /dev/leddev
+    echo 1 > /dev/led0
+    echo 0 > /dev/led0
     if [ $((i % 100)) -eq 0 ]; then
         echo "Completed $i cycles"
     fi
@@ -887,7 +887,7 @@ echo "Stress test completed successfully"
 
 | Operation | Description | Parameters | Return |
 |-----------|-------------|------------|--------|
-| `open()` | Open device | `/dev/leddev`, `O_WRONLY` | File descriptor or -1 |
+| `open()` | Open device | `/dev/led0`, `O_WRONLY` | File descriptor or -1 |
 | `write()` | Set LED state | '1' (ON) or '0' (OFF) | Bytes written or -1 |
 | `close()` | Close device | File descriptor | 0 or -1 |
 
@@ -897,7 +897,7 @@ echo "Stress test completed successfully"
 |----------|-------------|-------------|
 | `led_init()` | Initialize module | `insmod` |
 | `led_exit()` | Cleanup module | `rmmod` |
-| `led_open()` | Open device | User opens `/dev/leddev` |
+| `led_open()` | Open device | User opens `/dev/led0` |
 | `led_write()` | Process write | User writes to device |
 | `led_release()` | Close device | User closes file descriptor |
 

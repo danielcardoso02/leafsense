@@ -175,7 +175,7 @@ sudo tee -a /media/daniel/BOOT/config.txt << 'EOF'
 # ========================================
 # Waveshare 3.5" LCD (C) Configuration
 # ========================================
-dtoverlay=waveshare35c,speed=48000000,fps=20
+dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
 
 # HDMI to LCD framebuffer settings
 hdmi_force_hotplug=1

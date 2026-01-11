@@ -22,9 +22,9 @@ LeafSense is a complete embedded hydroponic monitoring system running on Raspber
 | Custom Linux Image | ✅ Complete | Buildroot 2025.08, kernel 6.12.41-v8 |
 | Qt5 Framework | ✅ Complete | Qt 5.15.x with Widgets, Charts, SQL |
 | OpenCV | ✅ Complete | OpenCV 4.11.0 for image processing |
-| ONNX Runtime | ✅ Complete | Version 1.20.1 for ARM64 |
+| ONNX Runtime | ✅ Complete | Version 1.16.3 for ARM64 |
 | SQLite | ✅ Complete | Version 3.48.0 for data persistence |
-| Systemd | ✅ Complete | Service management and boot |
+| BusyBox Init | ✅ Complete | S99leafsense init script for auto-start |
 | SSH/Networking | ✅ Complete | Static IP 10.42.0.196, passwordless SSH |
 
 ### 2. Display & Touchscreen

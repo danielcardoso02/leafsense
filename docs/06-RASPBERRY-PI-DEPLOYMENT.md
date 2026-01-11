@@ -334,7 +334,7 @@ chmod +x /opt/leafsense/start.sh
 
 ### 7.5 Create Auto-Start Service (Optional)
 ```bash
-cat > /etc/init.d/S98leafsense << 'EOF'
+cat > /etc/init.d/S99leafsense << 'EOF'
 #!/bin/sh
 
 case "$1" in
@@ -362,12 +362,12 @@ esac
 exit 0
 EOF
 
-chmod +x /etc/init.d/S98leafsense
+chmod +x /etc/init.d/S99leafsense
 ```
 
 ### 7.6 Test Auto-Start
 ```bash
-/etc/init.d/S98leafsense start
+/etc/init.d/S99leafsense start
 ps aux | grep LeafSense
 tail -f /var/log/leafsense.log
 ```
@@ -384,7 +384,7 @@ tail -f /var/log/leafsense.log
 | `/opt/leafsense/start.sh` | Startup script |
 | `/usr/lib/libonnxruntime.so*` | ONNX Runtime libraries |
 | `/lib/modules/6.12.41-v8/led.ko` | LED kernel module |
-| `/etc/init.d/S98leafsense` | Init script |
+| `/etc/init.d/S99leafsense` | Init script |
 | `/var/log/leafsense.log` | Application log |
 
 ---
@@ -445,7 +445,7 @@ Add to `/boot/config.txt`:
 dtparam=spi=on
 
 # Waveshare 3.5" LCD (C) - ILI9486 + ADS7846 Touchscreen
-dtoverlay=waveshare35c:rotate=90,speed=24000000,fps=30
+dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
 
 # Framebuffer for LCD
 framebuffer_width=480

@@ -40,7 +40,7 @@ export QT_QPA_FB_HIDECURSOR=1
 
 **Solution with evdev:**
 - Qt5's evdev touchscreen plugin reads directly from `/dev/input/event0`
-- The `rotate=90` parameter handles coordinate transformation
+- The `rotate=180:invertx` parameter handles coordinate transformation for the 90° rotated display
 - No calibration file is needed
 - No `ts_calibrate` or `ts_uinput` processes required
 
@@ -48,16 +48,16 @@ export QT_QPA_FB_HIDECURSOR=1
 
 ## Rotation Parameter Mapping
 
-The `rotate` parameter in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` MUST match the `rotate` parameter in the dtoverlay:
+The touch coordinates require transformation to match the rotated display. For the Waveshare 3.5" LCD (C) with `rotate=90` in config.txt, the Qt evdev parameter needs `rotate=180:invertx`:
 
 | config.txt dtoverlay | Qt Environment Variable |
 |---------------------|------------------------|
 | `rotate=0` | `rotate=0` |
-| `rotate=90` | `rotate=90` |
+| `rotate=90` | `rotate=180:invertx` |
 | `rotate=180` | `rotate=180` |
 | `rotate=270` | `rotate=270` |
 
-If these don't match, touch coordinates will be wrong (inverted, swapped, or offset).
+**Note:** The `rotate=90` case requires special handling with `:invertx` due to the touchscreen's coordinate system orientation.
 
 ---
 
@@ -156,10 +156,10 @@ This ensures that after reflashing, the touchscreen works immediately without an
 
 ### Touch Coordinates Wrong
 
-1. Verify rotation matches:
+1. Verify configuration:
    ```bash
    cat /boot/config.txt | grep waveshare  # Should show rotate=90
-   echo $QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS  # Should show rotate=90
+   echo $QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS  # Should show rotate=180:invertx
    ```
 
 2. If they don't match, restart with correct rotation:
@@ -198,7 +198,8 @@ If all these pass, the configuration is correctly preserved.
 
 **Key Points:**
 - Use **evdev**, NOT tslib
-- Set `rotate=90` in BOTH config.txt AND environment variable
+- Set `rotate=90` in config.txt dtoverlay
+- Set `rotate=180:invertx` in Qt environment variable
 - Use `speed=16000000` (16MHz) to prevent touch freeze
 - Use `fps=50` to minimize screen flicker
 - All configuration files are in the Buildroot overlay

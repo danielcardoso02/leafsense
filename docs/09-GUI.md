@@ -196,7 +196,7 @@ private:
     QtCharts::QChartView *phChartView;
     QtCharts::QChartView *ecChartView;
     
-    // Filtros
+    // Filters
     QDateEdit *startDate;
     QDateEdit *endDate;
     QComboBox *periodSelector;
@@ -243,7 +243,7 @@ public slots:
 };
 ```
 
-## Temas
+## Themes
 
 ### Light Mode (Default)
 ```cpp

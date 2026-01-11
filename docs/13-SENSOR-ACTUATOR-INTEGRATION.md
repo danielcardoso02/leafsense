@@ -411,8 +411,8 @@ The LED kernel module is already compiled and can be loaded:
 insmod /lib/modules/$(uname -r)/extra/ledmodule.ko
 
 # Control LED
-echo 1 > /dev/leddev  # Turn ON
-echo 0 > /dev/leddev  # Turn OFF
+echo 1 > /dev/led0  # Turn ON
+echo 0 > /dev/led0  # Turn OFF
 ```
 
 **Integration with Alerts** (add to Master.cpp):
@@ -436,7 +436,7 @@ void Master::updateAlertLED() {
     if (currentTDS < tdsRange[0] || currentTDS > tdsRange[1]) hasAlert = true;
     
     // Write to LED device
-    int fd = open("/dev/leddev", O_WRONLY);
+    int fd = open("/dev/led0", O_WRONLY);
     if (fd >= 0) {
         char state = hasAlert ? '1' : '0';
         write(fd, &state, 1);

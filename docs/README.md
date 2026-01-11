@@ -70,10 +70,10 @@
 - Qt5 development packages
 - SQLite3 development packages
 - OpenCV 4.5+
-- ONNX Runtime 1.20+
+- ONNX Runtime 1.16.3+
 
 **Raspberry Pi Cross-Compilation (ARM64):**
-- Buildroot toolchain (see [04-BUILDROOT-IMAGE.md](04-BUILDROOT-IMAGE.md))
+- Buildroot toolchain (see [05-BUILDROOT-IMAGE.md](05-BUILDROOT-IMAGE.md))
 - Cross-compilation toolchain at: `/home/daniel/buildroot/buildroot-2025.08/output/host/`
 
 ---

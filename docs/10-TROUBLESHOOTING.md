@@ -514,7 +514,7 @@ Pi hangs on boot with white screen, only red LED on
 ls /boot/overlays/waveshare35c.dtbo
 
 # 2. Verify config.txt has the correct lines:
-# dtoverlay=waveshare35c,speed=48000000,fps=20
+# dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
 # hdmi_force_hotplug=1
 # hdmi_group=2
 # hdmi_mode=87
@@ -565,7 +565,7 @@ export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
 
-**Key insight:** The `rotate=90` parameter in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` is critical because the display is rotated 90 degrees in config.txt (`dtoverlay=waveshare35c:rotate=90`), and the touch coordinates must be transformed to match.
+**Key insight:** The `rotate=180:invertx` parameter in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` is critical because the display is rotated 90 degrees in config.txt (`dtoverlay=waveshare35c:rotate=90`), and the touch coordinates must be transformed with rotation and X-axis inversion to match correctly.
 
 ### Touchscreen coordinates wrong (touch offset)
 
@@ -579,7 +579,7 @@ The display rotation must match the touch rotation parameter:
 | config.txt rotate | QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS |
 |-------------------|-------------------------------------|
 | rotate=0          | rotate=0 (or no rotation)           |
-| rotate=90         | rotate=90                           |
+| rotate=90         | rotate=180:invertx                  |
 | rotate=180        | rotate=180                          |
 | rotate=270        | rotate=270                          |
 

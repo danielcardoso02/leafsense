@@ -349,7 +349,7 @@ rmmod led
 The module is automatically loaded by the init script:
 
 ```bash
-# /etc/init.d/S98leafsense
+# /etc/init.d/S99leafsense
 if [ -f /lib/modules/$(uname -r)/led.ko ]; then
     insmod /lib/modules/$(uname -r)/led.ko 2>/dev/null || true
 fi

@@ -109,7 +109,7 @@ This release finalizes the system configuration and Buildroot packages, preparin
 | Component | Status | Details |
 |-----------|--------|---------|
 | Display | ✅ Working | fb1 (fb_ili9486), 480x320, 50fps |
-| Touchscreen | ✅ Working | evdev with rotate=90 |
+| Touchscreen | ✅ Working | evdev with rotate=180:invertx |
 | Camera | 🔄 Pending | Hardware detected, libcamera integration pending |
 | GUI | ✅ Running | Qt5 linuxfb on fb1 |
 | Database | ✅ Working | SQLite with all tables |
@@ -119,7 +119,7 @@ This release finalizes the system configuration and Buildroot packages, preparin
 ### Known Constraints
 
 1. **Touchscreen**: Must use evdev, NOT tslib (tslib causes freezing)
-2. **Display rotation**: rotate=90 in config.txt MUST match rotate=90 in Qt environment
+2. **Display rotation**: rotate=90 in config.txt, Qt uses rotate=180:invertx for touch mapping
 3. **SPI speed**: Maximum stable speed is 16MHz for touchscreen reliability
 4. **Camera**: Requires libcamera rebuild (configuration done, build pending)
 
@@ -361,7 +361,7 @@ This version integrates camera functionality with ML analysis, adds LED alert sy
 #### LED Alert System
 - **Kernel module integration** with Master controller
   - Added `updateAlertLED()` function to check sensor thresholds
-  - Automatically controls LED via `/dev/leddev`
+  - Automatically controls LED via `/dev/led0`
   - LED ON = any parameter out of ideal range
   - LED OFF = all parameters within range
 - **Real-time alert feedback** synchronized with sensor reads
@@ -395,7 +395,7 @@ This version integrates camera functionality with ML analysis, adds LED alert sy
 - Camera device: `/dev/video0` (unicam-image)
 - Capture resolution: 640x480 pixels
 - Capture interval: 900 sensor reads (30 minutes at 2s per read)
-- LED control: Character device `/dev/leddev` (write '1'/'0')
+- LED control: Character device `/dev/led0` (write '1'/'0')
 - Gallery storage: `/opt/leafsense/gallery/*.jpg`
 
 ### Known Issues
@@ -599,7 +599,7 @@ This version marks the first functional deployment of LeafSense on a Raspberry P
 └── led.ko                 # Kernel module (13KB)
 
 /etc/init.d/
-└── S98leafsense           # Auto-start script
+└── S99leafsense           # Auto-start script
 ```
 
 ### Performance Metrics

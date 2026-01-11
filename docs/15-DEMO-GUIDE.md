@@ -148,7 +148,7 @@ ssh root@10.42.0.196 '/opt/leafsense/start.sh &'
    - Alert status
 
 **What to observe**:
-- Touch responsiveness (cursor follows pen accurately due to rotate=90 calibration)
+- Touch responsiveness (cursor follows pen accurately due to evdev with rotate=180:invertx)
 - Sensor values updating every ~2 seconds
 - GUI rendering on 480x320 display
 
@@ -406,11 +406,11 @@ ssh root@10.42.0.196 'killall LeafSense; /opt/leafsense/start.sh &'
    ssh root@10.42.0.196 'lsmod | grep led'
    
    # Check device
-   ssh root@10.42.0.196 'ls -l /dev/leddev'
+   ssh root@10.42.0.196 'ls -l /dev/led0'
    
    # Manual test
-   ssh root@10.42.0.196 'echo 1 > /dev/leddev'  # LED ON
-   ssh root@10.42.0.196 'echo 0 > /dev/leddev'  # LED OFF
+   ssh root@10.42.0.196 'echo 1 > /dev/led0'  # LED ON
+   ssh root@10.42.0.196 'echo 0 > /dev/led0'  # LED OFF
    ```
 
 3. **Alert Persistence**:
@@ -495,7 +495,7 @@ ssh root@10.42.0.196 'killall LeafSense; /opt/leafsense/start.sh &'
 
 **Objective**: Verify touchscreen accuracy
 
-**Calibration**: ✅ Already configured with `rotate=90`
+**Calibration**: ✅ Already configured with `rotate=180:invertx`
 
 **Test**:
 1. Touch each corner of the screen
@@ -596,8 +596,8 @@ cat /sys/class/video4linux/video0/name            # Check camera device
 # === LED MODULE ===
 insmod /lib/modules/$(uname -r)/extra/ledmodule.ko    # Load module
 lsmod | grep led                                  # Check if loaded
-echo 1 > /dev/leddev                              # LED ON
-echo 0 > /dev/leddev                              # LED OFF
+echo 1 > /dev/led0                              # LED ON
+echo 0 > /dev/led0                              # LED OFF
 rmmod ledmodule                                   # Unload module
 
 # === TOUCHSCREEN ===

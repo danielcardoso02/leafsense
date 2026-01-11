@@ -100,12 +100,12 @@ Hostname:      leafsense-pi
 #### Libraries
 - **OpenCV 4.11.0** - Computer vision (with V4L2 support)
 - **SQLite 3.48.0** - Database engine
-- **ONNX Runtime 1.20.1** - ML inference (external)
+- **ONNX Runtime 1.16.3** - ML inference (external)
 - **glibc 2.40** - Standard C library
 
 #### Development Tools (Host Only)
 - **CMake** - Build system
-- **GCC 13.3.0** - Cross-compiler toolchain
+- **GCC 14.3.0** - Cross-compiler toolchain
 - **pkg-config** - Library configuration
 
 ---
@@ -153,7 +153,7 @@ leafsense-project/
 │   ├── toolchain-rpi4.cmake        # CMake cross-compilation config
 │   └── CAMERA_SETUP_GUIDE.md       # Camera troubleshooting guide
 └── docs/
-    └── 04-BUILDROOT-IMAGE.md       # This document
+    └── 05-BUILDROOT-IMAGE.md       # This document
 ```
 
 ---
@@ -591,7 +591,7 @@ Total Image Size       288 MB     (289 MB on disk)
 
 # ML inference (external)
 /opt/leafsense/external/
-└── libonnxruntime.so.1.20.1
+└── libonnxruntime.so.1.16.3
 ```
 
 ---
@@ -907,8 +907,8 @@ make clean
 
 - [19-TERMINOLOGY.md](19-TERMINOLOGY.md) - Technical term definitions
 - [03-MACHINE-LEARNING.md](03-MACHINE-LEARNING.md) - ML model deployment
-- [05-RASPBERRY-PI-DEPLOYMENT.md](05-RASPBERRY-PI-DEPLOYMENT.md) - Deploying LeafSense
-- [09-TROUBLESHOOTING.md](09-TROUBLESHOOTING.md) - Common issues
+- [06-RASPBERRY-PI-DEPLOYMENT.md](06-RASPBERRY-PI-DEPLOYMENT.md) - Deploying LeafSense
+- [10-TROUBLESHOOTING.md](10-TROUBLESHOOTING.md) - Common issues
 - [deploy/CAMERA_SETUP_GUIDE.md](../deploy/CAMERA_SETUP_GUIDE.md) - Camera troubleshooting
 
 ---

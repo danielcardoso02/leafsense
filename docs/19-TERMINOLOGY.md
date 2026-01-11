@@ -484,7 +484,7 @@ Device files (hardware interfaces):
 - `/dev/fb1` - Framebuffer (display)
 - `/dev/video0` - Camera
 - `/dev/input/event0` - Touchscreen
-- `/dev/leddev` - LED kernel module
+- `/dev/led0` - LED kernel module
 
 ### **/sys/**
 Kernel information:
@@ -588,12 +588,12 @@ For detailed information on specific topics, see:
 - **Overview:** [01-OVERVIEW.md](01-OVERVIEW.md)
 - **Architecture:** [02-ARCHITECTURE.md](02-ARCHITECTURE.md)
 - **Machine Learning:** [03-MACHINE-LEARNING.md](03-MACHINE-LEARNING.md)
-- **Buildroot:** [04-BUILDROOT-IMAGE.md](04-BUILDROOT-IMAGE.md)
-- **Deployment:** [05-RASPBERRY-PI-DEPLOYMENT.md](05-RASPBERRY-PI-DEPLOYMENT.md)
+- **Buildroot:** [05-BUILDROOT-IMAGE.md](05-BUILDROOT-IMAGE.md)
+- **Deployment:** [06-RASPBERRY-PI-DEPLOYMENT.md](06-RASPBERRY-PI-DEPLOYMENT.md)
 - **Device Driver:** [06-DEVICE-DRIVER.md](06-DEVICE-DRIVER.md)
 - **Database:** [07-DATABASE.md](07-DATABASE.md)
 - **GUI:** [08-GUI.md](08-GUI.md)
-- **Troubleshooting:** [09-TROUBLESHOOTING.md](09-TROUBLESHOOTING.md)
+- **Troubleshooting:** [10-TROUBLESHOOTING.md](10-TROUBLESHOOTING.md)
 
 ---
 
