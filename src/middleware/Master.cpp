@@ -385,7 +385,7 @@ void Master::updateAlertLED()
     
     // Open LED device on first call
     if (ledFd == -1) {
-        ledFd = open("/dev/leddev", O_WRONLY);
+        ledFd = open("/dev/led0", O_WRONLY);
         if (ledFd < 0) {
             // LED module not loaded, skip LED control
             return;

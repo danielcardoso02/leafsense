@@ -135,7 +135,7 @@ private:
      * @brief Updates alert LED based on sensor readings
      * 
      * Checks if any parameter is out of ideal range and controls
-     * the LED via kernel module (/dev/leddev).
+     * the LED via kernel module (/dev/led0).
      * LED ON = Alert active, LED OFF = All parameters normal
      */
     void updateAlertLED();
