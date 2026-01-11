@@ -637,7 +637,7 @@ void Master::updateAlertLED()
 
 ### Startup Integration
 
-**File:** `/opt/leafsense/start_leafsense.sh`
+**File:** `/opt/leafsense/start.sh`
 
 ```bash
 #!/bin/sh
@@ -650,7 +650,7 @@ chmod 666 /dev/leddev 2>/dev/null
 
 # Start LeafSense
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 cd /opt/leafsense
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```

@@ -561,7 +561,7 @@ evtest /dev/input/event0  # Should show ADS7846 Touchscreen
 
 # Start LeafSense with evdev touchscreen handler and rotation
 cd /opt/leafsense
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
 
@@ -608,7 +608,7 @@ killall LeafSense
 
 # Don't use tslib - use evdev instead
 unset QT_QPA_FB_TSLIB
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 
 # Start app
 ./LeafSense -platform linuxfb:fb=/dev/fb1

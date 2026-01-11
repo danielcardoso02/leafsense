@@ -24,8 +24,8 @@ framebuffer_height=320
 ### Environment Variables (Runtime)
 
 ```bash
-# CRITICAL: The rotate=90 MUST match the display rotation in config.txt
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+# CRITICAL: The rotation MUST be configured for correct touch mapping
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
 export QT_QPA_FB_HIDECURSOR=1
 ```
@@ -96,7 +96,7 @@ If these don't match, touch coordinates will be wrong (inverted, swapped, or off
 
 1. **/etc/profile.d/leafsense-qt.sh** - Qt environment variables
 2. **/etc/init.d/S99leafsense** - Auto-start script with correct environment
-3. **/opt/leafsense/start_leafsense.sh** - Manual startup script
+3. **/opt/leafsense/start.sh** - Manual startup script
 
 ---
 
@@ -120,7 +120,7 @@ deploy/
     │       └── leafsense-qt.sh # Qt environment
     └── opt/
         └── leafsense/
-            └── start_leafsense.sh  # Startup script
+            └── start.sh  # Startup script
 ```
 
 ### Post-Build Script
@@ -164,9 +164,9 @@ This ensures that after reflashing, the touchscreen works immediately without an
 
 2. If they don't match, restart with correct rotation:
    ```bash
-   export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+   export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
    killall LeafSense
-   /opt/leafsense/start_leafsense.sh
+   /opt/leafsense/start.sh
    ```
 
 ### Application Freezes on Touch

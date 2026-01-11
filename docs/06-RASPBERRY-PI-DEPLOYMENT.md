@@ -313,7 +313,7 @@ env QT_QPA_PLATFORM=linuxfb \
 
 ### 7.4 Create LeafSense Startup Script
 ```bash
-cat > /opt/leafsense/start_leafsense.sh << 'EOF'
+cat > /opt/leafsense/start.sh << 'EOF'
 #!/bin/sh
 # LeafSense Display Startup Script
 
@@ -329,7 +329,7 @@ exec env \
     ./LeafSense -platform linuxfb:fb=/dev/fb1
 EOF
 
-chmod +x /opt/leafsense/start_leafsense.sh
+chmod +x /opt/leafsense/start.sh
 ```
 
 ### 7.5 Create Auto-Start Service (Optional)
@@ -342,7 +342,7 @@ case "$1" in
         echo "Starting LeafSense..."
         cd /opt/leafsense
         # Use startup script for proper display configuration
-        ./start_leafsense.sh > /var/log/leafsense.log 2>&1 &
+        ./start.sh > /var/log/leafsense.log 2>&1 &
         echo "LeafSense started with PID $!"
         ;;
     stop)
@@ -381,7 +381,7 @@ tail -f /var/log/leafsense.log
 | `/opt/leafsense/LeafSense` | Application binary |
 | `/opt/leafsense/leafsense_model.onnx` | ML model |
 | `/opt/leafsense/leafsense.db` | SQLite database |
-| `/opt/leafsense/start_leafsense.sh` | Startup script |
+| `/opt/leafsense/start.sh` | Startup script |
 | `/usr/lib/libonnxruntime.so*` | ONNX Runtime libraries |
 | `/lib/modules/6.12.41-v8/led.ko` | LED kernel module |
 | `/etc/init.d/S98leafsense` | Init script |
@@ -479,23 +479,23 @@ cat /sys/class/graphics/fb1/virtual_size
 **Important:** Qt's evdev touchscreen handler requires rotation parameter to match display rotation.
 
 ```bash
-# Environment variable for touch input (rotate=90 for landscape)
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+# Environment variable for touch input (rotate=180:invertx for landscape)
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 ```
 
 ### A.5 Complete Working Startup Command
 
 ```bash
 #!/bin/sh
-# /opt/leafsense/start_leafsense.sh
+# /opt/leafsense/start.sh
 
 cd /opt/leafsense
 
 # Display on Waveshare LCD (fb1)
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
 
-# Touchscreen with 90-degree rotation
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+# Touchscreen with 180-degree rotation and inverted X axis
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 
 # Run application
 exec ./LeafSense -platform linuxfb:fb=/dev/fb1
@@ -511,7 +511,7 @@ case "$1" in
         echo "Starting LeafSense..."
         cd /opt/leafsense
         export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
-        export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+        export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
         ./LeafSense -platform linuxfb:fb=/dev/fb1 &
         ;;
     stop)

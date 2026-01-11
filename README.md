@@ -72,7 +72,7 @@ LeafSense is a complete embedded system for intelligent hydroponic plant monitor
 #### Option 1: Use Pre-Built Binary (Quick)
 
 ```bash
-# 1. Flash Buildroot image to SD card (see docs/04-BUILDROOT-IMAGE.md)
+# 1. Flash Buildroot image to SD card (see docs/05-BUILDROOT-IMAGE.md)
 sudo dd if=sdcard.img of=/dev/sdX bs=4M status=progress && sync
 
 # 2. Insert SD card into Pi and power on
@@ -122,11 +122,11 @@ make -j$(nproc)
 scp build-arm64/src/LeafSense root@10.42.0.196:/opt/leafsense/
 
 # Start application with touchscreen support
-ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
+ssh root@10.42.0.196 '/opt/leafsense/start.sh &'
 
 # Or manual execution with touchscreen:
 ssh root@10.42.0.196 'export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1; \
-  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"; \
+  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"; \
   cd /opt/leafsense && ./LeafSense &'
 
 # Stop application
@@ -146,36 +146,38 @@ cd build/src
 
 ## 📚 Documentation
 
-**Start here:** [docs/00-TERMINOLOGY.md](docs/00-TERMINOLOGY.md) - Explains all technical terms
+**Start here:** [docs/00-PROJECT-STATUS.md](docs/00-PROJECT-STATUS.md) - Complete project status
 
 Complete documentation available in [`docs/`](docs/) directory:
 
 | # | Document | Description |
 |---|----------|-------------|
-| 0 | [00-TERMINOLOGY.md](docs/00-TERMINOLOGY.md) | **Comprehensive terminology guide** (read first!) |
-| 1 | [01-OVERVIEW.md](docs/01-OVERVIEW.md) | Project overview and objectives |
-| 2 | [02-ARCHITECTURE.md](docs/02-ARCHITECTURE.md) | System architecture and design patterns |
-| 3 | [03-MACHINE-LEARNING.md](docs/03-MACHINE-LEARNING.md) | ML model training, inference, and dataset |
-| 4 | [04-BUILDROOT-IMAGE.md](docs/04-BUILDROOT-IMAGE.md) | **Buildroot configuration and SD card creation** |
-| 5 | [05-RASPBERRY-PI-DEPLOYMENT.md](docs/05-RASPBERRY-PI-DEPLOYMENT.md) | Deployment procedures and SSH access |
-| 6 | [06-DEVICE-DRIVER.md](docs/06-DEVICE-DRIVER.md) | LED kernel module development |
-| 7 | [07-DATABASE.md](docs/07-DATABASE.md) | SQLite schema and data persistence |
-| 8 | [08-GUI.md](docs/08-GUI.md) | Qt5 interface and framebuffer rendering |
-| 9 | [09-TROUBLESHOOTING.md](docs/09-TROUBLESHOOTING.md) | Common issues and solutions |
-| 10 | [10-CHANGELOG.md](docs/10-CHANGELOG.md) | Version history and release notes |
-| 11 | [11-IMPLEMENTATION-REPORT.md](docs/11-IMPLEMENTATION-REPORT.md) | Technical implementation report |
-| 12 | [11-SENSOR-ACTUATOR-INTEGRATION.md](docs/11-SENSOR-ACTUATOR-INTEGRATION.md) | Hardware integration guide |
-| 13 | [11-TESTING-GUIDE.md](docs/11-TESTING-GUIDE.md) | Testing procedures and validation |
-| 14 | [12-DEMO-GUIDE.md](docs/12-DEMO-GUIDE.md) | Demonstration and presentation guide |
-| 15 | [13-KERNEL-MODULE.md](docs/13-KERNEL-MODULE.md) | Kernel module development (low-level) |
-| 16 | [14-TOUCHSCREEN-CONFIGURATION.md](docs/14-TOUCHSCREEN-CONFIGURATION.md) | **Touchscreen setup (evdev, no calibration)** |
-| [FINAL-STATUS.md](FINAL-STATUS.md) | **Complete system status** |
+| 00 | [00-PROJECT-STATUS.md](docs/00-PROJECT-STATUS.md) | **Complete project status and roadmap** |
+| 01 | [01-OVERVIEW.md](docs/01-OVERVIEW.md) | Project overview and objectives |
+| 02 | [02-ARCHITECTURE.md](docs/02-ARCHITECTURE.md) | System architecture and design patterns |
+| 03 | [03-MACHINE-LEARNING.md](docs/03-MACHINE-LEARNING.md) | ML model training, inference, and dataset |
+| 04 | [04-NETWORKING.md](docs/04-NETWORKING.md) | USB-Ethernet and SSH setup |
+| 05 | [05-BUILDROOT-IMAGE.md](docs/05-BUILDROOT-IMAGE.md) | **Buildroot configuration and SD card creation** |
+| 06 | [06-RASPBERRY-PI-DEPLOYMENT.md](docs/06-RASPBERRY-PI-DEPLOYMENT.md) | Deployment procedures and SSH access |
+| 07 | [07-DEVICE-DRIVER.md](docs/07-DEVICE-DRIVER.md) | LED kernel module development |
+| 08 | [08-DATABASE.md](docs/08-DATABASE.md) | SQLite schema and data persistence |
+| 09 | [09-GUI.md](docs/09-GUI.md) | Qt5 interface and framebuffer rendering |
+| 10 | [10-TROUBLESHOOTING.md](docs/10-TROUBLESHOOTING.md) | Common issues and solutions |
+| 11 | [11-CHANGELOG.md](docs/11-CHANGELOG.md) | Version history and release notes |
+| 12 | [12-IMPLEMENTATION-REPORT.md](docs/12-IMPLEMENTATION-REPORT.md) | Technical implementation report |
+| 13 | [13-SENSOR-ACTUATOR-INTEGRATION.md](docs/13-SENSOR-ACTUATOR-INTEGRATION.md) | Hardware integration guide |
+| 14 | [14-TESTING-GUIDE.md](docs/14-TESTING-GUIDE.md) | Testing procedures and validation |
+| 15 | [15-DEMO-GUIDE.md](docs/15-DEMO-GUIDE.md) | Demonstration and presentation guide |
+| 16 | [16-KERNEL-MODULE.md](docs/16-KERNEL-MODULE.md) | Kernel module development (low-level) |
+| 17 | [17-TOUCHSCREEN-CONFIGURATION.md](docs/17-TOUCHSCREEN-CONFIGURATION.md) | **Touchscreen setup (evdev, rotate=180:invertx)** |
+| 18 | [18-BUILDROOT-PACKAGES.md](docs/18-BUILDROOT-PACKAGES.md) | Complete Buildroot package list |
+| 19 | [19-TERMINOLOGY.md](docs/19-TERMINOLOGY.md) | Key terms and concepts explained |
 
 **Quick Links:**
-- 🎯 [Demonstration Guide](docs/12-DEMO-GUIDE.md) - Step-by-step demo procedures
-- ⚙️ [Hardware Integration](docs/11-SENSOR-ACTUATOR-INTEGRATION.md) - Connect real sensors
-- 📊 [System Status](FINAL-STATUS.md) - Current feature status
-- 🐛 [Troubleshooting](docs/08-TROUBLESHOOTING.md) - Common issues
+- 🎯 [Demonstration Guide](docs/15-DEMO-GUIDE.md) - Step-by-step demo procedures
+- ⚙️ [Hardware Integration](docs/13-SENSOR-ACTUATOR-INTEGRATION.md) - Connect real sensors
+- 📊 [Project Status](docs/00-PROJECT-STATUS.md) - Current feature status
+- 🐛 [Troubleshooting](docs/10-TROUBLESHOOTING.md) - Common issues
 
 ---
 
@@ -215,7 +217,7 @@ Master Controller (7 threads)
 
 ### ✅ Fully Operational
 - Multi-threaded control system (7 threads)
-- Qt5 GUI with touchscreen (rotate=90 calibration)
+- Qt5 GUI with touchscreen (rotate=180:invertx)
 - ONNX ML inference (99.39% accuracy)
 - Camera capture with fallback (640x480 JPEG)
 - Image gallery with ML predictions
@@ -286,7 +288,7 @@ export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins
 export QT_QPA_FONTDIR=/usr/share/fonts
 
 # Touchscreen calibration (critical!)
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 ```
 
 ### Camera Intervals
@@ -338,10 +340,10 @@ ssh root@10.42.0.196 'killall -9 LeafSense'
 ssh root@10.42.0.196 'rm -f /opt/leafsense/database/*.db-wal'
 
 # Restart
-ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
+ssh root@10.42.0.196 '/opt/leafsense/start.sh &'
 ```
 
-See [docs/08-TROUBLESHOOTING.md](docs/08-TROUBLESHOOTING.md) for complete guide.
+See [docs/10-TROUBLESHOOTING.md](docs/10-TROUBLESHOOTING.md) for complete guide.
 
 ---
 
@@ -351,17 +353,16 @@ See [docs/08-TROUBLESHOOTING.md](docs/08-TROUBLESHOOTING.md) for complete guide.
 leafsense-project/
 ├── CMakeLists.txt                 # Build configuration
 ├── README.md                      # This file
-├── FINAL-STATUS.md               # Complete system status
 ├── build-arm64/                   # ARM64 build directory
 ├── database/
 │   └── schema.sql                # Database schema
 ├── deploy/                        # Deployment scripts
 │   ├── toolchain-rpi4.cmake
 │   └── setup-waveshare35c.sh
-├── docs/                          # Documentation (17 files)
-│   ├── 00-TERMINOLOGY.md         # Technical terms explained
-│   ├── 05-DEVICE-DRIVER.md       # Device driver guide
-│   └── 13-KERNEL-MODULE.md       # Low-level kernel details
+├── docs/                          # Documentation (21 files)
+│   ├── 00-PROJECT-STATUS.md      # Project status and roadmap
+│   ├── 07-DEVICE-DRIVER.md       # Device driver guide
+│   └── 16-KERNEL-MODULE.md       # Low-level kernel details
 ├── drivers/
 │   └── kernel_module/            # LED driver (device driver)
 ├── external/
@@ -419,8 +420,8 @@ This project was developed as part of an academic course. All rights reserved.
 
 For issues, questions, or contributions:
 
-1. Check [FINAL-STATUS.md](FINAL-STATUS.md) for system status
-2. Review [docs/08-TROUBLESHOOTING.md](docs/08-TROUBLESHOOTING.md)
+1. Check [docs/00-PROJECT-STATUS.md](docs/00-PROJECT-STATUS.md) for system status
+2. Review [docs/10-TROUBLESHOOTING.md](docs/10-TROUBLESHOOTING.md)
 3. Contact development team (see Authors section)
 
 ---
@@ -431,7 +432,7 @@ For issues, questions, or contributions:
 
 ---
 
-## 📋 Version 1.4.0 Highlights
+## 📋 Version 1.5.1 Highlights
 
 ### Computer Vision Enhancements
 - Auto white balance correction
@@ -445,6 +446,6 @@ For issues, questions, or contributions:
 - Real-time verification of data persistence
 
 ### Documentation
-- Complete device driver guide ([docs/13-DEVICE-DRIVER.md](docs/13-DEVICE-DRIVER.md))
-- 14 comprehensive documentation files
+- Complete device driver guide ([docs/07-DEVICE-DRIVER.md](docs/07-DEVICE-DRIVER.md))
+- 21 comprehensive documentation files
 - Full API reference and integration examples

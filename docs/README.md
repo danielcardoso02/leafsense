@@ -146,7 +146,7 @@ cd build/src
 **Option 1: Using startup script (recommended)**
 ```bash
 ssh root@10.42.0.196
-/opt/leafsense/start_leafsense.sh
+/opt/leafsense/start.sh
 ```
 
 **Option 2: Manual execution with touchscreen**
@@ -161,7 +161,7 @@ cd /opt/leafsense
 **Option 3: Background execution**
 ```bash
 ssh root@10.42.0.196
-/opt/leafsense/start_leafsense.sh &
+/opt/leafsense/start.sh &
 ```
 
 **Stop the application:**
@@ -204,7 +204,7 @@ ssh root@10.42.0.196
 
 ### Start Application (on Pi)
 ```bash
-/opt/leafsense/start_leafsense.sh
+/opt/leafsense/start.sh
 ```
 
 ---

@@ -51,10 +51,10 @@ This document provides a complete reference of all packages included in the Leaf
 
 **Critical Configuration:**
 ```bash
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 ```
 
-The `rotate=90` MUST match the display rotation in `config.txt`.
+The rotation parameters configure correct touch mapping for the display.
 
 ---
 
@@ -336,7 +336,7 @@ deploy/
     │       └── leafsense-qt.sh # Qt environment
     └── opt/
         └── leafsense/
-            └── start_leafsense.sh
+            └── start.sh
 ```
 
 ---

@@ -84,13 +84,13 @@ This release finalizes the system configuration and Buildroot packages, preparin
 - `boot-overlay/overlays/waveshare35c.dtbo` - Display driver overlay
 - `rootfs-overlay/etc/profile.d/leafsense-qt.sh` - Qt environment
 - `rootfs-overlay/etc/init.d/S99leafsense` - Auto-start init script
-- `rootfs-overlay/opt/leafsense/start_leafsense.sh` - Manual startup
+- `rootfs-overlay/opt/leafsense/start.sh` - Manual startup
 
 ### Changed
 
 #### Touchscreen Driver
 - **Switched from tslib to evdev** - tslib caused application freezing
-- **Rotation via environment variable**: `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"`
+- **Rotation via environment variable**: `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"`
 - **No calibration required** - evdev handles rotation automatically
 
 #### Display Configuration
@@ -487,7 +487,7 @@ This version adds complete support for the Waveshare 3.5" LCD (C) touchscreen di
 - Framebuffer `/dev/fb1` for ILI9486 display (480x320)
 - Touch input via `/dev/input/event0` (ADS7846)
 - Udev rules for touchscreen permissions
-- Startup script `/opt/leafsense/start_leafsense.sh`
+- Startup script `/opt/leafsense/start.sh`
 
 #### Networking
 - Static IP configuration (10.42.0.196/24)
@@ -521,7 +521,7 @@ This version adds complete support for the Waveshare 3.5" LCD (C) touchscreen di
 └── waveshare35c.dtbo          # Device tree overlay
 
 /opt/leafsense/
-└── start_leafsense.sh         # Startup script with display config
+└── start.sh                   # Startup script with display config
 
 /etc/udev/rules.d/
 └── 99-touchscreen.rules       # Touchscreen permissions
