@@ -1,5 +1,9 @@
 # LeafSense Project Status Report - January 10, 2026
 
+> ⚠️ **SUPERSEDED:** This document has been superseded by [00-PROJECT-STATUS.md](00-PROJECT-STATUS.md). See that document for the current project status.
+
+---
+
 ## Executive Summary
 
 **PROJECT STATUS: ✅ FULL HARDWARE INTEGRATION COMPLETE**

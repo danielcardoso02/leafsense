@@ -1,7 +1,7 @@
 # LeafSense Project Status - Final Report
 
 **Date:** January 11, 2026  
-**Version:** 1.5.0  
+**Version:** 1.5.1  
 **Authors:** Daniel Cardoso (PG53753), Marco Costa (PG60210)  
 **Course:** Master's in Industrial Electronics and Computers Engineering  
 **Institution:** University of Minho, School of Engineering

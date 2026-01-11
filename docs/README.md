@@ -1,6 +1,6 @@
 # LeafSense - Documentation Index
 
-**Version:** 1.5.0  
+**Version:** 1.5.1  
 **Last Updated:** January 11, 2026
 
 ---
@@ -153,7 +153,7 @@ ssh root@10.42.0.196
 ```bash
 ssh root@10.42.0.196
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 cd /opt/leafsense
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
@@ -171,14 +171,13 @@ ssh root@10.42.0.196 'killall LeafSense'
 
 ### Critical Touch Configuration
 
-The `rotate=90` parameter in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` **MUST match** the display rotation in `/boot/config.txt`:
+The Waveshare 3.5" LCD with `rotate=270` in `/boot/config.txt` requires:
 
-| Display Overlay | Touch Parameter |
-|-----------------|-----------------|
-| `rotate=0` | `rotate=0` |
-| `rotate=90` | `rotate=90` |
-| `rotate=180` | `rotate=180` |
-| `rotate=270` | `rotate=270` |
+```bash
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+```
+
+**Note:** The `:invertx` parameter corrects horizontal button mapping.
 
 ---
 
@@ -226,4 +225,4 @@ ssh root@10.42.0.196
 
 ---
 
-**Última atualização:** 10 de Janeiro de 2026
+**Última atualização:** 11 de Janeiro de 2026
