@@ -28,13 +28,21 @@ LoginDialog::LoginDialog(QWidget *parent)
       * @brief Constructs the login dialog.
       * @param parent Parent widget (optional)
       */
+    qDebug() << "LoginDialog: Constructor started";
     setWindowTitle("Login");
     setFixedSize(480, 320);
-    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
-    move(QApplication::primaryScreen()->availableGeometry().center() - rect().center());
+    // Use simpler window flags for embedded - avoid modal dialogs which can freeze
+    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    
+    // Simpler positioning for embedded systems - just use (0,0)
+    move(0, 0);
+    
+    // Disable input method (virtual keyboard) for embedded
+    setAttribute(Qt::WA_InputMethodEnabled, false);
 
     setup_ui();
     apply_theme();
+    qDebug() << "LoginDialog: Constructor completed";
 }
 
 /**
@@ -97,6 +105,7 @@ void LoginDialog::setup_ui()
 
     username_input = new QLineEdit();
     username_input->setText("admin"); // Pre-fill for touch-only devices
+    username_input->setAttribute(Qt::WA_InputMethodEnabled, false); // Disable virtual keyboard
     // Remove event filter - no automatic keyboard
     connect(username_input, &QLineEdit::returnPressed, this, &LoginDialog::on_username_return_pressed);
 
@@ -113,6 +122,7 @@ void LoginDialog::setup_ui()
     password_input = new QLineEdit();
     password_input->setEchoMode(QLineEdit::Password);
     password_input->setText("admin"); // Pre-fill for touch-only devices
+    password_input->setAttribute(Qt::WA_InputMethodEnabled, false); // Disable virtual keyboard
     // Remove event filter - no automatic keyboard
     connect(password_input, &QLineEdit::returnPressed, this, &LoginDialog::on_password_return_pressed);
 
@@ -214,11 +224,14 @@ bool LoginDialog::validate_credentials(const QString &u, const QString &p)
  */
 void LoginDialog::on_login_button_clicked() 
 {
+    qDebug() << "LoginDialog: Login button clicked";
     if (validate_credentials(username_input->text(), password_input->text())) {
         logged_in_user = username_input->text();
         login_timestamp = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd HH:mm:ss UTC");
+        qDebug() << "LoginDialog: Credentials valid, accepting dialog";
         accept();
     }
+    qDebug() << "LoginDialog: on_login_button_clicked completed";
 }
 
 /**
@@ -226,6 +239,7 @@ void LoginDialog::on_login_button_clicked()
  */
 void LoginDialog::on_cancel_button_clicked() 
 { 
+    qDebug() << "LoginDialog: Cancel button clicked";
     reject(); 
 }
 

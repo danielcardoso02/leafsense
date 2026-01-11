@@ -134,28 +134,27 @@ leafsense-project/
 
 Complete documentation available in `docs/` directory:
 
-0. **00-TERMINOLOGY.md** - Technical terms and concepts explained
-1. **01-OVERVIEW.md** - This file
-2. **02-ARCHITECTURE.md** - System architecture and design patterns
-3. **03-MACHINE-LEARNING.md** - ML model details and training
-4. **04-BUILDROOT-IMAGE.md** - Custom Linux image configuration and building
-5. **05-RASPBERRY-PI-DEPLOYMENT.md** - Deployment procedures
-6. **06-DEVICE-DRIVER.md** - LED kernel module comprehensive guide
-7. **07-DATABASE.md** - Database schema and queries
-8. **08-GUI.md** - GUI design and implementation
-9. **09-TROUBLESHOOTING.md** - Common issues and solutions
-10. **10-CHANGELOG.md** - Version history
-11. **11-IMPLEMENTATION-REPORT.md** - Technical implementation report
-11. **11-SENSOR-ACTUATOR-INTEGRATION.md** - Hardware integration
-12. **11-TESTING-GUIDE.md** - Testing procedures
-13. **12-DEMO-GUIDE.md** - Demonstration guide
-14. **13-KERNEL-MODULE.md** - LED driver low-level implementation
-15. **FINAL-STATUS.md** - System status report
-16. **PROJECT-STATUS.md** - Development status
-17. **README.md** - Quick start guide
-10. **10-IMPLEMENTATION-REPORT.md** - Final project report
-11. **11-SENSOR-ACTUATOR-INTEGRATION.md** - Hardware integration guide
-12. **12-DEMO-GUIDE.md** - Comprehensive demonstration guide
+| # | File | Description |
+|---|------|-------------|
+| 00 | TERMINOLOGY.md | Technical terms and concepts |
+| 01 | OVERVIEW.md | This file |
+| 02 | ARCHITECTURE.md | System architecture and design patterns |
+| 03 | MACHINE-LEARNING.md | ML model details and training |
+| 04 | NETWORKING.md | Network configuration options |
+| 05 | BUILDROOT-IMAGE.md | Custom Linux image creation |
+| 06 | RASPBERRY-PI-DEPLOYMENT.md | Deployment procedures |
+| 07 | DEVICE-DRIVER.md | LED kernel module guide |
+| 08 | DATABASE.md | Database schema and queries |
+| 09 | GUI.md | GUI design and implementation |
+| 10 | TROUBLESHOOTING.md | Common issues and solutions |
+| 11 | CHANGELOG.md | Version history |
+| 12 | IMPLEMENTATION-REPORT.md | Technical implementation report |
+| 13 | SENSOR-ACTUATOR-INTEGRATION.md | Hardware integration guide |
+| 14 | TESTING-GUIDE.md | Testing procedures |
+| 15 | DEMO-GUIDE.md | Demonstration guide |
+| 16 | KERNEL-MODULE.md | LED driver implementation |
+| 17 | TOUCHSCREEN-CONFIGURATION.md | Waveshare 3.5" LCD setup |
+| 18 | BUILDROOT-PACKAGES.md | Complete package reference |
 
 ## Authors
 

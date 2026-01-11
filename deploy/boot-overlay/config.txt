@@ -1,0 +1,80 @@
+# LeafSense Raspberry Pi 4 Boot Configuration
+# ============================================
+# This file is part of the LeafSense project overlay.
+# It will be copied to the boot partition during image generation.
+#
+# CRITICAL: Do not modify touchscreen/display settings without testing!
+# These settings have been verified to work correctly.
+#
+# Last verified: January 10, 2026
+# Tested configuration: Waveshare 3.5" LCD (C) + evdev touchscreen
+
+# Raspberry Pi 4 Base Configuration
+# =================================
+start_file=start4.elf
+fixup_file=fixup4.dat
+kernel=Image
+
+# Disable overscan (full resolution display)
+disable_overscan=1
+
+# GPU Memory allocation
+gpu_mem_256=100
+gpu_mem_512=100
+gpu_mem_1024=100
+
+# Enable UART0 for serial console
+dtoverlay=miniuart-bt
+
+# Enable 64-bit support
+arm_64bit=1
+
+# LeafSense Hardware Configuration
+# ================================
+
+# Enable I2C (for ADC ADS1115 and RTC DS3231)
+dtparam=i2c_arm=on
+dtparam=i2c1=on
+
+# Enable 1-Wire for DS18B20 temperature sensor (GPIO 19)
+dtoverlay=w1-gpio,gpiopin=19
+
+# Enable SPI (required for display and touchscreen)
+dtparam=spi=on
+
+# USB Gadget Mode (for USB-Ethernet connection to PC)
+dtoverlay=dwc2
+
+# ============================================
+# WAVESHARE 3.5" LCD (C) DISPLAY CONFIGURATION
+# ============================================
+# Controller: ILI9486 (SPI display)
+# Touchscreen: ADS7846 (SPI touchscreen)
+# Resolution: 480x320 (landscape mode with rotate=90)
+#
+# CRITICAL SETTINGS - DO NOT MODIFY:
+# - speed=16000000 (16MHz) prevents touch freeze at higher speeds
+# - fps=50 reduces screen blinking (balance between quality and stability)
+# - rotate=90 sets landscape orientation
+#
+dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
+
+# HDMI fallback settings (required for LCD initialization)
+hdmi_force_hotplug=1
+hdmi_cvt=480 320 60 6 0 0 0
+hdmi_group=2
+hdmi_mode=87
+hdmi_drive=2
+
+# Framebuffer dimensions (must match display resolution)
+framebuffer_width=480
+framebuffer_height=320
+
+# ============================================
+# CAMERA CSI CONFIGURATION
+# ============================================
+# Enable legacy camera stack (start_x) and libcamera (camera_auto_detect)
+start_x=1
+gpu_mem=256
+camera_auto_detect=1
+dtoverlay=vc4-kms-v3d

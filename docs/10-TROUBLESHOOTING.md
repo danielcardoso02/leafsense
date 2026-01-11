@@ -530,36 +530,113 @@ Display works but touch input is ignored
 ```
 
 **Solution:**
+
+There are two approaches to get touchscreen working. **Method 2 (evdev) is recommended** as it's more stable.
+
+#### Method 1: tslib (May cause freezing)
+
 ```bash
-# Step 1: Verify touch device exists
-ls -la /dev/input/event*
-cat /proc/bus/input/devices | grep -A 4 ADS7846
+# Verify tslib is installed
+ls -la /usr/lib/libts*
+which ts_calibrate
 
-# Step 2: Check udev rules are configured
-cat /etc/udev/rules.d/99-touchscreen.rules
+# Calibrate
+export TSLIB_TSDEVICE=/dev/input/event0
+export TSLIB_FBDEVICE=/dev/fb1
+ts_calibrate
 
-# Step 3: Create udev rule if it doesn't exist
-echo 'SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="*ADS7846*", MODE="0666"' > /etc/udev/rules.d/99-touchscreen.rules
-
-# Step 4: CRITICAL - Enable Qt evdev touch plugin
-# The touch won't work without this environment variable!
-export QT_QPA_GENERIC_PLUGINS=evdevtouch
-export QT_QPA_MOUSEDRIVER=linuxinput
-export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
-
-# Step 5: Verify the plugin is loaded
-# Check startup logs for: "loaded library libqevdevtouchplugin.so"
-tail -f /var/log/leafsense.log | grep -i "evdev\|touch\|plugin"
-
-# Step 6: Verify the application is using the correct plugin path
-export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins
-
-# Then start LeafSense
-cd /opt/leafsense
+# Start with tslib (may freeze on some systems)
+export QT_QPA_FB_TSLIB=1
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
 
-**Note:** The Qt evdev touch plugin (`libqevdevtouchplugin.so`) MUST be enabled via the `QT_QPA_GENERIC_PLUGINS=evdevtouch` environment variable. Without this, touch input will not work even if the ADS7846 device is properly detected. This is the most common cause of touchscreen unresponsiveness.
+#### Method 2: evdev with rotation (RECOMMENDED)
+
+**This is the working solution that doesn't freeze:**
+
+```bash
+# Verify touch device exists
+ls -la /dev/input/event*
+evtest /dev/input/event0  # Should show ADS7846 Touchscreen
+
+# Start LeafSense with evdev touchscreen handler and rotation
+cd /opt/leafsense
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+./LeafSense -platform linuxfb:fb=/dev/fb1
+```
+
+**Key insight:** The `rotate=90` parameter in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` is critical because the display is rotated 90 degrees in config.txt (`dtoverlay=waveshare35c:rotate=90`), and the touch coordinates must be transformed to match.
+
+### Touchscreen coordinates wrong (touch offset)
+
+```
+Touch registers but in wrong position
+```
+
+**Solution:**
+The display rotation must match the touch rotation parameter:
+
+| config.txt rotate | QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS |
+|-------------------|-------------------------------------|
+| rotate=0          | rotate=0 (or no rotation)           |
+| rotate=90         | rotate=90                           |
+| rotate=180        | rotate=180                          |
+| rotate=270        | rotate=270                          |
+
+You may also need to add `:invertx` or `:inverty`:
+```bash
+# If X axis is inverted
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90:invertx"
+
+# If Y axis is inverted  
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90:inverty"
+```
+
+### Application freezes when touching screen
+
+```
+LeafSense freezes completely when touchscreen is touched
+```
+
+**Solution:**
+
+This commonly occurs when using tslib with Qt. Switch to evdev:
+
+```bash
+# Kill frozen app
+killall LeafSense
+
+# Don't use tslib - use evdev instead
+unset QT_QPA_FB_TSLIB
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+
+# Start app
+./LeafSense -platform linuxfb:fb=/dev/fb1
+```
+
+### Touchscreen frozen / not calibrated
+```
+Touch input detected but cursor does not follow finger
+```
+
+**Solution:**
+
+If using tslib approach:
+
+# Follow the on-screen instructions to touch crosshairs
+# This creates /etc/pointercal with calibration data
+
+# Step 3: Verify pointercal was created
+cat /etc/pointercal
+# Should show 7 numeric values
+
+# Step 4: Restart LeafSense with tslib support
+export QT_QPA_PLATFORM=linuxfb
+export QT_QPA_FB_DEV=/dev/fb1
+export QT_QPA_FB_HIDECURSOR=0
+export QT_QPA_FB_TSLIB=1
+cd /opt/leafsense && ./LeafSense &
+```
 
 ---
 
@@ -595,4 +672,4 @@ For problems not resolved by this guide, check:
 
 ---
 
-*Document last updated: January 9, 2026*
+*Document last updated: January 10, 2026*

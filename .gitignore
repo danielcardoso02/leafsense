@@ -52,3 +52,13 @@ Thumbs.db
 *~
 .tmp/
 temp/
+
+# ML training datasets (large files - not for version control)
+ml/dataset_4class/
+ml/dataset*/
+
+# ONNX Runtime external library (downloaded separately)
+external/onnxruntime-arm64/
+
+# Gallery images (runtime generated)
+gallery/

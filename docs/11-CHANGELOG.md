@@ -1,6 +1,127 @@
 # LeafSense - Changelog and Development History
 
-## Current Version: 1.4.2 (January 10, 2026)
+## Current Version: 1.5.1 (January 11, 2026)
+
+---
+
+## [1.5.1] - 2026-01-11
+
+### 🧹 Repository Cleanup & Final Documentation
+
+This release cleans up the repository, removes build artifacts from version control, and finalizes documentation for project handoff.
+
+### Added
+
+#### Documentation
+- **00-PROJECT-STATUS.md** - Comprehensive project status document with implementation tables
+- **Buildroot configuration backup** - `deploy/buildroot_defconfig` for easy rebuild
+
+### Changed
+
+#### Touchscreen Calibration
+- Fixed horizontal button swap: changed `rotate=180` to `rotate=180:invertx`
+- Login/Exit buttons now map correctly on Waveshare 3.5" LCD
+
+#### Repository Cleanup
+- **Removed build directories from git tracking** (`build/`, `build-arm64/`)
+- **Removed ML training dataset from git tracking** (`ml/dataset_4class/` - 468MB)
+- These files are now properly excluded via `.gitignore`
+
+#### Documentation Organization
+- Reorganized [docs/README.md](docs/README.md) with categorized tables
+- Added priority ratings for documentation sections
+- Updated version references to 1.5.1
+
+### Verified Complete
+- ✅ Qt5 GUI with all tabs (Dashboard, Analytics, Gallery, Logs, Settings)
+- ✅ ONNX Runtime ML inference (4-class model: healthy, disease, pest, deficiency)
+- ✅ SQLite database with 10 tables
+- ✅ Camera integration via libcamera
+- ✅ Custom LED kernel module
+- ✅ Buildroot 2025.08 image for Pi 4
+
+### Not Implemented (Mock Only)
+- ⏳ DS18B20 temperature sensor
+- ⏳ pH sensor module
+- ⏳ TDS sensor module
+- ⏳ Peristaltic pumps (6x)
+- ⏳ Water heater relay
+- ⏳ DS3231 RTC module
+
+---
+
+## [1.5.0] - 2026-01-10
+
+### 🎯 System Finalization & Buildroot Configuration Lock
+
+This release finalizes the system configuration and Buildroot packages, preparing for camera integration work.
+
+### Added
+
+#### Buildroot Configuration
+- **Comprehensive package list** in `configure-buildroot.sh`:
+  - Python 3 with pip, SSL, and SQLite support
+  - WiFi support (wpa_supplicant, wireless-tools, iw)
+  - NTP for time synchronization
+  - GDB and ltrace for debugging
+  - syslog-ng for system logging
+  - picocom for serial communication
+  - jq for JSON processing
+  - TIFF image library
+  - Hardware clock utilities
+  - USB mass storage support
+- **libcamera integration** for Pi Camera support (V4L2 and RPI_VC4 pipeline)
+- **OpenCV4 with V4L2 support** for video capture
+
+#### Documentation
+- **17-TOUCHSCREEN-CONFIGURATION.md** - Complete touchscreen setup guide
+- **18-BUILDROOT-PACKAGES.md** - Comprehensive package reference
+- Fixed documentation numbering (removed duplicate #14)
+- Updated README.md index with all 18 documents
+
+#### Deploy Overlay Structure
+- `boot-overlay/config.txt` - Complete verified boot configuration
+- `boot-overlay/overlays/waveshare35c.dtbo` - Display driver overlay
+- `rootfs-overlay/etc/profile.d/leafsense-qt.sh` - Qt environment
+- `rootfs-overlay/etc/init.d/S99leafsense` - Auto-start init script
+- `rootfs-overlay/opt/leafsense/start_leafsense.sh` - Manual startup
+
+### Changed
+
+#### Touchscreen Driver
+- **Switched from tslib to evdev** - tslib caused application freezing
+- **Rotation via environment variable**: `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"`
+- **No calibration required** - evdev handles rotation automatically
+
+#### Display Configuration
+- **Lowered SPI speed** from 24MHz to 16MHz (prevents touch freeze)
+- **Increased FPS** from 20 to 50 (reduces screen blinking)
+- **Final config**: `dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50`
+
+### Fixed
+
+- Documentation numbering (two files were labeled "14")
+- Updated 01-OVERVIEW.md documentation list with correct numbers
+- Updated 05-BUILDROOT-IMAGE.md to reference evdev instead of tslib
+
+### System Status (January 10, 2026)
+
+| Component | Status | Details |
+|-----------|--------|---------|
+| Display | ✅ Working | fb1 (fb_ili9486), 480x320, 50fps |
+| Touchscreen | ✅ Working | evdev with rotate=90 |
+| Camera | 🔄 Pending | Hardware detected, libcamera integration pending |
+| GUI | ✅ Running | Qt5 linuxfb on fb1 |
+| Database | ✅ Working | SQLite with all tables |
+| ML Model | ✅ Loaded | ONNX Runtime inference |
+| Buildroot | ✅ Configured | Ready for final build |
+
+### Known Constraints
+
+1. **Touchscreen**: Must use evdev, NOT tslib (tslib causes freezing)
+2. **Display rotation**: rotate=90 in config.txt MUST match rotate=90 in Qt environment
+3. **SPI speed**: Maximum stable speed is 16MHz for touchscreen reliability
+4. **Camera**: Requires libcamera rebuild (configuration done, build pending)
 
 ---
 

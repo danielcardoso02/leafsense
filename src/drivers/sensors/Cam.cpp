@@ -177,15 +177,53 @@ std::string Cam::takePhoto()
     
     std::string filepath = filename.str();
     
-    // Strategy 1: Try OpenCV with multiple video devices
-    // On Raspberry Pi with bcm2835 camera, try:
-    // - /dev/video0 (unicam-image - raw sensor data)
-    // - /dev/video13 (bcm2835-isp-output0 - processed)
-    // - /dev/video14 (bcm2835-isp-capture0 - processed)
-    
     std::cout << "[Camera] Attempting capture to: " << filepath << std::endl;
     
-    const int devices_to_try[] = {13, 14, 0, 20, 21};
+    // Strategy 1: Use libcamera's cam utility FIRST (works with Pi Camera on modern kernels)
+    std::cout << "[Camera] Trying libcamera 'cam' utility..." << std::endl;
+    
+    // Capture using cam utility - saves as PPM, then convert to JPEG
+    std::string ppmFile = filepath.substr(0, filepath.length() - 4) + ".ppm";
+    std::ostringstream camCmd;
+    camCmd << "cam --camera=1 --capture=1 --stream width=640,height=480,pixelformat=BGR888 --file=" << ppmFile << " 2>/dev/null";
+    
+    int camResult = system(camCmd.str().c_str());
+    if (camResult == 0) {
+        // Check if PPM file was created
+        struct stat st;
+        if (stat(ppmFile.c_str(), &st) == 0 && st.st_size > 0) {
+            // Convert PPM to JPEG using OpenCV
+            cv::Mat ppmImage = cv::imread(ppmFile);
+            if (!ppmImage.empty()) {
+                cv::Mat enhanced = enhanceImage(ppmImage);
+                std::vector<int> params;
+                params.push_back(cv::IMWRITE_JPEG_QUALITY);
+                params.push_back(85);
+                if (cv::imwrite(filepath, enhanced, params)) {
+                    std::remove(ppmFile.c_str()); // Delete temp PPM
+                    std::cout << "[Camera] Captured via libcamera cam: " << filepath << std::endl;
+                    return filepath;
+                }
+            }
+        }
+    }
+    
+    // Strategy 2: Try libcamera-still if available
+    std::cout << "[Camera] Trying libcamera-still..." << std::endl;
+    std::ostringstream stillCmd;
+    stillCmd << "libcamera-still -o " << filepath << " --width 640 --height 480 -t 500 -n 2>/dev/null";
+    if (system(stillCmd.str().c_str()) == 0) {
+        struct stat st;
+        if (stat(filepath.c_str(), &st) == 0 && st.st_size > 0) {
+            std::cout << "[Camera] Captured via libcamera-still: " << filepath << std::endl;
+            return filepath;
+        }
+    }
+    
+    // Strategy 3: Try OpenCV with video devices (USB webcam fallback)
+    std::cout << "[Camera] Trying OpenCV V4L2 devices..." << std::endl;
+    
+    const int devices_to_try[] = {0, 1, 2};
     for (int device : devices_to_try) {
         std::ostringstream dev_path;
         dev_path << "/dev/video" << device;
@@ -199,19 +237,7 @@ std::string Cam::takePhoto()
         }
     }
     
-    // Strategy 2: Try direct media-ctl/v4l2 configuration for Pi Camera
-    std::cout << "[Camera] Trying direct V4L2 configuration..." << std::endl;
-    
-    // Configure Pi Camera using media-ctl if available  
-    system("media-ctl -d /dev/media0 --set-v4l2 '\"unicam\":0 [fmt:SRGGB10_1X10/640x480]' 2>/dev/null");
-    
-    // Try video0 again after configuration
-    if (tryOpenCVCapture(0, filepath)) {
-        std::cout << "[Camera] Captured after V4L2 config: " << filepath << std::endl;
-        return filepath;
-    }
-    
-    // Strategy 3: Create realistic test pattern as absolute fallback
+    // Strategy 4: Create realistic test pattern as absolute fallback
     std::cerr << "╔══════════════════════════════════════════════════════════════════╗" << std::endl;
     std::cerr << "║  WARNING: CAMERA HARDWARE NOT DETECTED                           ║" << std::endl;
     std::cerr << "║  Generating TEST PATTERN instead of real camera capture         ║" << std::endl;

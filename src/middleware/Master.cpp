@@ -144,10 +144,11 @@ void Master::tReadSensorsFunc()
 
         /* --------------------------------------------------------------------
          * Periodic Camera Capture & ML Analysis (every 30 minutes)
+         * First capture happens 4 seconds after startup for testing
          * -------------------------------------------------------------------- */
         cameraCaptureCounter++;
-        if (cameraCaptureCounter >= 900) {  // 900 * 2s = 1800s = 30 minutes
-            cameraCaptureCounter = 0;
+        if (cameraCaptureCounter >= 900 || cameraCaptureCounter == 2) {  // Trigger at 2 for initial test, then every 30 min
+            if (cameraCaptureCounter >= 900) cameraCaptureCounter = 0;
             
             std::cout << "[Master] Capturing photo for ML analysis..." << std::endl;
             std::string photoPath = camera->takePhoto();

@@ -1,9 +1,12 @@
 # LeafSense - Intelligent Hydroponic Monitoring System
 
-**Version:** 1.4.0  
-**Status:** ✅ Production Ready (Camera integration in progress)
-**Platform:** Raspberry Pi 4B (ARM64) + Buildroot Linux  
+**Version:** 1.5.1  
+**Date:** January 11, 2026  
+**Status:** ✅ Complete system with display, camera, touchscreen, and ML working on Raspberry Pi 4  
+**Platform:** Raspberry Pi 4B (ARM64) + Custom Buildroot Linux  
 **Architecture:** Cross-compiled C++17 with Qt5, OpenCV, ONNX Runtime
+
+> 📋 **See [docs/00-PROJECT-STATUS.md](docs/00-PROJECT-STATUS.md) for complete implementation status**
 
 ---
 
@@ -118,11 +121,25 @@ make -j$(nproc)
 # Copy binary
 scp build-arm64/src/LeafSense root@10.42.0.196:/opt/leafsense/
 
-# Restart application
-ssh root@10.42.0.196 'killall LeafSense; /opt/leafsense/LeafSense &'
+# Start application with touchscreen support
+ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
+
+# Or manual execution with touchscreen:
+ssh root@10.42.0.196 'export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1; \
+  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"; \
+  cd /opt/leafsense && ./LeafSense &'
+
+# Stop application
+ssh root@10.42.0.196 'killall LeafSense'
 
 # View logs
 ssh root@10.42.0.196 'tail -f /var/log/leafsense.log'
+```
+
+**Run on PC (Development):**
+```bash
+cd build/src
+./LeafSense
 ```
 
 ---
@@ -151,6 +168,7 @@ Complete documentation available in [`docs/`](docs/) directory:
 | 13 | [11-TESTING-GUIDE.md](docs/11-TESTING-GUIDE.md) | Testing procedures and validation |
 | 14 | [12-DEMO-GUIDE.md](docs/12-DEMO-GUIDE.md) | Demonstration and presentation guide |
 | 15 | [13-KERNEL-MODULE.md](docs/13-KERNEL-MODULE.md) | Kernel module development (low-level) |
+| 16 | [14-TOUCHSCREEN-CONFIGURATION.md](docs/14-TOUCHSCREEN-CONFIGURATION.md) | **Touchscreen setup (evdev, no calibration)** |
 | [FINAL-STATUS.md](FINAL-STATUS.md) | **Complete system status** |
 
 **Quick Links:**

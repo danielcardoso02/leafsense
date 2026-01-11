@@ -5,7 +5,7 @@
 - Marco Costa
 
 ## Date
-December 2025
+January 2026
 
 ---
 
@@ -14,30 +14,86 @@ December 2025
 This guide documents the deployment of LeafSense on Raspberry Pi 4 with Waveshare 3.5" LCD (C) touchscreen display.
 
 ### Hardware Configuration
-- **Board**: Raspberry Pi 4 (4GB/8GB)
+- **Board**: Raspberry Pi 4 Model B (2GB+ RAM)
 - **Display**: Waveshare 3.5" LCD (C) - ILI9486 controller
 - **Touch**: ADS7846 resistive touchscreen
-- **Resolution**: 480x320 pixels
+- **Resolution**: 480x320 pixels (landscape)
 - **Interface**: SPI (display on CS0, touch on CS1)
+
+---
+
+## Quick Start
+
+### 1. Flash SD Card
+```bash
+sudo dd if=~/buildroot/buildroot-2025.08/output/images/sdcard.img \
+       of=/dev/sdX bs=4M status=progress conv=fsync
+sudo fatlabel /dev/sdX1 BOOT
+sudo e2label /dev/sdX2 ROOTFS
+```
+
+### 2. Configure Display Overlay
+```bash
+sudo mount /dev/sdX1 /mnt/BOOT
+sudo cp deploy/boot-overlay/overlays/waveshare35c.dtbo /mnt/BOOT/overlays/
+sudo cp deploy/boot-overlay/config.txt /mnt/BOOT/config.txt
+sudo umount /mnt/BOOT
+```
+
+**Note:** The config.txt in `deploy/boot-overlay/` contains the verified working configuration:
+- `speed=16000000` (16MHz) - prevents touch freeze
+- `fps=50` - minimizes screen blinking
+- `rotate=90` - landscape orientation
+
+### 3. Deploy Application
+```bash
+sudo mount /dev/sdX2 /mnt/ROOTFS
+sudo mkdir -p /mnt/ROOTFS/opt/leafsense
+
+# Copy files
+sudo cp build-arm64/src/LeafSense /mnt/ROOTFS/opt/leafsense/
+sudo cp ml/leafsense_model.onnx /mnt/ROOTFS/opt/leafsense/
+sudo cp ml/leafsense_model_classes.txt /mnt/ROOTFS/opt/leafsense/
+sudo cp database/schema.sql /mnt/ROOTFS/opt/leafsense/
+sudo cp external/onnxruntime-arm64/lib/libonnxruntime.so.1.16.3 /mnt/ROOTFS/usr/lib/
+sudo ln -sf libonnxruntime.so.1.16.3 /mnt/ROOTFS/usr/lib/libonnxruntime.so
+
+sudo umount /mnt/ROOTFS
+```
+
+### 4. First Boot
+```bash
+ssh root@10.42.0.196  # Password: leafsense
+
+# Initialize database
+cd /opt/leafsense
+sqlite3 leafsense.db < schema.sql
+
+# Run application
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+./LeafSense -platform linuxfb:fb=/dev/fb1
+```
 
 ---
 
 ## Build System
 
-### Buildroot Configuration
-The system uses Buildroot 2025.08 with custom configuration for:
-- Qt5 with linuxfb platform plugin
-- tslib for touchscreen calibration
-- SQLite3 for database
-- OpenCV for image processing (optional)
-
-### Cross-Compilation
+### PC Build (Development/Testing)
 ```bash
-# Build for ARM64
 cd leafsense-project
-mkdir build-arm64 && cd build-arm64
-cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-aarch64.cmake
+mkdir -p build && cd build
+cmake ..
 make -j$(nproc)
+# Binary: build/src/LeafSense
+```
+
+### ARM64 Build (Raspberry Pi)
+```bash
+cd leafsense-project
+mkdir -p build-arm64 && cd build-arm64
+cmake .. -DCMAKE_TOOLCHAIN_FILE=../deploy/toolchain-rpi4.cmake
+make -j$(nproc)
+# Binary: build-arm64/src/LeafSense
 ```
 
 ---
@@ -45,68 +101,47 @@ make -j$(nproc)
 ## Display Configuration
 
 ### Kernel Overlay
-The Waveshare 3.5" LCD (C) requires the `waveshare35c.dtbo` overlay from:
-- https://files.waveshare.com/wiki/common/Waveshare35c.zip
+The Waveshare 3.5" LCD (C) requires the `waveshare35c.dtbo` overlay.
 
-### config.txt Settings
+### config.txt Settings (Working Configuration)
 ```ini
 # Enable SPI
 dtparam=spi=on
 
-# Waveshare 3.5" LCD (C) overlay
-# SPI speed reduced to 48MHz for touch stability (default 115MHz causes freeze)
-# FPS reduced to 20 for same reason (default 31)
-dtoverlay=waveshare35c,speed=48000000,fps=20
+# Waveshare 3.5" LCD (C) with 90° rotation (landscape mode)
+# CRITICAL: speed=16000000 prevents touch freeze, fps=50 reduces blinking
+dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
 
-# HDMI settings for framebuffer
-hdmi_force_hotplug=1
-hdmi_group=2
-hdmi_mode=87
-hdmi_cvt=480 320 60 6 0 0 0
-hdmi_drive=2
+# Framebuffer dimensions
+framebuffer_width=480
+framebuffer_height=320
 ```
 
-### Critical Fix: SPI Speed
-**Problem**: At default 115MHz SPI speed, touching the screen causes UI freeze due to SPI bus contention between display and touch controller.
-
-**Solution**: Reduce SPI speed to 48MHz and FPS to 20:
-```
-dtoverlay=waveshare35c,speed=48000000,fps=20
-```
+**Note:** Higher SPI speeds (24MHz+) cause touchscreen freezing issues.
 
 ---
 
 ## Touch Configuration
 
-### tslib Setup
-Touch calibration uses tslib with the following configuration:
+### REQUIRED: Qt evdev (Do NOT use tslib!)
 
-**/etc/ts.conf**:
-```
-module_raw input
-module pthres pmin=1
-module dejitter delta=100
-module linear
-```
+The **only working solution** uses Qt's evdev touchscreen handler with rotation parameter:
 
-**/etc/pointercal** (90° rotation calibration):
-```
-0 -7680 31457280 5120 0 0 65536
-```
-
-### ts_uinput
-The `ts_uinput` daemon creates a calibrated virtual input device:
-- Raw input: `/dev/input/event0` (ADS7846, 0-4095 range)
-- Calibrated output: `/dev/input/event1` (ts_uinput, 0-479/0-319 range)
-
-### Environment Variables
 ```bash
-# TSLIB configuration
-export TSLIB_TSDEVICE=/dev/input/event0
-export TSLIB_CONFFILE=/etc/ts.conf
-export TSLIB_CALIBFILE=/etc/pointercal
-export TSLIB_PLUGINDIR=/usr/lib/ts
+# Environment variable to set before running LeafSense
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+
+# Run application
+./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
+
+**Key insight:** The `rotate=90` in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` must match the `rotate=90` in the dtoverlay config.
+
+### ❌ DO NOT USE: tslib (Causes application freezing)
+
+tslib causes application freezing when the touchscreen is touched due to SPI bus contention.
+
+**Never use tslib with this display.** If you see TSLIB_ environment variables, remove them and use evdev instead.
 
 ---
 
@@ -114,12 +149,10 @@ export TSLIB_PLUGINDIR=/usr/lib/ts
 
 ### Platform Settings
 ```bash
-# Use linuxfb platform on fb1 (LCD)
-export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
+# Core Qt settings for LeafSense on Waveshare LCD
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
 export QT_QPA_FB_HIDECURSOR=1
-
-# Use calibrated touch from ts_uinput
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/event1:rotate=0
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 export QT_QPA_FONTDIR=/usr/share/fonts
 ```
 
@@ -141,32 +174,53 @@ Focus rectangles are disabled for touchscreen use via stylesheet:
 
 ## Application Startup
 
+### Startup Script: /opt/leafsense/start_leafsense.sh
+```bash
+#!/bin/sh
+# LeafSense Startup Script - Waveshare 3.5" LCD (C)
+
+# Qt Platform Configuration
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+export QT_QPA_FB_HIDECURSOR=1
+export QT_QPA_FONTDIR=/usr/share/fonts
+
+# Touchscreen Configuration (CRITICAL: rotate=90 must match display rotation)
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+
+# Run application
+cd /opt/leafsense
+./LeafSense -platform linuxfb:fb=/dev/fb1
+```
+
 ### Init Script: /etc/init.d/S99leafsense
 ```bash
 #!/bin/sh
+PIDFILE=/var/run/leafsense.pid
+LOGFILE=/var/log/leafsense.log
+
 case "$1" in
     start)
         echo "Starting LeafSense..."
-        
-        # Source environment
-        . /etc/profile.d/qt-touchscreen.sh
-        
-        # Start ts_uinput for calibrated touch
-        ts_uinput -d &
-        sleep 2
-        
-        # Start application
-        cd /opt/leafsense
-        ./LeafSense >> /var/log/leafsense.log 2>&1 &
+        /opt/leafsense/start_leafsense.sh >> $LOGFILE 2>&1 &
+        echo $! > $PIDFILE
         ;;
     stop)
         echo "Stopping LeafSense..."
-        killall LeafSense ts_uinput 2>/dev/null
+        [ -f $PIDFILE ] && kill $(cat $PIDFILE) 2>/dev/null
+        killall LeafSense 2>/dev/null
+        rm -f $PIDFILE
         ;;
     restart)
         $0 stop
         sleep 2
         $0 start
+        ;;
+    status)
+        if [ -f $PIDFILE ] && kill -0 $(cat $PIDFILE) 2>/dev/null; then
+            echo "LeafSense is running (PID: $(cat $PIDFILE))"
+        else
+            echo "LeafSense is not running"
+        fi
         ;;
 esac
 ```
@@ -236,15 +290,17 @@ ssh root@<PI_IP> '/etc/init.d/S99leafsense start'
 
 ### Display Not Working
 ```bash
-# Check framebuffers
+# Check framebuffers (should show fb0 for HDMI, fb1 for LCD)
 ls /dev/fb*
-# Should show fb0 (HDMI) and fb1 (LCD)
 
 # Check kernel messages
 dmesg | grep -i "fb\|ili9486\|spi"
 
 # Verify overlay loaded
 cat /proc/device-tree/soc/spi@*/status
+
+# Test display
+cat /dev/urandom > /dev/fb1  # Should show static
 ```
 
 ### Touch Not Responding
@@ -252,31 +308,34 @@ cat /proc/device-tree/soc/spi@*/status
 # Check input devices
 cat /proc/bus/input/devices
 
-# Test raw touch
-hexdump -C /dev/input/event0  # Touch screen
+# Test raw touch (should show hex output on touch)
+hexdump -C /dev/input/event0
 
-# Check ts_uinput running
-ps aux | grep ts_uinput
-
-# Test calibrated touch
-ts_print_raw
+# Verify device permissions
+ls -la /dev/input/event0
 ```
 
-### UI Freezes on Touch
-- **Cause**: SPI bus contention at high speeds
-- **Solution**: Reduce SPI speed in config.txt:
-  ```
-  dtoverlay=waveshare35c,speed=48000000,fps=20
-  ```
+### Touch Coordinates Inverted/Wrong
+This is the most common issue. The solution is to add `rotate=90` to the evdev parameters:
 
-### Touch Offset/Miscalibrated
 ```bash
-# Recalibrate
-ts_calibrate
-
-# Verify calibration file
-cat /etc/pointercal
+# Correct configuration - rotate matches display rotation
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 ```
+
+| Display Rotation | Touch Parameter |
+|------------------|-----------------|
+| rotate=0 | rotate=0 |
+| rotate=90 | rotate=90 |
+| rotate=180 | rotate=180 |
+| rotate=270 | rotate=270 |
+
+### UI Freezes on Touch (tslib issue)
+- **Cause**: tslib can cause SPI bus contention
+- **Solution**: Use evdev instead of tslib:
+  ```bash
+  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+  ```
 
 ---
 
@@ -285,11 +344,13 @@ cat /etc/pointercal
 | File | Location | Description |
 |------|----------|-------------|
 | LeafSense | /opt/leafsense/LeafSense | Main application |
+| Database | /opt/leafsense/leafsense.db | SQLite database |
+| ML Model | /opt/leafsense/leafsense_model.onnx | ONNX model |
+| Startup | /opt/leafsense/start_leafsense.sh | Startup script |
+| Gallery | /opt/leafsense/gallery/ | Camera captures |
 | Log | /var/log/leafsense.log | Application log |
-| Init Script | /etc/init.d/S99leafsense | Startup script |
-| Qt Env | /etc/profile.d/qt-touchscreen.sh | Qt environment |
-| ts.conf | /etc/ts.conf | tslib config |
-| pointercal | /etc/pointercal | Touch calibration |
+| Init | /etc/init.d/S99leafsense | Auto-start script |
+| ONNX | /usr/lib/libonnxruntime.so.1.16.3 | ONNX Runtime |
 | config.txt | /boot/config.txt | Pi boot config |
 | Overlay | /boot/overlays/waveshare35c.dtbo | Display overlay |
 
@@ -299,9 +360,10 @@ cat /etc/pointercal
 
 ### USB Ethernet Gadget
 The Pi is configured for USB ethernet gadget mode for development:
-- Pi IP: 10.42.0.197 (may vary)
-- Host IP: 10.42.0.1
-- SSH: `ssh root@10.42.0.197` (password: root)
+- **Pi IP**: 10.42.0.196
+- **Host IP**: 10.42.0.1
+- **SSH**: `ssh root@10.42.0.196`
+- **Password**: leafsense
 
 ---
 
@@ -309,8 +371,9 @@ The Pi is configured for USB ethernet gadget mode for development:
 
 | Date | Change |
 |------|--------|
+| Jan 2026 | Updated to evdev touchscreen handling (more reliable than tslib) |
+| Jan 2026 | Added rotate=90 parameter for correct touch coordinates |
+| Jan 2026 | Improved startup scripts and documentation |
 | Dec 2025 | Initial deployment with Waveshare 3.5" LCD (C) |
-| Dec 2025 | Fixed SPI speed for touch stability (115→48MHz) |
-| Dec 2025 | Added tslib calibration and ts_uinput |
+| Dec 2025 | Fixed SPI speed for touch stability |
 | Dec 2025 | Enabled touch scrolling with QScroller |
-| Dec 2025 | Removed focus rectangles for touchscreen |

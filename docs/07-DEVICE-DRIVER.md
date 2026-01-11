@@ -298,7 +298,71 @@ sudo apt-get install build-essential linux-headers-$(uname -r)
 # No additional installation needed
 ```
 
-### Building the Module
+### Option 1: Buildroot Package (Recommended)
+
+The LED driver is available as a Buildroot external package. This automatically compiles the module for the target kernel and installs it in the image.
+
+#### Package Structure
+
+```
+deploy/buildroot-packages/
+├── Config.in              # Menu configuration
+├── external.desc          # External package descriptor
+├── external.mk            # Package includes
+└── leafsense-led/
+    ├── Config.in          # Package menu entry
+    ├── leafsense-led.mk   # Build rules
+    ├── 99-leddev.rules    # Udev permissions
+    └── src/
+        ├── Makefile
+        ├── ledmodule.c
+        ├── utils.c
+        └── utils.h
+```
+
+#### Enable in Buildroot
+
+```bash
+cd ~/buildroot/buildroot-2025.08
+
+# Set external packages path
+export BR2_EXTERNAL=/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/deploy/buildroot-packages
+
+# Open menuconfig
+make menuconfig
+
+# Navigate to: External options → LeafSense packages → leafsense-led
+# Press 'Y' to enable, then save and exit
+
+# Rebuild image
+make -j$(nproc)
+```
+
+The module will be installed to `/lib/modules/<kernel-version>/extra/led.ko` and automatically loaded on boot.
+
+### Option 2: Manual Cross-Compilation
+
+For development, you can cross-compile the module manually:
+
+```bash
+cd drivers/kernel_module
+
+# Set cross-compilation environment
+export ARCH=arm64
+export CROSS_COMPILE=/home/daniel/buildroot/buildroot-2025.08/output/host/bin/aarch64-linux-
+export KDIR=/home/daniel/buildroot/buildroot-2025.08/output/build/linux-custom
+
+# Build
+make
+```
+
+Then copy to the Pi:
+```bash
+scp led.ko root@10.42.0.196:/lib/modules/$(uname -r)/extra/
+ssh root@10.42.0.196 'depmod -a'
+```
+
+### Option 3: Building on Host (Development)
 
 ```bash
 cd drivers/kernel_module
@@ -316,7 +380,7 @@ make[1]: Leaving directory '/usr/src/linux-headers-6.12.41-v8'
 ```
 
 **Generated Files:**
-- `ledmodule.ko` - Kernel module binary
+- `led.ko` - Kernel module binary
 - `ledmodule.mod.c` - Module metadata
 - `*.o` - Object files
 
@@ -324,23 +388,23 @@ make[1]: Leaving directory '/usr/src/linux-headers-6.12.41-v8'
 
 ```bash
 # Load module
-sudo insmod ledmodule.ko
+sudo insmod led.ko
 
 # Verify module is loaded
 lsmod | grep led
-# Output: ledmodule  16384  0
+# Output: led  16384  0
 
 # Check kernel log
 dmesg | tail -5
 # Output: [LED Module] Registered with major number 240
-#         [LED Module] Device created: /dev/leddev
+#         [LED Module] Device created: /dev/led0
 ```
 
 ### Unloading the Module
 
 ```bash
 # Unload module
-sudo rmmod ledmodule
+sudo rmmod led
 
 # Verify removal
 lsmod | grep led

@@ -1,6 +1,0 @@
-/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build-arm64/CMakeFiles/edit_cache.dir
-/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build-arm64/CMakeFiles/rebuild_cache.dir
-/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build-arm64/src/CMakeFiles/LeafSense.dir
-/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build-arm64/src/CMakeFiles/edit_cache.dir
-/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build-arm64/src/CMakeFiles/rebuild_cache.dir
-/home/daniel/Desktop/ESRG/2025-2026/Project/Rasp/leafsense-project/build-arm64/src/CMakeFiles/LeafSense_autogen.dir

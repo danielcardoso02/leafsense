@@ -433,4 +433,103 @@ ls -lh /opt/leafsense/leafsense_model.onnx
 
 ---
 
-*Document last updated: January 9, 2026*
+## Appendix A: Waveshare 3.5" LCD (C) Complete Setup
+
+This section documents the **working configuration** for the Waveshare 3.5" LCD (C) with ILI9486 controller and ADS7846 touchscreen.
+
+### A.1 Boot Configuration (config.txt)
+
+Add to `/boot/config.txt`:
+```ini
+# SPI enable (required for LCD)
+dtparam=spi=on
+
+# Waveshare 3.5" LCD (C) - ILI9486 + ADS7846 Touchscreen
+dtoverlay=waveshare35c:rotate=90,speed=24000000,fps=30
+
+# Framebuffer for LCD
+framebuffer_width=480
+framebuffer_height=320
+```
+
+### A.2 Device Tree Overlay
+
+Copy the overlay file to boot partition:
+```bash
+# From project directory
+sudo cp deploy/waveshare35c.dtbo /mnt/BOOT/overlays/
+```
+
+### A.3 Verify Display After Boot
+
+```bash
+# Check framebuffer devices
+cat /proc/fb
+# Expected output:
+# 0 BCM2708 FB      (HDMI)
+# 1 fb_ili9486      (Waveshare LCD)
+
+# Check LCD resolution
+cat /sys/class/graphics/fb1/virtual_size
+# Expected: 480,320 (landscape mode)
+```
+
+### A.4 Touchscreen Configuration
+
+**Important:** Qt's evdev touchscreen handler requires rotation parameter to match display rotation.
+
+```bash
+# Environment variable for touch input (rotate=90 for landscape)
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+```
+
+### A.5 Complete Working Startup Command
+
+```bash
+#!/bin/sh
+# /opt/leafsense/start_leafsense.sh
+
+cd /opt/leafsense
+
+# Display on Waveshare LCD (fb1)
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+
+# Touchscreen with 90-degree rotation
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+
+# Run application
+exec ./LeafSense -platform linuxfb:fb=/dev/fb1
+```
+
+### A.6 Auto-Start on Boot
+
+Create `/etc/init.d/S99leafsense`:
+```bash
+#!/bin/sh
+case "$1" in
+    start)
+        echo "Starting LeafSense..."
+        cd /opt/leafsense
+        export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+        export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+        ./LeafSense -platform linuxfb:fb=/dev/fb1 &
+        ;;
+    stop)
+        killall LeafSense 2>/dev/null
+        ;;
+esac
+```
+
+### A.7 Troubleshooting Touchscreen
+
+| Problem | Solution |
+|---------|----------|
+| Black screen | Verify `dtoverlay=waveshare35c` in config.txt and overlay file exists |
+| Touch not responding | Check `evtest /dev/input/event0` shows touch events |
+| Touch coordinates inverted | Add `rotate=90` or `rotate=270` to EVDEV_TOUCHSCREEN_PARAMETERS |
+| Touch off by 90 degrees | Change rotate value (0, 90, 180, 270) |
+| Application freezes on touch | Don't use tslib plugin, use evdev with rotation |
+
+---
+
+*Document last updated: January 10, 2026*

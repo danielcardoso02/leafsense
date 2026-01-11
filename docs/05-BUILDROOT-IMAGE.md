@@ -95,7 +95,7 @@ Hostname:      leafsense-pi
 #### Graphics (for Waveshare 3.5" LCD)
 - **Qt5 5.15.17** - GUI framework
 - **fbdev** - Framebuffer device support
-- **tslib** - Touchscreen library
+- **libevdev** - Touchscreen via evdev (NOT tslib - see 17-TOUCHSCREEN-CONFIGURATION.md)
 
 #### Libraries
 - **OpenCV 4.11.0** - Computer vision (with V4L2 support)
