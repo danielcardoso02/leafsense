@@ -262,7 +262,7 @@ This version adds professional image processing techniques using OpenCV and comp
   - Real-time verification of data persistence
 
 #### Documentation
-- **Terminology guide** (`docs/00-TERMINOLOGY.md`)
+- **Terminology guide** (`docs/19-TERMINOLOGY.md`)
   - Complete glossary of technical terms
   - Hardware, software, and networking concepts
   - Development and deployment terminology

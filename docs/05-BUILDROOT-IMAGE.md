@@ -905,7 +905,7 @@ make clean
 
 ### Related Documentation
 
-- [00-TERMINOLOGY.md](00-TERMINOLOGY.md) - Technical term definitions
+- [19-TERMINOLOGY.md](19-TERMINOLOGY.md) - Technical term definitions
 - [03-MACHINE-LEARNING.md](03-MACHINE-LEARNING.md) - ML model deployment
 - [05-RASPBERRY-PI-DEPLOYMENT.md](05-RASPBERRY-PI-DEPLOYMENT.md) - Deploying LeafSense
 - [09-TROUBLESHOOTING.md](09-TROUBLESHOOTING.md) - Common issues

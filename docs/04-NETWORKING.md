@@ -285,4 +285,4 @@ ssh -i ~/.ssh/leafsense_rsa root@10.42.0.196
 ## Related Documentation
 - [Raspberry Pi Deployment](05-RASPBERRY-PI-DEPLOYMENT.md)
 - [Troubleshooting Guide](09-TROUBLESHOOTING.md)
-- [Terminology](00-TERMINOLOGY.md)
+- [Terminology](19-TERMINOLOGY.md)
