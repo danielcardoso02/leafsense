@@ -42,8 +42,8 @@ LeafSense is a complete embedded system for intelligent hydroponic plant monitor
 
 **Software Stack:**
 - **OS:** Custom Buildroot Linux 6.12.41-v8 (minimal ~289 MB image)
-- **GUI:** Qt5 5.15.x (Widgets, Charts, SQL, linuxfb platform)
-- **ML:** ONNX Runtime 1.20.1 with custom trained model
+- **GUI:** Qt5 5.15.14 (Widgets, Charts, SQL, linuxfb platform)
+- **ML:** ONNX Runtime 1.16.3 with custom trained model
 - **Vision:** OpenCV 4.11.0 (image preprocessing, CLAHE enhancement)
 - **Database:** SQLite 3.48.0
 - **Build:** CMake 3.22+ with cross-compilation toolchain

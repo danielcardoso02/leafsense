@@ -183,11 +183,11 @@ import torch.nn as nn
 from torchvision import models, transforms
 from torch.utils.data import DataLoader
 
-# Template base
+# Base template
 model = models.resnet18(pretrained=True)
 model.fc = nn.Linear(512, 4)  # 4 classes
 
-# Otimizador
+# Optimizer
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 

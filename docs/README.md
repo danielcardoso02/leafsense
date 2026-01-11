@@ -171,7 +171,7 @@ ssh root@10.42.0.196 'killall LeafSense'
 
 ### Critical Touch Configuration
 
-The Waveshare 3.5" LCD with `rotate=270` in `/boot/config.txt` requires:
+The Waveshare 3.5" LCD with `rotate=90` in `/boot/config.txt` requires:
 
 ```bash
 export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"

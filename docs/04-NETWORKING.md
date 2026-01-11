@@ -211,14 +211,14 @@ tcpdump -i eth0 -n
 
 ### SSH Connection Refused
 1. Verify Pi is responding to ping
-2. Check SSH service is running: `systemctl status dropbear`
+2. Check SSH service is running: `ps aux | grep dropbear`
 3. Clear known_hosts: `ssh-keygen -R 10.42.0.196`
 4. Try with verbose: `ssh -vvv root@10.42.0.196`
 
 ### DHCP IP Not Assigned
 1. Verify DHCP server is running
 2. Check DHCP lease: `ip addr show`
-3. Restart DHCP client: `systemctl restart dhcpcd`
+3. Restart DHCP client: `/etc/init.d/S41dhcpcd restart`
 4. Fall back to static IP configuration
 
 ### Intermittent Disconnections

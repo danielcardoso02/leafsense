@@ -419,14 +419,14 @@ void MainWindow::setupConnections() {
 }
 ```
 
-## Plataformas Qt
+## Qt Platforms
 
 ### Desktop (X11/Wayland)
 ```bash
-# Pattern - detecta automaticamente
+# Auto-detect platform
 ./LeafSense
 
-# Forçar X11
+# Force X11
 QT_QPA_PLATFORM=xcb ./LeafSense
 ```
 
