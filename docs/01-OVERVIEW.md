@@ -62,39 +62,39 @@
 
 ```
 leafsense-project/
-├── CMakeLists.txt              # Main build configuration
+├── CMakeLists.txt                  # Main build configuration
 ├── database/
-│   └── schema.sql              # Database schema
+│   └── schema.sql                  # Database schema
 ├── deploy/
-│   ├── toolchain-rpi4.cmake    # Toolchain for cross-compilation
-│   ├── configure-buildroot.sh  # Buildroot configuration script
+│   ├── toolchain-rpi4.cmake        # Toolchain for cross-compilation
+│   ├── configure-buildroot.sh      # Buildroot configuration script
 │   └── setup-onnxruntime-arm64.sh
-├── docs/                       # Documentation
+├── docs/                           # Documentation
 ├── drivers/
-│   ├── kernel_module/          # Kernel module for LED
-│   ├── actuators/              # Actuator drivers
-│   └── sensors/                # Sensor drivers
+│   ├── kernel_module/              # Kernel module for LED
+│   ├── actuators/                  # Actuator drivers
+│   └── sensors/                    # Sensor drivers
 ├── external/
-│   └── onnxruntime-arm64/      # Pre-compiled ONNX Runtime
+│   └── onnxruntime-arm64/          # Pre-compiled ONNX Runtime
 ├── include/
 │   ├── application/
-│   │   ├── gui/                # GUI headers
-│   │   └── ml/                 # ML system headers
-│   ├── drivers/                # Driver headers
-│   └── middleware/             # Middleware headers
+│   │   ├── gui/                    # GUI headers
+│   │   └── ml/                     # ML system headers
+│   ├── drivers/                    # Driver headers
+│   └── middleware/                 # Middleware headers
 ├── ml/
-│   ├── leafsense_model.onnx    # Trained model (5.9MB)
-│   └── training/               # Python training scripts
+│   ├── leafsense_model.onnx        # Trained model (5.9MB)
+│   └── training/                   # Python training scripts
 ├── resources/
-│   ├── resources.qrc           # Qt resources
-│   └── images/                 # GUI images
+│   ├── resources.qrc               # Qt resources
+│   └── images/                     # GUI images
 └── src/
-    ├── main.cpp                # Entry point
+    ├── main.cpp                    # Entry point
     ├── application/
-    │   ├── gui/                # GUI implementation
-    │   └── ml/                 # ML implementation
-    ├── drivers/                # Driver implementation
-    └── middleware/             # Middleware implementation
+    │   ├── gui/                    # GUI implementation
+    │   └── ml/                     # ML implementation
+    ├── drivers/                    # Driver implementation
+    └── middleware/                 # Middleware implementation
 ```
 
 ## Implemented Features
