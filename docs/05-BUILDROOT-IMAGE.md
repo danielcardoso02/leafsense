@@ -82,7 +82,7 @@ Hostname:      leafsense-pi
 
 #### Core System
 - **BusyBox 1.37.0** - Minimal Unix utilities
-- **systemd-udev** - Device management
+- **eudev** - Device management (udev fork for non-systemd systems)
 - **dropbear** - Lightweight SSH server
 - **iptables** - Network filtering
 
@@ -93,7 +93,7 @@ Hostname:      leafsense-pi
 - ✅ **ov5647** - Camera sensor driver (Pi Camera v1)
 
 #### Graphics (for Waveshare 3.5" LCD)
-- **Qt5 5.15.17** - GUI framework
+- **Qt5 5.15.14** - GUI framework
 - **fbdev** - Framebuffer device support
 - **libevdev** - Touchscreen via evdev (NOT tslib - see 17-TOUCHSCREEN-CONFIGURATION.md)
 

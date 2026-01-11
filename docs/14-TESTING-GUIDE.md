@@ -449,7 +449,7 @@ ssh root@10.42.0.196 'killall LeafSense 2>/dev/null && echo "LeafSense stopped"'
 | ML model | `/opt/leafsense/leafsense_model.onnx` |
 | Class labels | `/opt/leafsense/leafsense_model_classes.txt` |
 | Database | `/opt/leafsense/leafsense.db` |
-| Startup script | `/opt/leafsense/start_leafsense.sh` |
+| Startup script | `/opt/leafsense/start.sh` |
 | Application logs | `/tmp/leafsense.log` |
 | ONNX Runtime | `/usr/lib/libonnxruntime.so.1.16.3` |
 

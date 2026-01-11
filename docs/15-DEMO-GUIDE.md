@@ -60,7 +60,7 @@ sudo ip link set usb0 up
 ```bash
 # Connect to Raspberry Pi
 ssh root@10.42.0.196
-# Password: (set during deployment, default is empty or 'root')
+# Password: leafsense
 
 # Verify system is running
 uname -a
