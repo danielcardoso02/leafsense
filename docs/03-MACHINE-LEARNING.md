@@ -40,9 +40,9 @@ Linear (512 → 4)
 Output: 4 classes (softmax)
 ```
 
-## Metrics de Treino
+## Training Metrics
 
-### Resultados Finais
+### Final Results
 - **Accuracy:** 99.39%
 - **Precision:** 99.41%
 - **Recall:** 99.39%
@@ -60,7 +60,7 @@ Actual  Healthy     [76      0         0        0]
 Total validation images: 1,155 (across 4 classes)
 ```
 
-### Curvas de Treino
+### Training Curves
 - **Training Loss:** 0.0089 (final epoch)
 - **Validation Loss:** 0.0156 (final epoch)
 - **Epochs:** 20
@@ -79,7 +79,7 @@ Total validation images: 1,155 (across 4 classes)
   - Healthy: 224 images (148 train + 76 val)
   - Deficiency: 196 images (155 train + 41 val)
 
-### Augmentação de Data
+### Data Augmentation
 ```python
 transform_train = transforms.Compose([
     transforms.RandomResizedCrop(224),
@@ -92,7 +92,7 @@ transform_train = transforms.Compose([
 ])
 ```
 
-## Integration no System
+## System Integration
 
 ### Model File
 - **Location:** `/opt/leafsense/leafsense_model.onnx`
@@ -161,21 +161,21 @@ session_options.SetGraphOptimizationLevel(
 );
 ```
 
-### Performance no Raspberry Pi 4B
+### Performance on Raspberry Pi 4B
 | Metric | Value |
-|---------|-------|
-| Tempo de inferência | ~150ms |
-| Usage de RAM | ~50MB |
-| Usage de CPU | ~80% (1 core) |
+|--------|-------|
+| Inference time | ~150ms |
+| RAM usage | ~50MB |
+| CPU usage | ~80% (1 core) |
 
-## Treino do Template
+## Model Training
 
-### Environment de Treino
+### Training Environment
 - **GPU:** NVIDIA RTX 3070
 - **Framework:** PyTorch 2.0
 - **Python:** 3.10
 
-### Script de Treino
+### Training Script
 ```python
 # ml/training/train.py
 import torch
@@ -206,7 +206,7 @@ for epoch in range(20):
     scheduler.step()
 ```
 
-### Exportação para ONNX
+### ONNX Export
 ```python
 # ml/training/export_onnx.py
 import torch
@@ -226,9 +226,9 @@ torch.onnx.export(
 )
 ```
 
-## Modo Mock
+## Mock Mode
 
-Quando o modelo não está disponível, o sistema opera em modo mock:
+When the model is not available, the system operates in mock mode:
 ```cpp
 if (!modelLoaded) {
     qDebug() << "[ML] Running in mock mode (always returns Healthy)";
@@ -236,10 +236,10 @@ if (!modelLoaded) {
 }
 ```
 
-## Melhorias Futuras
+## Future Improvements
 
-1. **Mais classes** - Adicionar mais doenças e pragas
-2. **Template mais leve** - MobileNetV3 para inferência mais rápida
-3. **Quantização INT8** - Reduzir tamanho e aumentar velocidade
-4. **Treino contínuo** - Melhorar modelo com dados do campo
-5. **Segmentação** - Identificar área afetada da folha
+1. **More classes** - Add more diseases and pests
+2. **Lighter model** - MobileNetV3 for faster inference
+3. **INT8 quantization** - Reduce size and increase speed
+4. **Continuous training** - Improve model with field data
+5. **Segmentation** - Identify affected leaf area

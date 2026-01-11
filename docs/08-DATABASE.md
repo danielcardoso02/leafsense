@@ -14,10 +14,10 @@ LeafSense uses SQLite as an embedded database for persistent storage of sensor d
 
 ## Schema
 
-### Tables Principais
+### Main Tables
 
 #### `sensor_readings`
-Armazena leituras dos sensores de ambiente.
+Stores environment sensor readings.
 
 ```sql
 CREATE TABLE sensor_readings (
@@ -31,14 +31,14 @@ CREATE TABLE sensor_readings (
 
 | Column | Type | Description |
 |--------|------|-----------|
-| id | INTEGER | Chave primária auto-incremento |
-| temperature | REAL | Temperatura em °C |
-| ph | REAL | Value de pH (0-14) |
-| ec | REAL | Condutividade elétrica (µS/cm) |
-| timestamp | DATETIME | Data/hora da leitura |
+| id | INTEGER | Auto-increment primary key |
+| temperature | REAL | Temperature in °C |
+| ph | REAL | pH Value (0-14) |
+| ec | REAL | Electrical conductivity (µS/cm) |
+| timestamp | DATETIME | Reading date/time |
 
 #### `logs`
-System de logging para eventos e ações.
+Logging system for events and actions.
 
 ```sql
 CREATE TABLE logs (
@@ -52,14 +52,14 @@ CREATE TABLE logs (
 
 | Column | Type | Description |
 |--------|------|-----------|
-| id | INTEGER | Chave primária |
+| id | INTEGER | Primary key |
 | log_type | VARCHAR | Type: Maintenance, Alert, System, ML |
-| message | TEXT | Mensagem principal |
-| details | TEXT | Detalhes adicionais |
-| timestamp | DATETIME | Data/hora do evento |
+| message | TEXT | Main message |
+| details | TEXT | Additional details |
+| timestamp | DATETIME | Event date/time |
 
 #### `alerts`
-Alerts do sistema.
+System alerts.
 
 ```sql
 CREATE TABLE alerts (
@@ -94,7 +94,7 @@ CREATE TABLE health_assessments (
 ```
 
 #### `ml_predictions`
-Resultados de inferência ML.
+ML inference results.
 
 ```sql
 CREATE TABLE ml_predictions (
@@ -108,7 +108,7 @@ CREATE TABLE ml_predictions (
 ```
 
 #### `ml_detections`
-Deteções de doenças.
+Disease detections.
 
 ```sql
 CREATE TABLE ml_detections (
@@ -123,7 +123,7 @@ CREATE TABLE ml_detections (
 ```
 
 #### `ml_recommendations`
-Recomendações baseadas em ML.
+ML-based recommendations.
 
 ```sql
 CREATE TABLE ml_recommendations (
@@ -138,7 +138,7 @@ CREATE TABLE ml_recommendations (
 ```
 
 #### `plant`
-Registo de plantas monitorizadas.
+Registry of monitored plants.
 
 ```sql
 CREATE TABLE plant (
@@ -152,7 +152,7 @@ CREATE TABLE plant (
 ```
 
 #### `plant_images`
-Imagens capturadas das plantas.
+Captured plant images.
 
 ```sql
 CREATE TABLE plant_images (
@@ -226,7 +226,7 @@ ORDER BY
 ```
 
 #### `vw_pending_recommendations`
-Recomendações pendentes.
+Pending recommendations.
 
 ```sql
 CREATE VIEW vw_pending_recommendations AS
@@ -262,7 +262,7 @@ CREATE INDEX idx_ml_predictions_timestamp ON ml_predictions(timestamp);
 
 ## Initialization
 
-### Criar Base de Data
+### Create Database
 ```bash
 sqlite3 leafsense.db < database/schema.sql
 ```
@@ -279,9 +279,9 @@ sqlite3 leafsense.db '.tables'
 # plant                       vw_unread_alerts
 ```
 
-## Queries Comuns
+## Common Queries
 
-### Inserir Reading de Sensor
+### Insert Sensor Reading
 ```sql
 INSERT INTO sensor_readings (temperature, ph, ec) 
 VALUES (23.5, 6.2, 1250);
@@ -357,7 +357,7 @@ private:
 };
 ```
 
-### Example de Usage
+### Usage Example
 ```cpp
 auto& db = DatabaseManager::instance();
 db.initialize("/opt/leafsense/leafsense.db");
@@ -388,21 +388,21 @@ sqlite3 /opt/leafsense/leafsense.db ".backup /opt/leafsense/backup/leafsense.db"
 
 ### Clean Old Data
 ```sql
--- Manter apenas últimos 30 dias de leituras
+-- Keep only last 30 days of readings
 DELETE FROM sensor_readings 
 WHERE timestamp < datetime('now', '-30 days');
 
--- Manter apenas últimos 7 dias de logs
+-- Keep only last 7 days of logs
 DELETE FROM logs 
 WHERE timestamp < datetime('now', '-7 days');
 
--- Vacuum para recuperar espaço
+-- Vacuum to recover space
 VACUUM;
 ```
 
-### Estatísticas
+### Statistics
 ```sql
--- Contagem por tabela
+-- Count per table
 SELECT 'sensor_readings' as table_name, COUNT(*) as count FROM sensor_readings
 UNION ALL
 SELECT 'logs', COUNT(*) FROM logs

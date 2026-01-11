@@ -56,7 +56,7 @@
 | 14 | [Testing Guide](14-TESTING-GUIDE.md) | Testing procedures | Reference |
 | 15 | [Demo Guide](15-DEMO-GUIDE.md) | Demonstration instructions | Reference |
 | 11 | [Changelog](11-CHANGELOG.md) | Version history | Reference |
-| 12 | [Implementation Report](12-IMPLEMENTATION-REPORT.md) | Technical report (Portuguese) | Reference |
+| 12 | [Implementation Report](12-IMPLEMENTATION-REPORT.md) | Technical report | Reference |
 
 ---
 

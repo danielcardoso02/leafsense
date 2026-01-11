@@ -14,7 +14,7 @@ The kernel module `led.ko` provides direct control of an LED connected to GPIO t
 | GPIO Pin | 20 (configurable) |
 | Kernel version | 6.12.41-v8 |
 
-## Architecture do Module
+## Module Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -55,7 +55,7 @@ The kernel module `led.ko` provides direct control of an LED connected to GPIO t
 └─────────────────────────────────────────────────────────┘
 ```
 
-## Código Fonte
+## Source Code
 
 ### File: `drivers/kernel_module/ledmodule.c`
 
@@ -269,13 +269,13 @@ arm64:
 
 ## Compilation
 
-### Para Desktop (Test)
+### For Desktop (Test)
 ```bash
 cd drivers/kernel_module
 make
 ```
 
-### Para Raspberry Pi 4 (Cross-Compilation)
+### For Raspberry Pi 4 (Cross-Compilation)
 ```bash
 cd drivers/kernel_module
 
@@ -286,28 +286,28 @@ export ARCH=arm64
 make arm64
 ```
 
-## Correção Aplicada
+## Applied Fix
 
-### Problema: `ioremap_nocache` deprecated
-O kernel Linux 5.6+ removeu a função `ioremap_nocache`. A correção foi:
+### Problem: `ioremap_nocache` deprecated
+Linux kernel 5.6+ removed the `ioremap_nocache` function. The fix was:
 
 ```diff
 - gpio_base = ioremap_nocache(GPIO_BASE, GPIO_SIZE);
 + gpio_base = ioremap(GPIO_BASE, GPIO_SIZE);
 ```
 
-A função `ioremap` no ARM64 já é não-cacheable por defeito.
+The `ioremap` function on ARM64 is already non-cacheable by default.
 
 ## Usage
 
-### Carregar Module
+### Load Module
 ```bash
 insmod /lib/modules/$(uname -r)/led.ko
-# ou
+# or
 modprobe led
 ```
 
-### Verify Carregamento
+### Verify Loading
 ```bash
 lsmod | grep led
 # led                    12288  0
@@ -316,20 +316,20 @@ ls -la /dev/led0
 # crw------- 1 root root 237, 0 ... /dev/led0
 ```
 
-### Controlar LED
+### Control LED
 ```bash
-# Ligar LED
+# Turn LED on
 echo 1 > /dev/led0
 
-# Desligar LED
+# Turn LED off
 echo 0 > /dev/led0
 
-# Ler estado
+# Read state
 cat /dev/led0
-# 1 ou 0
+# 1 or 0
 ```
 
-### Ver Logs do Kernel
+### View Kernel Logs
 ```bash
 dmesg | grep led
 # [  123.456789] LED module: initializing
@@ -339,14 +339,14 @@ dmesg | grep led
 # [  234.567892] SetGPIOOutputValue: register value is 0x100000
 ```
 
-### Descarregar Module
+### Unload Module
 ```bash
 rmmod led
 ```
 
-## Integration com LeafSense
+## Integration with LeafSense
 
-O módulo é carregado automaticamente pelo script de init:
+The module is automatically loaded by the init script:
 
 ```bash
 # /etc/init.d/S98leafsense
@@ -355,7 +355,7 @@ if [ -f /lib/modules/$(uname -r)/led.ko ]; then
 fi
 ```
 
-A aplicação pode controlar o LED via C++:
+The application can control the LED via C++:
 ```cpp
 void setLED(bool state) {
     std::ofstream led("/dev/led0");
@@ -365,7 +365,7 @@ void setLED(bool state) {
 }
 ```
 
-## Conexão de Hardware
+## Hardware Connection
 
 ```
 Raspberry Pi 4 GPIO Header:
@@ -398,9 +398,9 @@ Circuito LED:
           (Pin 38)   Resistor
 ```
 
-## Registo de GPIO BCM2711
+## BCM2711 GPIO Registers
 
-| Registo | Offset | Function |
+| Register | Offset | Function |
 |---------|--------|--------|
 | GPFSEL0 | 0x00 | Function Select GPIO 0-9 |
 | GPFSEL1 | 0x04 | Function Select GPIO 10-19 |

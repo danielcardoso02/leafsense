@@ -15,40 +15,40 @@
 
 ## 4. Implementation
 
-### 4.1 Environment de Development
+### 4.1 Development Environment
 
-O desenvolvimento do projeto LeafSense foi realizado utilizando as seguintes ferramentas e tecnologias:
+The development of the LeafSense project was carried out using the following tools and technologies:
 
-| Componente | Ferramenta/Version |
+| Component | Tool/Version |
 |------------|-------------------|
-| System Operativo (Host) | Ubuntu 22.04 LTS |
+| Operating System (Host) | Ubuntu 22.04 LTS |
 | IDE | Visual Studio Code |
-| Linguagem Principal | C++17 |
-| System de Build | CMake 3.22+ |
-| Control de Versions | Git / GitHub |
-| Framework GUI | Qt 5.15.14 |
-| ML Framework (Treino) | PyTorch 2.0 |
+| Main Language | C++17 |
+| Build System | CMake 3.22+ |
+| Version Control | Git / GitHub |
+| GUI Framework | Qt 5.15.14 |
+| ML Framework (Training) | PyTorch 2.0 |
 | ML Runtime (Inference) | ONNX Runtime 1.16.3 |
-| Visão Computacional | OpenCV 4.11.0 |
-| Base de Data | SQLite 3.48.0 |
+| Computer Vision | OpenCV 4.11.0 |
+| Database | SQLite 3.48.0 |
 
-Para o desenvolvimento embebido, foi utilizado o **Buildroot 2025.08** como sistema de build para criar uma distribuição Linux customizada para a Raspberry Pi 4.
+For embedded development, **Buildroot 2025.08** was used as the build system to create a customized Linux distribution for the Raspberry Pi 4.
 
-### 4.2 Cross-Compilation para Raspberry Pi
+### 4.2 Cross-Compilation for Raspberry Pi
 
-#### 4.2.1 Configuration do Buildroot
+#### 4.2.1 Buildroot Configuration
 
-O Buildroot foi configurado a partir da configuração base `raspberrypi4_64_defconfig`, com as seguintes customizações:
+Buildroot was configured from the base configuration `raspberrypi4_64_defconfig`, with the following customizations:
 
 ```bash
 # Configuration base
 make raspberrypi4_64_defconfig
 
-# Customizações via menuconfig
+# Customizations via menuconfig
 make menuconfig
 ```
 
-**Opções habilitadas:**
+**Enabled options:**
 
 | Categoria | Packages |
 |-----------|---------|
@@ -60,9 +60,9 @@ make menuconfig
 | Hardware | i2c-tools, 1-Wire support |
 | Filesystem | ext4, 512MB root partition |
 
-#### 4.2.2 Toolchain de Cross-Compilation
+#### 4.2.2 Cross-Compilation Toolchain
 
-Foi criado um ficheiro CMake toolchain (`deploy/toolchain-rpi4.cmake`) para permitir a compilação cruzada:
+A CMake toolchain file (`deploy/toolchain-rpi4.cmake`) was created to enable cross-compilation:
 
 ```cmake
 set(CMAKE_SYSTEM_NAME Linux)
@@ -74,7 +74,7 @@ set(CMAKE_CXX_COMPILER "${TOOLCHAIN_PREFIX}/bin/aarch64-linux-g++")
 set(CMAKE_SYSROOT "${TOOLCHAIN_PREFIX}/aarch64-buildroot-linux-gnu/sysroot")
 ```
 
-A compilação é realizada com:
+Compilation is performed with:
 
 ```bash
 mkdir build-arm && cd build-arm
@@ -82,43 +82,43 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../deploy/toolchain-rpi4.cmake ..
 make -j$(nproc)
 ```
 
-O binário resultante tem aproximadamente 380KB e é um executável ELF 64-bit para ARM aarch64.
+The resulting binary is approximately 380KB and is a 64-bit ELF executable for ARM aarch64.
 
-### 4.3 Camada de Drivers
+### 4.3 Drivers Layer
 
-#### 4.3.1 Module de Kernel (LED Driver)
+#### 4.3.1 Kernel Module (LED Driver)
 
-Foi desenvolvido um módulo de kernel Linux para controlo de um LED indicador através de GPIO. O módulo implementa um character device driver que expõe o dispositivo `/dev/led0`.
+A Linux kernel module was developed for controlling an indicator LED via GPIO. The module implements a character device driver that exposes the device `/dev/led0`.
 
-**Características principais:**
+**Main characteristics:**
 
-- Acesso direto aos registos GPIO do BCM2711 via `ioremap`
-- Endereço base GPIO: `0xFE200000`
-- GPIO utilizado: Pin 20
-- Operações suportadas: `open`, `close`, `read`, `write`
+- Direct access to BCM2711 GPIO registers via `ioremap`
+- GPIO base address: `0xFE200000`
+- GPIO used: Pin 20
+- Supported operations: `open`, `close`, `read`, `write`
 
-**Estrutura do código:**
+**Code structure:**
 
 ```c
-// Registos GPIO
+// GPIO Registers
 #define GPIO_BASE   0xFE200000
 #define GPFSEL2     0x08    // Function Select (GPIO 20-29)
 #define GPSET0      0x1C    // Set Output High
 #define GPCLR0      0x28    // Clear Output Low
 
-// Mapear registos para memória virtual
+// Map registers to virtual memory
 gpio_base = ioremap(GPIO_BASE, GPIO_SIZE);
 
-// Configurar GPIO como output
+// Configure GPIO as output
 SetGPIOOutput(LED_PIN);
 
-// Controlar LED
+// Control LED
 SetGPIOOutputValue(LED_PIN, value);  // 1=ON, 0=OFF
 ```
 
-**Nota técnica:** A função `ioremap_nocache` foi substituída por `ioremap` devido a alterações na API do kernel Linux 5.6+.
+**Technical note:** The `ioremap_nocache` function was replaced with `ioremap` due to changes in the Linux kernel 5.6+ API.
 
-A compilação do módulo requer os headers do kernel:
+Module compilation requires the kernel headers:
 
 ```bash
 export KERNEL_SRC=~/buildroot/buildroot-2025.08/output/build/linux-custom
@@ -127,9 +127,9 @@ export ARCH=arm64
 make
 ```
 
-#### 4.3.2 Drivers de Sensors
+#### 4.3.2 Sensor Drivers
 
-Os drivers de sensores foram implementados seguindo uma interface comum:
+The sensor drivers were implemented following a common interface:
 
 ```cpp
 class SensorInterface {
@@ -140,19 +140,19 @@ public:
 };
 ```
 
-**Sensors implementados:**
+**Implemented sensors:**
 
 | Sensor | Interface | Description |
 |--------|-----------|-----------|
-| DS18B20 | 1-Wire (GPIO4) | Temperatura da solução |
-| pH Sensor | I2C | Medição de pH (0-14) |
-| EC Sensor | I2C | Condutividade elétrica |
+| DS18B20 | 1-Wire (GPIO4) | Solution temperature |
+| pH Sensor | I2C | pH measurement (0-14) |
+| EC Sensor | I2C | Electrical conductivity |
 
-Para testes e desenvolvimento, foi implementado um modo mock que simula leituras realistas dos sensores.
+For testing and development, a mock mode was implemented that simulates realistic sensor readings.
 
-#### 4.3.3 Drivers de Actuatores
+#### 4.3.3 Actuator Drivers
 
-Os atuadores (bombas doseadoras) são controlados através de relés conectados a GPIOs:
+The actuators (dosing pumps) are controlled through relays connected to GPIOs:
 
 ```cpp
 class ActuatorInterface {
@@ -163,32 +163,32 @@ public:
 };
 ```
 
-**Actuatores implementados:**
+**Implemented actuators:**
 
 | Actuator | GPIO | Function |
 |---------|------|--------|
-| Bomba pH Up | 12 | Aumentar pH |
-| Bomba pH Down | 13 | Diminuir pH |
-| Bomba Nutrientes | 16 | Adicionar nutrientes |
+| pH Up Pump | 12 | Increase pH |
+| pH Down Pump | 13 | Decrease pH |
+| Nutrient Pump | 16 | Add nutrients |
 
-### 4.4 Camada de Middleware
+### 4.4 Middleware Layer
 
-#### 4.4.1 Base de Data (SQLite)
+#### 4.4.1 Database (SQLite)
 
-A persistência de dados é gerida através de SQLite, com o seguinte schema:
+Data persistence is managed through SQLite, with the following schema:
 
-**Tables principais:**
+**Main tables:**
 
 | Table | Description |
 |--------|-----------|
-| `sensor_readings` | Readings de temperatura, pH, EC |
-| `logs` | Eventos e ações do sistema |
-| `alerts` | Alerts com severidade |
-| `ml_predictions` | Resultados de inferência ML |
-| `ml_detections` | Deteções de doenças |
-| `ml_recommendations` | Recomendações de ação |
-| `plant` | Registo de plantas |
-| `health_assessments` | Avaliações de saúde |
+| `sensor_readings` | Temperature, pH, EC readings |
+| `logs` | System events and actions |
+| `alerts` | Alerts with severity |
+| `ml_predictions` | ML inference results |
+| `ml_detections` | Disease detections |
+| `ml_recommendations` | Action recommendations |
+| `plant` | Plant registry |
+| `health_assessments` | Health assessments |
 
 **Views for optimized queries:**
 
@@ -197,60 +197,60 @@ A persistência de dados é gerida através de SQLite, com o seguinte schema:
 - `vw_unread_alerts` - Pending alerts
 - `vw_pending_recommendations` - Active recommendations
 
-#### 4.4.2 Controlador Principal (Master)
+#### 4.4.2 Main Controller (Master)
 
-O controlador principal implementa a lógica de negócio:
+The main controller implements the business logic:
 
-1. **Loop de leitura** - Aquisição periódica de dados dos sensores
-2. **Lógica de decisão** - Ativação de bombas baseada em thresholds
-3. **Gestão de eventos** - Geração de alertas e logs
-4. **Communication** - Ponte com a interface gráfica via signals/slots
+1. **Reading loop** - Periodic data acquisition from sensors
+2. **Decision logic** - Pump activation based on thresholds
+3. **Event management** - Alert and log generation
+4. **Communication** - Bridge with the graphical interface via signals/slots
 
-### 4.5 Camada de Application
+### 4.5 Application Layer
 
-#### 4.5.1 Interface Gráfica (Qt5)
+#### 4.5.1 Graphical Interface (Qt5)
 
-A interface foi desenvolvida em Qt5 com os seguintes componentes:
+The interface was developed in Qt5 with the following components:
 
-| Componente | Class | Function |
+| Component | Class | Function |
 |------------|--------|--------|
-| Janela Principal | `MainWindow` | Container com tabs |
-| Sensors | `SensorsDisplay` | Visualização tempo real |
-| Saúde | `HealthDisplay` | Resultados ML |
-| Alerts | `AlertsDisplay` | Lista de notificações |
-| Analytics | `AnalyticsWindow` | Charts históricos |
-| Settings | `SettingsWindow` | Parameters do sistema |
+| Main Window | `MainWindow` | Container with tabs |
+| Sensors | `SensorsDisplay` | Real-time visualization |
+| Health | `HealthDisplay` | ML results |
+| Alerts | `AlertsDisplay` | Notification list |
+| Analytics | `AnalyticsWindow` | Historical charts |
+| Settings | `SettingsWindow` | System parameters |
 
-**Características visuais:**
+**Visual characteristics:**
 
-- Temas Light/Dark mode
-- Cores consistentes (verde #4CAF50 como cor primária)
-- Charts com Qt5Charts
+- Light/Dark mode themes
+- Consistent colors (green #4CAF50 as primary color)
+- Charts with Qt5Charts
 - Responsive design
 
-**Plataformas Qt suportadas:**
+**Supported Qt platforms:**
 
-| Plataforma | Usage |
+| Platform | Usage |
 |------------|-----|
 | `xcb` | Desktop Linux (X11) |
-| `linuxfb` | Raspberry Pi com HDMI |
-| `offscreen` | Modo headless/testes |
-| `vnc` | Acesso remoto |
+| `linuxfb` | Raspberry Pi with HDMI |
+| `offscreen` | Headless/testing mode |
+| `vnc` | Remote access |
 
-#### 4.5.2 System de Machine Learning
+#### 4.5.2 Machine Learning System
 
-##### Template
+##### Model
 
-Foi trained um modelo baseado em MobileNetV3-Small para classification de doenças em plantas de tomate:
+A model based on MobileNetV3-Small was trained for disease classification in tomato plants:
 
 | Parameter | Value |
 |-----------|-------|
-| Architecture | MobileNetV3-Small (modificada) |
+| Architecture | MobileNetV3-Small (modified) |
 | Input | 224×224×3 (RGB) |
 | Output | 4 classes |
-| Tamanho | 5.9 MB (ONNX) |
+| Size | 5.9 MB (ONNX) |
 
-**Classs de classification:**
+**Classification classes:**
 
 | Class | Description |
 |--------|-----------|
@@ -259,26 +259,26 @@ Foi trained um modelo baseado em MobileNetV3-Small para classification de doenç
 | Early_Blight | Early Blight |
 | Late_Blight | Late Blight |
 
-##### Treino
+##### Training
 
 | Parameter | Value |
 |-----------|-------|
-| Dataset | PlantVillage (10.000 imagens) |
-| Split | 80% treino, 10% validação, 10% teste |
+| Dataset | PlantVillage (10,000 images) |
+| Split | 80% training, 10% validation, 10% test |
 | Epochs | 20 |
 | Learning Rate | 0.001 → 0.0001 (scheduler) |
 | Optimizer | Adam |
 | Loss | CrossEntropyLoss |
 | GPU | NVIDIA RTX 3070 |
 
-**Augmentação de dados:**
+**Data augmentation:**
 
 - RandomResizedCrop
 - RandomHorizontalFlip
 - RandomRotation (±15°)
 - ColorJitter
 
-##### Resultados
+##### Results
 
 | Metric | Value |
 |---------|-------|
@@ -289,7 +289,7 @@ Foi trained um modelo baseado em MobileNetV3-Small para classification de doenç
 
 ##### Inference
 
-A inferência no Raspberry Pi é realizada com ONNX Runtime:
+Inference on the Raspberry Pi is performed with ONNX Runtime:
 
 ```cpp
 Ort::SessionOptions session_options;
@@ -299,134 +299,134 @@ session_options.SetGraphOptimizationLevel(ORT_ENABLE_ALL);
 Ort::Session session(env, "leafsense_model.onnx", session_options);
 ```
 
-**Performance no Raspberry Pi 4:**
+**Performance on Raspberry Pi 4:**
 
 | Metric | Value |
-|---------|-------|
-| Tempo de inferência | ~150 ms |
-| Usage de RAM | ~50 MB |
-| Usage de CPU | ~80% (1 core) |
+|--------|-------|
+| Inference time | ~150 ms |
+| RAM usage | ~50 MB |
+| CPU usage | ~80% (1 core) |
 
-### 4.6 Deploymentment
+### 4.6 Deployment
 
-#### 4.6.1 Preparação da Imagem
+#### 4.6.1 Image Preparation
 
-O processo de deployment envolve:
+The deployment process involves:
 
-1. **Compilation do Buildroot** (~1-2 horas)
+1. **Buildroot compilation** (~1-2 hours)
    ```bash
    cd ~/buildroot/buildroot-2025.08
    make -j$(nproc)
    ```
 
-2. **Cross-compilation do LeafSense**
+2. **LeafSense cross-compilation**
    ```bash
    cmake -DCMAKE_TOOLCHAIN_FILE=../deploy/toolchain-rpi4.cmake ..
    make -j$(nproc)
    ```
 
-3. **Compilation do módulo de kernel**
+3. **Kernel module compilation**
    ```bash
    cd drivers/kernel_module
    make arm64
    ```
 
-#### 4.6.2 Installation na Raspberry Pi
+#### 4.6.2 Installation on Raspberry Pi
 
-1. **Flash do cartão SD**
+1. **SD card flash**
    ```bash
    sudo dd if=output/images/sdcard.img of=/dev/sdX bs=4M
    ```
 
-2. **Expansão da partição**
+2. **Partition expansion**
    ```bash
    sudo parted /dev/sdX resizepart 2 100%
    sudo resize2fs /dev/sdX2
    ```
 
-3. **Cópia de ficheiros via SSH**
+3. **File copy via SSH**
    ```bash
    scp build-arm/LeafSense root@10.42.0.196:/opt/leafsense/
    scp ml/leafsense_model.onnx root@10.42.0.196:/opt/leafsense/
    scp external/onnxruntime-arm64/lib/*.so* root@10.42.0.196:/usr/lib/
    ```
 
-4. **Configuration de auto-start**
+4. **Auto-start configuration**
    ```bash
    # /etc/init.d/S98leafsense
    export QT_QPA_PLATFORM=offscreen
    cd /opt/leafsense && ./LeafSense &
    ```
 
-#### 4.6.3 Estrutura de Ficheiros Final
+#### 4.6.3 Final File Structure
 
 ```
 Raspberry Pi 4B
 ├── /opt/leafsense/
 │   ├── LeafSense              # Application (380KB)
-│   ├── leafsense_model.onnx   # Template ML (5.9MB)
+│   ├── leafsense_model.onnx   # ML Model (5.9MB)
 │   ├── leafsense.db           # Database
-│   └── schema.sql             # Schema SQL
+│   └── schema.sql             # SQL Schema
 ├── /usr/lib/
 │   ├── libonnxruntime.so*     # ONNX Runtime (16MB)
 │   └── libQt5Charts.so*       # Qt5Charts (1.9MB)
 ├── /lib/modules/6.12.41-v8/
-│   └── led.ko                 # Module kernel (13KB)
+│   └── led.ko                 # Kernel module (13KB)
 ├── /etc/init.d/
-│   └── S98leafsense           # Script de arranque
+│   └── S98leafsense           # Startup script
 └── /var/log/
-    └── leafsense.log          # Logs da aplicação
+    └── leafsense.log          # Application logs
 ```
 
 ### 4.7 Validation
 
-A validação do sistema foi realizada através de:
+System validation was performed through:
 
-| Test | Resultado |
+| Test | Result |
 |-------|-----------|
-| Boot da Raspberry Pi | ✅ Sucesso |
-| Conectividade SSH | ✅ root@10.42.0.196 |
-| Carregamento do módulo LED | ✅ `/dev/led0` criado |
-| Control de LED | ✅ ON/OFF funcional |
-| Initialization da base de dados | ✅ 8 tabelas criadas |
-| Carregamento do modelo ONNX | ✅ Template carregado |
-| Application LeafSense | ✅ A executar |
-| Readings de sensores (mock) | ✅ Data a serem gravados |
-| Auto-start no boot | ✅ S98leafsense |
+| Raspberry Pi boot | ✅ Success |
+| SSH connectivity | ✅ root@10.42.0.196 |
+| LED module loading | ✅ `/dev/led0` created |
+| LED control | ✅ ON/OFF functional |
+| Database initialization | ✅ 8 tables created |
+| ONNX model loading | ✅ Model loaded |
+| LeafSense application | ✅ Running |
+| Sensor readings (mock) | ✅ Data being recorded |
+| Auto-start on boot | ✅ S98leafsense |
 
-**Metrics de sistema:**
+**System metrics:**
 
 | Metric | Value |
 |---------|-------|
-| RAM utilizada | ~60 MB / 1.8 GB (3%) |
+| RAM used | ~60 MB / 1.8 GB (3%) |
 | Load average | 0.23 |
-| Uptime testado | 20+ minutos |
+| Tested uptime | 20+ minutes |
 
-### 4.8 Dificuldades Encontradas e Soluções
+### 4.8 Difficulties Encountered and Solutions
 
-| Problema | Causa | Solução |
+| Problem | Cause | Solution |
 |----------|-------|---------|
-| `ioremap_nocache` não existe | API removida no kernel 5.6+ | Substituir por `ioremap` |
-| Qt5Charts não encontrado | Não incluído no Buildroot por defeito | Adicionar `BR2_PACKAGE_QT5CHARTS=y` e recompilar |
-| Template ONNX não carrega | Caminho relativo incorreto | Copiar modelo para `/opt/leafsense/` |
-| Tables da BD não existem | BD não inicializada | Executar `sqlite3 leafsense.db < schema.sql` |
-| Pi não encontrado na rede | DHCP não atribuiu IP | Usar USB-Ethernet e IP fixo |
-| Plataforma Qt "eglfs" não disponível | Plugin não compilado | Usar `QT_QPA_PLATFORM=offscreen` |
+| `ioremap_nocache` does not exist | API removed in kernel 5.6+ | Replace with `ioremap` |
+| Qt5Charts not found | Not included in Buildroot by default | Add `BR2_PACKAGE_QT5CHARTS=y` and recompile |
+| ONNX model does not load | Incorrect relative path | Copy model to `/opt/leafsense/` |
+| DB tables do not exist | DB not initialized | Execute `sqlite3 leafsense.db < schema.sql` |
+| Pi not found on network | DHCP did not assign IP | Use USB-Ethernet and fixed IP |
+| Qt platform "eglfs" not available | Plugin not compiled | Use `QT_QPA_PLATFORM=offscreen` |
 
-### 4.9 Trabalho Futuro
+### 4.9 Future Work
 
-As seguintes funcionalidades estão planeadas para versões futuras:
+The following features are planned for future versions:
 
-1. **Integration de sensores reais** - Substituir mocks por drivers I2C/1-Wire funcionais
-2. **Synchronization NTP** - Corrigir data/hora do sistema
-3. **Interface de câmara** - Captura em tempo real para ML
-4. **Servidor web** - Acesso remoto via browser
-5. **Notifications push** - Alerts via Telegram/Email
-6. **Dashboard mobile** - Application Android/iOS
+1. **Real sensor integration** - Replace mocks with functional I2C/1-Wire drivers
+2. **NTP synchronization** - Fix system date/time
+3. **Camera interface** - Real-time capture for ML
+4. **Web server** - Remote access via browser
+5. **Push notifications** - Alerts via Telegram/Email
+6. **Mobile dashboard** - Android/iOS application
 
 ---
 
-## Referências
+## References
 
 1. Qt Documentation - https://doc.qt.io/qt-5/
 2. ONNX Runtime - https://onnxruntime.ai/

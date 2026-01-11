@@ -1,8 +1,8 @@
-# LeafSense - Interface Gráfica (Qt5)
+# LeafSense - Graphical Interface (Qt5)
 
 ## Overview
 
-A interface gráfica do LeafSense é desenvolvida em Qt5 e fornece visualização em tempo real dos dados do sistema, controlo manual e configurações. A interface é otimizada para o display Waveshare 3.5" (480x320) com suporte a touchscreen.
+The LeafSense graphical interface is developed in Qt5 and provides real-time visualization of system data, manual control, and settings. The interface is optimized for the Waveshare 3.5" display (480x320) with touchscreen support.
 
 ## Display Configuration
 
@@ -33,9 +33,9 @@ export QT_QPA_MOUSEDRIVER=linuxinput
 | /dev/fb0 | BCM2708 (GPU) | HDMI output |
 | /dev/fb1 | ILI9486 (SPI) | Waveshare LCD |
 
-## Stack de UI
+## UI Stack
 
-| Componente | Library |
+| Component | Library |
 |------------|------------|
 | Framework | Qt 5.15.14 |
 | Widgets | Qt5Widgets |
@@ -72,10 +72,10 @@ src/application/gui/
 └── leafsense_data_bridge.cpp
 ```
 
-## Componentes Principais
+## Main Components
 
 ### MainWindow
-Janela principal com sistema de tabs.
+Main window with tab system.
 
 ```cpp
 class MainWindow : public QMainWindow {
@@ -100,7 +100,7 @@ private:
 ```
 
 ### SensorsDisplay
-Mostra dados de sensores em tempo real.
+Displays real-time sensor data.
 
 ```cpp
 class SensorsDisplay : public QWidget {
@@ -131,7 +131,7 @@ private:
 ```
 
 ### HealthDisplay
-Mostra resultados de ML e estado de saúde.
+Displays ML results and health status.
 
 ```cpp
 class HealthDisplay : public QWidget {
@@ -149,13 +149,13 @@ private:
     QLabel *confidenceLabel;
     QProgressBar *confidenceBar;
     
-    // History de predições
+    // Prediction history
     QTableWidget *historyTable;
 };
 ```
 
 ### AlertsDisplay
-Lista e gestão de alertas.
+Alert list and management.
 
 ```cpp
 class AlertsDisplay : public QWidget {
@@ -182,7 +182,7 @@ private:
 ```
 
 ### AnalyticsWindow
-Charts históricos e análise.
+Historical charts and analysis.
 
 ```cpp
 class AnalyticsWindow : public QDialog {
@@ -207,7 +207,7 @@ private:
 ```
 
 ### LeafSenseDataBridge
-Ponte entre backend e UI.
+Bridge between backend and UI.
 
 ```cpp
 class LeafSenseDataBridge : public QObject {
@@ -346,7 +346,7 @@ QString darkStyle = R"(
 </RCC>
 ```
 
-### Usage em Código
+### Code Usage
 ```cpp
 QPixmap logo(":/images/logo.png");
 QIcon alertIcon(":/images/alert_critical.svg");
@@ -385,7 +385,7 @@ QIcon alertIcon(":/images/alert_critical.svg");
 └────────────────────────────────────────────────────────┘
 ```
 
-## Conexões Signal/Slot
+## Signal/Slot Connections
 
 ```cpp
 // MainWindow::setupConnections()
@@ -432,25 +432,25 @@ QT_QPA_PLATFORM=xcb ./LeafSense
 
 ### Raspberry Pi (HDMI)
 ```bash
-# Framebuffer direto
+# Direct framebuffer
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb0
 ./LeafSense
 ```
 
-### Raspberry Pi (Sem Display)
+### Raspberry Pi (No Display)
 ```bash
-# Modo offscreen (para testes ou headless)
+# Offscreen mode (for testing or headless)
 export QT_QPA_PLATFORM=offscreen
 ./LeafSense
 ```
 
-### VNC (Acesso Remoto)
+### VNC (Remote Access)
 ```bash
-# Servidor VNC integrado
+# Integrated VNC server
 export QT_QPA_PLATFORM=vnc:port=5900
 ./LeafSense
 
-# Cliente conecta em: vnc://pi-ip:5900
+# Client connects at: vnc://pi-ip:5900
 ```
 
 ## CMake Configuration
