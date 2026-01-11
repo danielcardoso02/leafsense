@@ -2,7 +2,7 @@
 
 ## Critical Information
 
-**Last Verified:** January 10, 2026  
+**Last Verified:** January 11, 2026  
 **Hardware:** Waveshare 3.5" LCD (C) with ILI9486 display and ADS7846 touchscreen  
 **Driver:** Qt5 evdev touchscreen plugin (NOT tslib)
 
