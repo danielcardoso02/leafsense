@@ -314,7 +314,7 @@ ssh root@10.42.0.196 'ldd /opt/leafsense/LeafSense | head -15'
 
 ### Create Startup Script
 ```bash
-ssh root@10.42.0.196 'cat > /opt/leafsense/start.sh << '\''EOF'\''
+ssh root@10.42.0.196 'cat > /opt/leafsense/start_leafsense.sh << '\''EOF'\''
 #!/bin/sh
 # LeafSense Display Startup Script
 
@@ -329,7 +329,7 @@ exec env \
     QT_QPA_MOUSEDRIVER=linuxinput \
     ./LeafSense -platform linuxfb:fb=/dev/fb1
 EOF
-chmod +x /opt/leafsense/start.sh'
+chmod +x /opt/leafsense/start_leafsense.sh'
 ```
 
 ---
@@ -396,7 +396,7 @@ ssh root@10.42.0.196 'ps aux | grep LeafSense | grep -v grep && echo "✓ Runnin
 
 ### Test 4: Using Startup Script
 ```bash
-ssh root@10.42.0.196 '/opt/leafsense/start.sh &'
+ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
 
 sleep 4
 ssh root@10.42.0.196 'ps aux | grep LeafSense | grep -v grep'
@@ -428,7 +428,7 @@ ssh root@10.42.0.196 'killall LeafSense 2>/dev/null && echo "LeafSense stopped"'
 | Task | Command |
 |------|---------|
 | SSH to Pi | `ssh root@10.42.0.196` (password: leafsense) |
-| Start app (touchscreen) | `ssh root@10.42.0.196 '/opt/leafsense/start.sh &'` |
+| Start app (touchscreen) | `ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'` |
 | Stop app | `ssh root@10.42.0.196 'killall LeafSense'` |
 | Check running | `ssh root@10.42.0.196 'ps aux \| grep LeafSense'` |
 | View logs | `ssh root@10.42.0.196 'tail -f /tmp/leafsense.log'` |
@@ -449,7 +449,7 @@ ssh root@10.42.0.196 'killall LeafSense 2>/dev/null && echo "LeafSense stopped"'
 | ML model | `/opt/leafsense/leafsense_model.onnx` |
 | Class labels | `/opt/leafsense/leafsense_model_classes.txt` |
 | Database | `/opt/leafsense/leafsense.db` |
-| Startup script | `/opt/leafsense/start.sh` |
+| Startup script | `/opt/leafsense/start_leafsense.sh` |
 | Application logs | `/tmp/leafsense.log` |
 | ONNX Runtime | `/usr/lib/libonnxruntime.so.1.16.3` |
 

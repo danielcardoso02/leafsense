@@ -25,7 +25,7 @@ framebuffer_height=320
 
 ```bash
 # CRITICAL: The rotation MUST be configured for correct touch mapping
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
 export QT_QPA_FB_HIDECURSOR=1
 ```
@@ -40,7 +40,7 @@ export QT_QPA_FB_HIDECURSOR=1
 
 **Solution with evdev:**
 - Qt5's evdev touchscreen plugin reads directly from `/dev/input/event0`
-- The `rotate=180:invertx` parameter handles coordinate transformation for the 90° rotated display
+- The `rotate=90` parameter handles coordinate transformation for the 90° rotated display
 - No calibration file is needed
 - No `ts_calibrate` or `ts_uinput` processes required
 
@@ -48,16 +48,16 @@ export QT_QPA_FB_HIDECURSOR=1
 
 ## Rotation Parameter Mapping
 
-The touch coordinates require transformation to match the rotated display. For the Waveshare 3.5" LCD (C) with `rotate=90` in config.txt, the Qt evdev parameter needs `rotate=180:invertx`:
+The touch coordinates require transformation to match the rotated display. For the Waveshare 3.5" LCD (C) with `rotate=90` in config.txt, the Qt evdev parameter needs `rotate=90`:
 
 | config.txt dtoverlay | Qt Environment Variable |
 |---------------------|------------------------|
 | `rotate=0` | `rotate=0` |
-| `rotate=90` | `rotate=180:invertx` |
+| `rotate=90` | `rotate=90` |
 | `rotate=180` | `rotate=180` |
 | `rotate=270` | `rotate=270` |
 
-**Note:** The `rotate=90` case requires special handling with `:invertx` due to the touchscreen's coordinate system orientation.
+**Note:** For the Waveshare 3.5" LCD (C), both display and touch use `rotate=90` - no additional parameters needed.
 
 ---
 
@@ -96,7 +96,7 @@ The touch coordinates require transformation to match the rotated display. For t
 
 1. **/etc/profile.d/leafsense-qt.sh** - Qt environment variables
 2. **/etc/init.d/S99leafsense** - Auto-start script with correct environment
-3. **/opt/leafsense/start.sh** - Manual startup script
+3. **/opt/leafsense/start_leafsense.sh** - Manual startup script
 
 ---
 
@@ -120,7 +120,7 @@ deploy/
     │       └── leafsense-qt.sh # Qt environment
     └── opt/
         └── leafsense/
-            └── start.sh  # Startup script
+            └── start_leafsense.sh  # Startup script
 ```
 
 ### Post-Build Script
@@ -159,14 +159,14 @@ This ensures that after reflashing, the touchscreen works immediately without an
 1. Verify configuration:
    ```bash
    cat /boot/config.txt | grep waveshare  # Should show rotate=90
-   echo $QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS  # Should show rotate=180:invertx
+   echo $QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS  # Should show rotate=90
    ```
 
 2. If they don't match, restart with correct rotation:
    ```bash
-   export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+   export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
    killall LeafSense
-   /opt/leafsense/start.sh
+   /opt/leafsense/start_leafsense.sh
    ```
 
 ### Application Freezes on Touch
@@ -199,7 +199,7 @@ If all these pass, the configuration is correctly preserved.
 **Key Points:**
 - Use **evdev**, NOT tslib
 - Set `rotate=90` in config.txt dtoverlay
-- Set `rotate=180:invertx` in Qt environment variable
+- Set `rotate=90` in Qt environment variable
 - Use `speed=16000000` (16MHz) to prevent touch freeze
 - Use `fps=50` to minimize screen flicker
 - All configuration files are in the Buildroot overlay

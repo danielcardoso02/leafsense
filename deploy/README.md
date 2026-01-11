@@ -43,7 +43,7 @@ sudo umount /mnt/BOOT
 **Note:** The config.txt in `deploy/boot-overlay/` contains the verified working configuration:
 - `speed=16000000` (16MHz) - prevents touch freeze
 - `fps=50` - minimizes screen blinking
-- `rotate=180` - landscape orientation (Qt uses `rotate=180:invertx`)
+- `rotate=180` - landscape orientation (Qt uses `rotate=90`)
 
 ### 3. Deploy Application
 ```bash
@@ -70,7 +70,7 @@ cd /opt/leafsense
 sqlite3 leafsense.db < schema.sql
 
 # Run application
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
 
@@ -129,13 +129,13 @@ The **only working solution** uses Qt's evdev touchscreen handler with rotation 
 
 ```bash
 # Environment variable to set before running LeafSense
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 
 # Run application
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
 
-**Key insight:** The `rotate=180:invertx` in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` corrects touch mapping for the display rotation.
+**Key insight:** The `rotate=90` in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` corrects touch mapping for the display rotation.
 
 ### ❌ DO NOT USE: tslib (Causes application freezing)
 
@@ -152,7 +152,7 @@ tslib causes application freezing when the touchscreen is touched due to SPI bus
 # Core Qt settings for LeafSense on Waveshare LCD
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
 export QT_QPA_FB_HIDECURSOR=1
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 export QT_QPA_FONTDIR=/usr/share/fonts
 ```
 
@@ -174,7 +174,7 @@ Focus rectangles are disabled for touchscreen use via stylesheet:
 
 ## Application Startup
 
-### Startup Script: /opt/leafsense/start.sh
+### Startup Script: /opt/leafsense/start_leafsense.sh
 ```bash
 #!/bin/sh
 # LeafSense Startup Script - Waveshare 3.5" LCD (C)
@@ -184,8 +184,8 @@ export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
 export QT_QPA_FB_HIDECURSOR=1
 export QT_QPA_FONTDIR=/usr/share/fonts
 
-# Touchscreen Configuration (CRITICAL: rotate=180:invertx for correct mapping)
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+# Touchscreen Configuration (CRITICAL: rotate=90 for correct mapping)
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 
 # Run application
 cd /opt/leafsense
@@ -201,7 +201,7 @@ LOGFILE=/var/log/leafsense.log
 case "$1" in
     start)
         echo "Starting LeafSense..."
-        /opt/leafsense/start.sh >> $LOGFILE 2>&1 &
+        /opt/leafsense/start_leafsense.sh >> $LOGFILE 2>&1 &
         echo $! > $PIDFILE
         ;;
     stop)
@@ -316,25 +316,25 @@ ls -la /dev/input/event0
 ```
 
 ### Touch Coordinates Inverted/Wrong
-This is the most common issue. The solution is to add `rotate=180:invertx` to the evdev parameters:
+This is the most common issue. The solution is to add `rotate=90` to the evdev parameters:
 
 ```bash
-# Correct configuration - rotate=180:invertx for proper touch mapping
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+# Correct configuration - rotate=90 for proper touch mapping
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 ```
 
 | Display Rotation | Touch Parameter |
 |------------------|------------------|
 | rotate=0 | rotate=0 |
 | rotate=90 | rotate=90 |
-| rotate=180 | rotate=180:invertx |
+| rotate=180 | rotate=90 |
 | rotate=270 | rotate=270 |
 
 ### UI Freezes on Touch (tslib issue)
 - **Cause**: tslib can cause SPI bus contention
 - **Solution**: Use evdev instead of tslib:
   ```bash
-  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
   ```
 
 ---
@@ -346,7 +346,7 @@ export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx
 | LeafSense | /opt/leafsense/LeafSense | Main application |
 | Database | /opt/leafsense/leafsense.db | SQLite database |
 | ML Model | /opt/leafsense/leafsense_model.onnx | ONNX model |
-| Startup | /opt/leafsense/start.sh | Startup script |
+| Startup | /opt/leafsense/start_leafsense.sh | Startup script |
 | Gallery | /opt/leafsense/gallery/ | Camera captures |
 | Log | /var/log/leafsense.log | Application log |
 | Init | /etc/init.d/S99leafsense | Auto-start script |

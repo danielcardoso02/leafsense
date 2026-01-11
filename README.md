@@ -122,11 +122,11 @@ make -j$(nproc)
 scp build-arm64/src/LeafSense root@10.42.0.196:/opt/leafsense/
 
 # Start application with touchscreen support
-ssh root@10.42.0.196 '/opt/leafsense/start.sh &'
+ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
 
 # Or manual execution with touchscreen:
 ssh root@10.42.0.196 'export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1; \
-  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"; \
+  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"; \
   cd /opt/leafsense && ./LeafSense &'
 
 # Stop application
@@ -169,7 +169,7 @@ Complete documentation available in [`docs/`](docs/) directory:
 | 14 | [14-TESTING-GUIDE.md](docs/14-TESTING-GUIDE.md) | Testing procedures and validation |
 | 15 | [15-DEMO-GUIDE.md](docs/15-DEMO-GUIDE.md) | Demonstration and presentation guide |
 | 16 | [16-KERNEL-MODULE.md](docs/16-KERNEL-MODULE.md) | Kernel module development (low-level) |
-| 17 | [17-TOUCHSCREEN-CONFIGURATION.md](docs/17-TOUCHSCREEN-CONFIGURATION.md) | **Touchscreen setup (evdev, rotate=180:invertx)** |
+| 17 | [17-TOUCHSCREEN-CONFIGURATION.md](docs/17-TOUCHSCREEN-CONFIGURATION.md) | **Touchscreen setup (evdev, rotate=90)** |
 | 18 | [18-BUILDROOT-PACKAGES.md](docs/18-BUILDROOT-PACKAGES.md) | Complete Buildroot package list |
 | 19 | [19-TERMINOLOGY.md](docs/19-TERMINOLOGY.md) | Key terms and concepts explained |
 
@@ -217,7 +217,7 @@ Master Controller (7 threads)
 
 ### ✅ Fully Operational
 - Multi-threaded control system (7 threads)
-- Qt5 GUI with touchscreen (rotate=180:invertx)
+- Qt5 GUI with touchscreen (rotate=90)
 - ONNX ML inference (99.39% accuracy)
 - Camera capture with fallback (640x480 JPEG)
 - Image gallery with ML predictions
@@ -288,7 +288,7 @@ export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins
 export QT_QPA_FONTDIR=/usr/share/fonts
 
 # Touchscreen calibration (critical!)
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 ```
 
 ### Camera Intervals
@@ -340,7 +340,7 @@ ssh root@10.42.0.196 'killall -9 LeafSense'
 ssh root@10.42.0.196 'rm -f /opt/leafsense/database/*.db-wal'
 
 # Restart
-ssh root@10.42.0.196 '/opt/leafsense/start.sh &'
+ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
 ```
 
 See [docs/10-TROUBLESHOOTING.md](docs/10-TROUBLESHOOTING.md) for complete guide.

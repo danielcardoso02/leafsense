@@ -146,14 +146,14 @@ cd build/src
 **Option 1: Using startup script (recommended)**
 ```bash
 ssh root@10.42.0.196
-/opt/leafsense/start.sh
+/opt/leafsense/start_leafsense.sh
 ```
 
 **Option 2: Manual execution with touchscreen**
 ```bash
 ssh root@10.42.0.196
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 cd /opt/leafsense
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
@@ -161,7 +161,7 @@ cd /opt/leafsense
 **Option 3: Background execution**
 ```bash
 ssh root@10.42.0.196
-/opt/leafsense/start.sh &
+/opt/leafsense/start_leafsense.sh &
 ```
 
 **Stop the application:**
@@ -174,10 +174,10 @@ ssh root@10.42.0.196 'killall LeafSense'
 The Waveshare 3.5" LCD with `rotate=90` in `/boot/config.txt` requires:
 
 ```bash
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 ```
 
-**Note:** The `:invertx` parameter corrects horizontal button mapping.
+**Note:** The `rotate=90` parameter matches the display rotation for correct touch coordinates.
 
 ---
 
@@ -204,7 +204,7 @@ ssh root@10.42.0.196
 
 ### Start Application (on Pi)
 ```bash
-/opt/leafsense/start.sh
+/opt/leafsense/start_leafsense.sh
 ```
 
 ---

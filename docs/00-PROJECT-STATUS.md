@@ -33,7 +33,7 @@ LeafSense is a complete embedded hydroponic monitoring system running on Raspber
 | Waveshare 3.5" LCD (C) | ✅ Complete | ILI9486 controller, 480×320 resolution |
 | Framebuffer | ✅ Complete | `/dev/fb1` at 31fps |
 | Touchscreen | ✅ Complete | ADS7846, evdev at `/dev/input/event0` |
-| Calibration | ✅ Complete | Qt evdev: `rotate=180:invertx` |
+| Calibration | ✅ Complete | Qt evdev: `rotate=90` |
 | Qt Platform | ✅ Complete | linuxfb:fb=/dev/fb1:size=480x320 |
 
 ### 3. Camera System
@@ -136,9 +136,9 @@ See [13-SENSOR-ACTUATOR-INTEGRATION.md](13-SENSOR-ACTUATOR-INTEGRATION.md) for c
 
 ### 1. Touchscreen Calibration Persistence
 - **Issue:** Qt evdev parameters must be set before each launch
-- **Solution:** Parameters are set in `/opt/leafsense/start.sh`:
+- **Solution:** Parameters are set in `/opt/leafsense/start_leafsense.sh`:
   ```bash
-  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
   ```
 - **Note:** This configuration is specific to the LCD rotation (270°)
 
@@ -162,7 +162,7 @@ See [13-SENSOR-ACTUATOR-INTEGRATION.md](13-SENSOR-ACTUATOR-INTEGRATION.md) for c
 | Path | Contents |
 |------|----------|
 | `/opt/leafsense/LeafSense` | Main application binary |
-| `/opt/leafsense/start.sh` | Startup script with Qt environment |
+| `/opt/leafsense/start_leafsense.sh` | Startup script with Qt environment |
 | `/opt/leafsense/leafsense.db` | SQLite database |
 | `/opt/leafsense/leafsense_model.onnx` | ML model |
 | `/opt/leafsense/leafsense_model_classes.txt` | Class labels |
@@ -197,7 +197,7 @@ make -j$(nproc)
 
 ### Start Application on Pi
 ```bash
-ssh root@10.42.0.196 'cd /opt/leafsense && ./start.sh'
+ssh root@10.42.0.196 'cd /opt/leafsense && ./start_leafsense.sh'
 ```
 
 ### Redeploy Binary

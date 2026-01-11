@@ -561,11 +561,11 @@ evtest /dev/input/event0  # Should show ADS7846 Touchscreen
 
 # Start LeafSense with evdev touchscreen handler and rotation
 cd /opt/leafsense
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
 
-**Key insight:** The `rotate=180:invertx` parameter in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` is critical because the display is rotated 90 degrees in config.txt (`dtoverlay=waveshare35c:rotate=90`), and the touch coordinates must be transformed with rotation and X-axis inversion to match correctly.
+**Key insight:** The `rotate=90` parameter in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` must match the display rotation in config.txt (`dtoverlay=waveshare35c:rotate=90`) for correct touch coordinate mapping.
 
 ### Touchscreen coordinates wrong (touch offset)
 
@@ -579,7 +579,7 @@ The display rotation must match the touch rotation parameter:
 | config.txt rotate | QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS |
 |-------------------|-------------------------------------|
 | rotate=0          | rotate=0 (or no rotation)           |
-| rotate=90         | rotate=180:invertx                  |
+| rotate=90         | rotate=90                  |
 | rotate=180        | rotate=180                          |
 | rotate=270        | rotate=270                          |
 
@@ -608,7 +608,7 @@ killall LeafSense
 
 # Don't use tslib - use evdev instead
 unset QT_QPA_FB_TSLIB
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
 
 # Start app
 ./LeafSense -platform linuxfb:fb=/dev/fb1

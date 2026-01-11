@@ -355,7 +355,7 @@ The deployment process involves:
    ```bash
    # /etc/init.d/S99leafsense
    export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
-   export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+   export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
    cd /opt/leafsense && ./LeafSense &
    ```
 

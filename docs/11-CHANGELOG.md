@@ -19,7 +19,7 @@ This release cleans up the repository, removes build artifacts from version cont
 ### Changed
 
 #### Touchscreen Calibration
-- Fixed horizontal button swap: changed `rotate=180` to `rotate=180:invertx`
+- Fixed horizontal button swap: changed `rotate=180` to `rotate=90`
 - Login/Exit buttons now map correctly on Waveshare 3.5" LCD
 
 #### Repository Cleanup
@@ -84,13 +84,13 @@ This release finalizes the system configuration and Buildroot packages, preparin
 - `boot-overlay/overlays/waveshare35c.dtbo` - Display driver overlay
 - `rootfs-overlay/etc/profile.d/leafsense-qt.sh` - Qt environment
 - `rootfs-overlay/etc/init.d/S99leafsense` - Auto-start init script
-- `rootfs-overlay/opt/leafsense/start.sh` - Manual startup
+- `rootfs-overlay/opt/leafsense/start_leafsense.sh` - Manual startup
 
 ### Changed
 
 #### Touchscreen Driver
 - **Switched from tslib to evdev** - tslib caused application freezing
-- **Rotation via environment variable**: `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"`
+- **Rotation via environment variable**: `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"`
 - **No calibration required** - evdev handles rotation automatically
 
 #### Display Configuration
@@ -109,7 +109,7 @@ This release finalizes the system configuration and Buildroot packages, preparin
 | Component | Status | Details |
 |-----------|--------|---------|
 | Display | ✅ Working | fb1 (fb_ili9486), 480x320, 50fps |
-| Touchscreen | ✅ Working | evdev with rotate=180:invertx |
+| Touchscreen | ✅ Working | evdev with rotate=90 |
 | Camera | 🔄 Pending | Hardware detected, libcamera integration pending |
 | GUI | ✅ Running | Qt5 linuxfb on fb1 |
 | Database | ✅ Working | SQLite with all tables |
@@ -119,7 +119,7 @@ This release finalizes the system configuration and Buildroot packages, preparin
 ### Known Constraints
 
 1. **Touchscreen**: Must use evdev, NOT tslib (tslib causes freezing)
-2. **Display rotation**: rotate=90 in config.txt, Qt uses rotate=180:invertx for touch mapping
+2. **Display rotation**: rotate=90 in config.txt, Qt uses rotate=90 for touch mapping
 3. **SPI speed**: Maximum stable speed is 16MHz for touchscreen reliability
 4. **Camera**: Requires libcamera rebuild (configuration done, build pending)
 
@@ -487,7 +487,7 @@ This version adds complete support for the Waveshare 3.5" LCD (C) touchscreen di
 - Framebuffer `/dev/fb1` for ILI9486 display (480x320)
 - Touch input via `/dev/input/event0` (ADS7846)
 - Udev rules for touchscreen permissions
-- Startup script `/opt/leafsense/start.sh`
+- Startup script `/opt/leafsense/start_leafsense.sh`
 
 #### Networking
 - Static IP configuration (10.42.0.196/24)
@@ -521,7 +521,7 @@ This version adds complete support for the Waveshare 3.5" LCD (C) touchscreen di
 └── waveshare35c.dtbo          # Device tree overlay
 
 /opt/leafsense/
-└── start.sh                   # Startup script with display config
+└── start_leafsense.sh         # Startup script with display config
 
 /etc/udev/rules.d/
 └── 99-touchscreen.rules       # Touchscreen permissions
