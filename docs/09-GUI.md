@@ -44,20 +44,20 @@ export QT_QPA_MOUSEDRIVER=linuxinput
 | SVG | Qt5Svg |
 | Platform | linuxfb (framebuffer) |
 
-## Estrutura de Ficheiros
+## File Structure
 
 ```
 include/application/gui/
-├── mainwindow.h           # Janela principal
-├── sensors_display.h      # Display de sensores
-├── health_display.h       # Display de saúde (ML)
-├── alerts_display.h       # Display de alertas
-├── analytics_window.h     # Janela de analytics
-├── settings_window.h      # Janela de configurações
-├── logs_window.h          # Janela de logs
-├── login_dialog.h         # Diálogo de login
-├── info_window.h          # Janela de informações
-└── leafsense_data_bridge.h # Bridge de dados
+├── mainwindow.h           # Main window
+├── sensors_display.h      # Sensor display
+├── health_display.h       # Health display (ML)
+├── alerts_display.h       # Alerts display
+├── analytics_window.h     # Analytics window
+├── settings_window.h      # Settings window
+├── logs_window.h          # Logs window
+├── login_dialog.h         # Login dialog
+├── info_window.h          # Information window
+└── leafsense_data_bridge.h # Data bridge
 
 src/application/gui/
 ├── mainwindow.cpp
@@ -328,7 +328,7 @@ QString darkStyle = R"(
 
 ## Recursos (QRC)
 
-### Ficheiro: `resources/resources.qrc`
+### File: `resources/resources.qrc`
 ```xml
 <!DOCTYPE RCC>
 <RCC version="1.0">

@@ -1,15 +1,15 @@
-# LeafSense - Secção de Implementation (Report)
+# LeafSense - Implementation Report
 
-**Grupo 11**
+**Group 11**
 
-**Autores:**
+**Authors:**
 - Daniel Gonçalo Silva Cardoso, PG53753
 - Marco Xavier Leite Costa, PG60210
 
-**Especialização:** Embedded Systems and Computers  
-**Curso:** Master's in Industrial Electronics and Computers Engineering  
-**Orientador:** Professor Adriano José Conceição Tavares  
-**Data:** Dezembro 2025
+**Specialization:** Embedded Systems and Computers  
+**Program:** Master's in Industrial Electronics and Computers Engineering  
+**Advisor:** Professor Adriano José Conceição Tavares  
+**Date:** December 2025
 
 ---
 
@@ -190,12 +190,12 @@ A persistência de dados é gerida através de SQLite, com o seguinte schema:
 | `plant` | Registo de plantas |
 | `health_assessments` | Avaliações de saúde |
 
-**Views para queries otimizadas:**
+**Views for optimized queries:**
 
-- `vw_latest_sensor_reading` - Última leitura
-- `vw_daily_sensor_summary` - Resumo diário
-- `vw_unread_alerts` - Alerts pendentes
-- `vw_pending_recommendations` - Recomendações ativas
+- `vw_latest_sensor_reading` - Latest reading
+- `vw_daily_sensor_summary` - Daily summary
+- `vw_unread_alerts` - Pending alerts
+- `vw_pending_recommendations` - Active recommendations
 
 #### 4.4.2 Controlador Principal (Master)
 

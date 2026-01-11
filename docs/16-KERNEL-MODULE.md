@@ -2,16 +2,16 @@
 
 ## Overview
 
-O módulo de kernel `led.ko` fornece controlo direto de um LED conectado a GPIO através de um dispositivo de caracteres (`/dev/led0`). O módulo utiliza acesso direto aos registos de GPIO do BCM2711 (Raspberry Pi 4).
+The kernel module `led.ko` provides direct control of an LED connected to GPIO through a character device (`/dev/led0`). The module uses direct access to the GPIO registers of the BCM2711 (Raspberry Pi 4).
 
-## Especificações
+## Specifications
 
 | Property | Value |
-|-------------|-------|
-| Nome do módulo | `led` |
+|----------|-------|
+| Module name | `led` |
 | Device file | `/dev/led0` |
-| Major number | 237 (dinâmico) |
-| GPIO Pin | 20 (configurável) |
+| Major number | 237 (dynamic) |
+| GPIO Pin | 20 (configurable) |
 | Kernel version | 6.12.41-v8 |
 
 ## Architecture do Module
@@ -57,7 +57,7 @@ O módulo de kernel `led.ko` fornece controlo direto de um LED conectado a GPIO 
 
 ## Código Fonte
 
-### Ficheiro: `drivers/kernel_module/ledmodule.c`
+### File: `drivers/kernel_module/ledmodule.c`
 
 ```c
 #include <linux/module.h>
@@ -244,7 +244,7 @@ MODULE_DESCRIPTION("LED GPIO driver for Raspberry Pi 4");
 MODULE_VERSION("1.0");
 ```
 
-### Ficheiro: `drivers/kernel_module/Makefile`
+### File: `drivers/kernel_module/Makefile`
 
 ```makefile
 obj-m := led.o
@@ -298,7 +298,7 @@ O kernel Linux 5.6+ removeu a função `ioremap_nocache`. A correção foi:
 
 A função `ioremap` no ARM64 já é não-cacheable por defeito.
 
-## Utilização
+## Usage
 
 ### Carregar Module
 ```bash

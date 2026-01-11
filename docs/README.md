@@ -209,20 +209,20 @@ ssh root@10.42.0.196
 
 ---
 
-## Autores
+## Authors
 
-**Grupo 11 - University of Minho, School of Engineering**
+**Group 11 - University of Minho, School of Engineering**
 
-| Nome | Número |
-|------|--------|
+| Name | Student ID |
+|------|------------|
 | Daniel Gonçalo Silva Cardoso | PG53753 |
 | Marco Xavier Leite Costa | PG60210 |
 
-**Orientador:** Professor Adriano José Conceição Tavares
+**Advisor:** Professor Adriano José Conceição Tavares
 
-**Curso:** Master's in Industrial Electronics and Computers Engineering  
-**UC:** Embedded Systems and Computers
+**Program:** Master's in Industrial Electronics and Computers Engineering  
+**Course:** Embedded Systems and Computers
 
 ---
 
-**Última atualização:** 11 de Janeiro de 2026
+**Last Updated:** January 11, 2026

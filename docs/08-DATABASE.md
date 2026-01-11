@@ -1,13 +1,13 @@
-# LeafSense - Base de Data
+# LeafSense - Database
 
 ## Overview
 
-O LeafSense utiliza SQLite como base de dados embebida para armazenamento persistente de dados de sensores, logs, alertas e resultados de ML.
+LeafSense uses SQLite as an embedded database for persistent storage of sensor data, logs, alerts, and ML results.
 
-## Localization
+## Location
 
-| Environment | Caminho |
-|----------|---------|
+| Environment | Path |
+|-------------|------|
 | Desktop | `./leafsense.db` |
 | Raspberry Pi | `/opt/leafsense/leafsense.db` |
 | Schema | `database/schema.sql` |
@@ -75,10 +75,10 @@ CREATE TABLE alerts (
 | Column | Type | Description |
 |--------|------|-----------|
 | severity | VARCHAR | low, medium, high, critical |
-| is_read | BOOLEAN | Se foi lido pelo utilizador |
+| is_read | BOOLEAN | Whether read by user |
 
 #### `health_assessments`
-Avaliações de saúde das plantas.
+Plant health assessments.
 
 ```sql
 CREATE TABLE health_assessments (
@@ -165,7 +165,7 @@ CREATE TABLE plant_images (
 ```
 
 #### `user`
-Utilizadores do sistema.
+System users.
 
 ```sql
 CREATE TABLE user (
@@ -181,7 +181,7 @@ CREATE TABLE user (
 ### Views
 
 #### `vw_latest_sensor_reading`
-Última leitura de sensores.
+Latest sensor reading.
 
 ```sql
 CREATE VIEW vw_latest_sensor_reading AS
@@ -191,7 +191,7 @@ LIMIT 1;
 ```
 
 #### `vw_daily_sensor_summary`
-Resumo diário de sensores.
+Daily sensor summary.
 
 ```sql
 CREATE VIEW vw_daily_sensor_summary AS
@@ -209,7 +209,7 @@ ORDER BY date DESC;
 ```
 
 #### `vw_unread_alerts`
-Alerts não lidos.
+Unread alerts.
 
 ```sql
 CREATE VIEW vw_unread_alerts AS
@@ -287,14 +287,14 @@ INSERT INTO sensor_readings (temperature, ph, ec)
 VALUES (23.5, 6.2, 1250);
 ```
 
-### Últimas 10 Readings
+### Last 10 Readings
 ```sql
 SELECT * FROM sensor_readings 
 ORDER BY timestamp DESC 
 LIMIT 10;
 ```
 
-### Média do Dia
+### Daily Average
 ```sql
 SELECT 
     AVG(temperature) as avg_temp,
@@ -304,13 +304,13 @@ FROM sensor_readings
 WHERE DATE(timestamp) = DATE('now');
 ```
 
-### Alerts Críticos Não Lidos
+### Unread Critical Alerts
 ```sql
 SELECT * FROM vw_unread_alerts 
 WHERE severity = 'critical';
 ```
 
-### Últimas Predições ML
+### Latest ML Predictions
 ```sql
 SELECT 
     predicted_class,
@@ -362,31 +362,31 @@ private:
 auto& db = DatabaseManager::instance();
 db.initialize("/opt/leafsense/leafsense.db");
 
-// Inserir leitura
+// Insert reading
 db.insertSensorReading(23.5, 6.2, 1250);
 
-// Inserir log
+// Insert log
 db.insertLog("Maintenance", "pH Down", "Dosed 500ms");
 
-// Obter últimas leituras
+// Get recent readings
 auto readings = db.getRecentReadings(10);
 for (const auto& r : readings) {
     qDebug() << r.temperature << r.ph << r.ec;
 }
 ```
 
-## Backup e Manutenção
+## Backup and Maintenance
 
 ### Backup
 ```bash
-# Copiar ficheiro
+# Copy file
 cp /opt/leafsense/leafsense.db /opt/leafsense/backup/leafsense_$(date +%Y%m%d).db
 
-# Ou usar .backup do SQLite
+# Or use SQLite .backup
 sqlite3 /opt/leafsense/leafsense.db ".backup /opt/leafsense/backup/leafsense.db"
 ```
 
-### Limpar Data Antigos
+### Clean Old Data
 ```sql
 -- Manter apenas últimos 30 dias de leituras
 DELETE FROM sensor_readings 
