@@ -50,10 +50,10 @@ Output: 4 classes (softmax)
 
 ### Confusion Matrix (Validation Set)
 ```
-                    Predicted
+                             Predicted
                  Healthy  Disease  Deficiency  Pest
-Actual  Healthy     [76      0         0        0]
-        Disease     [ 0    346         0        0]
+        Healthy     [76      0         0        0]
+Actual  Disease     [ 0    346         0        0]
         Deficiency  [ 0      0        41        0]
         Pest        [ 0      0         0      692]
 
