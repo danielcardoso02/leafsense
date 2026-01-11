@@ -18,9 +18,9 @@
 | # | Document | Description | Priority |
 |---|----------|-------------|----------|
 | 00 | [PROJECT-STATUS](00-PROJECT-STATUS.md) | **Complete project status and roadmap** | ⭐ Essential |
-| 00 | [Terminology](00-TERMINOLOGY.md) | Key terms and concepts explained | ⭐ Essential |
 | 01 | [Project Overview](01-OVERVIEW.md) | Goals and objectives | Reference |
 | 02 | [System Architecture](02-ARCHITECTURE.md) | Software and hardware design | Reference |
+| 19 | [Terminology](19-TERMINOLOGY.md) | Key terms and concepts explained | Reference |
 
 ### Buildroot & Deployment
 
