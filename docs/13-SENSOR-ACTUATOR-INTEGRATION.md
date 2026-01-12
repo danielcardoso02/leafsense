@@ -399,7 +399,7 @@ std::string Cam::takePhoto() {
 
 **Status**: ✅ Kernel module implemented
 
-**Hardware**: LED on GPIO (pin TBD)
+**Hardware**: LED on GPIO 20
 **Module**: `drivers/kernel_module/ledmodule.c`
 
 **Current Integration**:

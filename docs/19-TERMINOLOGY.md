@@ -590,9 +590,9 @@ For detailed information on specific topics, see:
 - **Machine Learning:** [03-MACHINE-LEARNING.md](03-MACHINE-LEARNING.md)
 - **Buildroot:** [05-BUILDROOT-IMAGE.md](05-BUILDROOT-IMAGE.md)
 - **Deployment:** [06-RASPBERRY-PI-DEPLOYMENT.md](06-RASPBERRY-PI-DEPLOYMENT.md)
-- **Device Driver:** [06-DEVICE-DRIVER.md](06-DEVICE-DRIVER.md)
-- **Database:** [07-DATABASE.md](07-DATABASE.md)
-- **GUI:** [08-GUI.md](08-GUI.md)
+- **Device Driver:** [07-DEVICE-DRIVER.md](07-DEVICE-DRIVER.md)
+- **Database:** [08-DATABASE.md](08-DATABASE.md)
+- **GUI:** [09-GUI.md](09-GUI.md)
 - **Troubleshooting:** [10-TROUBLESHOOTING.md](10-TROUBLESHOOTING.md)
 
 ---
