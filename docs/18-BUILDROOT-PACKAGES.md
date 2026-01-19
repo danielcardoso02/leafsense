@@ -323,21 +323,21 @@ Files automatically installed to the image:
 ```
 deploy/
 ├── boot-overlay/
-│   ├── config.txt              # Boot configuration
-│   ├── cmdline.txt             # Kernel command line
-│   └── overlays/
-│       └── waveshare35c.dtbo   # Display overlay
+│   ├── config.txt              # Boot configuration (includes piscreen overlay)
+│   └── cmdline.txt             # Kernel command line
 │
 └── rootfs-overlay/
     ├── etc/
     │   ├── init.d/
     │   │   └── S99leafsense    # Auto-start script
     │   └── profile.d/
-    │       └── leafsense-qt.sh # Qt environment
+    │       └── leafsense-qt.sh # Qt environment (evdev touchscreen config)
     └── opt/
         └── leafsense/
             └── start.sh
 ```
+
+**Note:** The piscreen overlay is built into the Linux kernel, so no separate .dtbo file needs to be deployed.
 
 ---
 

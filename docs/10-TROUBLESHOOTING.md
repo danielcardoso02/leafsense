@@ -156,8 +156,8 @@ qt.qpa.plugin: Could not find the Qt platform plugin "eglfs"
 
 **Solution:**
 ```bash
-# Use linuxfb for Waveshare 3.5" (fb1)
-export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+# Use linuxfb for 3.5" LCD (fb1)
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
 
 # Or for HDMI (fb0)
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb0
@@ -485,7 +485,7 @@ std::vector<int64_t> input_shape = {1, 3, 224, 224};
 
 ## Touchscreen Problems
 
-### Black display (Waveshare 3.5")
+### Black display (3.5" LCD)
 ```
 LeafSense runs but touchscreen is black
 ```
@@ -496,11 +496,11 @@ LeafSense runs but touchscreen is black
 cat /proc/fb
 # Expected: 0 BCM2708 FB, 1 fb_ili9486
 
-# Use fb1 for Waveshare, not fb0
+# Use fb1 for 3.5" LCD, not fb0
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 
 # Verify overlay is loaded
-dmesg | grep -E "ili9486|fb_ili9486|waveshare"
+dmesg | grep -E "ili9486|fb_ili9486|piscreen"
 ```
 
 ### Boot hang with touchscreen (white screen)
@@ -510,18 +510,18 @@ Pi hangs on boot with white screen, only red LED on
 
 **Solution:**
 ```bash
-# 1. Verify overlay is installed
-ls /boot/overlays/waveshare35c.dtbo
+# 1. Verify overlay configuration in config.txt:
+cat /boot/config.txt | grep piscreen
+# Expected: dtoverlay=piscreen,speed=16000000,rotate=270
 
-# 2. Verify config.txt has the correct lines:
-# dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
+# 2. Verify framebuffer settings:
 # hdmi_force_hotplug=1
 # hdmi_group=2
 # hdmi_mode=87
 # hdmi_cvt=480 320 60 6 0 0 0
 
-# 3. If overlay doesn't exist, copy it:
-scp deploy/waveshare35c.dtbo root@10.42.0.196:/boot/overlays/
+# 3. If piscreen overlay doesn't work, check kernel has fbtft support
+dmesg | grep fbtft
 ```
 
 ### Touch not responding
@@ -579,11 +579,10 @@ The touch rotation parameter depends on your display overlay:
 | Display Overlay | QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS |
 |-----------------|-------------------------------------|
 | piscreen,rotate=270 | rotate=180:invertx |
-| waveshare35c,rotate=90 | rotate=90 |
 
 You may also need to add `:invertx` or `:inverty`:
 ```bash
-# If X axis is inverted
+# Current working configuration for piscreen,rotate=270
 export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 
 # If Y axis is inverted  
@@ -608,7 +607,7 @@ killall LeafSense
 unset QT_QPA_FB_TSLIB
 export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 
-# Start app
+# Start app using the startup script
 cd /opt/leafsense && ./start.sh
 ```
 
@@ -670,4 +669,4 @@ For problems not resolved by this guide, check:
 
 ---
 
-*Document last updated: January 10, 2026*
+*Document last updated: January 19, 2026*

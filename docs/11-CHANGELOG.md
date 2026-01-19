@@ -43,6 +43,21 @@ This release fixes ML prediction storage and improves Analytics window data disp
 - `include/application/gui/leafsense_data_bridge.h` - Added method declaration
 - `src/application/gui/analytics_window.cpp` - Gallery loads ML labels from database
 
+### Documentation Updated
+- `docs/06-RASPBERRY-PI-DEPLOYMENT.md` - Fixed to use piscreen overlay and start.sh
+- `docs/10-TROUBLESHOOTING.md` - Updated touchscreen troubleshooting with correct evdev config
+- `docs/14-TESTING-GUIDE.md` - Updated testing commands with correct display configuration
+- `docs/17-TOUCHSCREEN-CONFIGURATION.md` - Removed obsolete waveshare35c references
+- `docs/04-NETWORKING.md` - Fixed display overlay reference
+- `docs/05-BUILDROOT-IMAGE.md` - Updated overlay file list
+- `docs/18-BUILDROOT-PACKAGES.md` - Updated overlay structure documentation
+
+### Current Working Configuration
+- **Display overlay**: `dtoverlay=piscreen,speed=16000000,rotate=270`
+- **Touchscreen**: `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"`
+- **Qt platform**: `QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320`
+- **Startup script**: `/opt/leafsense/start.sh`
+
 ---
 
 ## [1.5.2] - 2026-01-19

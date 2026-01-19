@@ -113,14 +113,14 @@ network={
 
 ### Boot Configuration (`/boot/config.txt`)
 ```ini
-# Enable Ethernet (SPI-based Waveshare display uses SPI, not Ethernet pins)
+# Enable Ethernet (SPI-based LCD uses SPI, not Ethernet pins)
 # Standard Ethernet works over standard GPIO pins with proper driver
 
 # Camera overlay
 dtoverlay=ov5647
 
-# Waveshare 3.5" LCD (C)
-dtoverlay=waveshare35c
+# 3.5" ILI9486 LCD with touchscreen
+dtoverlay=piscreen,speed=16000000,rotate=270
 ```
 
 ### Network Interfaces (`/etc/network/interfaces`)

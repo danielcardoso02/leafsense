@@ -491,7 +491,7 @@ The final image is a **complete bootable SD card image** containing:
 ├── Image                      # Linux kernel (compressed)
 └── overlays/                  # Device tree overlays
     ├── ov5647.dtbo           # Camera overlay
-    ├── waveshare35c.dtbo     # Waveshare 3.5" LCD overlay
+    ├── piscreen.dtbo         # 3.5" ILI9486 LCD overlay (built-in)
     ├── vc4-kms-v3d.dtbo      # Graphics driver
     └── ...
 ```

@@ -1,6 +1,6 @@
 # LeafSense - Complete Testing Guide
 
-This document provides step-by-step commands for testing every component of the LeafSense system on Raspberry Pi 4B with Waveshare 3.5" touchscreen display.
+This document provides step-by-step commands for testing every component of the LeafSense system on Raspberry Pi 4B with 3.5" ILI9486 touchscreen display.
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ This document provides step-by-step commands for testing every component of the 
 - microSD card (16GB+, recommended 32GB)
 - USB-Ethernet adapter or WiFi
 - 5V 3A USB-C power supply
-- Waveshare 3.5" LCD (C) display (optional)
+- 3.5" ILI9486 LCD display (optional)
 
 ### Host PC Requirements
 - Ubuntu 22.04+ or similar Linux distribution
@@ -160,22 +160,19 @@ ls -lh /media/daniel/ROOTFS/opt/leafsense/
 ls -lh /media/daniel/ROOTFS/usr/lib/libonnxruntime*
 ```
 
-### Step 6: Deploy Touchscreen Overlay (if using Waveshare 3.5")
+### Step 6: Configure Touchscreen (if using 3.5" LCD)
 ```bash
 # Mount BOOT partition
 sudo mkdir -p /media/daniel/BOOT
 sudo mount /dev/sdX1 /media/daniel/BOOT
 
-# Copy Waveshare overlay
-sudo cp deploy/waveshare35c.dtbo /media/daniel/BOOT/overlays/
-
 # Append display configuration to config.txt
 sudo tee -a /media/daniel/BOOT/config.txt << 'EOF'
 
 # ========================================
-# Waveshare 3.5" LCD (C) Configuration
+# 3.5" ILI9486 LCD Configuration
 # ========================================
-dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
+dtoverlay=piscreen,speed=16000000,rotate=270
 
 # HDMI to LCD framebuffer settings
 hdmi_force_hotplug=1
@@ -216,7 +213,7 @@ echo "SD card ready! Insert into Pi."
 ### Step 1: Connect Hardware
 1. Insert SD card into Raspberry Pi 4
 2. Connect Ethernet cable between Pi and USB-Ethernet adapter on host PC
-3. (Optional) Connect Waveshare 3.5" display to GPIO header
+3. (Optional) Connect 3.5" LCD display to GPIO header
 4. Connect 5V 3A power supply
 
 ### Step 2: Monitor Boot on Host PC
@@ -272,11 +269,11 @@ ssh root@10.42.0.196 'df -h'
 
 ### Check Display Initialization
 ```bash
-ssh root@10.42.0.196 'dmesg | grep -E "fb|ILI|ads7846|waveshare" | head -15'
+ssh root@10.42.0.196 'dmesg | grep -E "fb|ILI|ads7846|piscreen" | head -15'
 # Expected output:
 # bcm2708_fb soc:fb: Registered framebuffer for display 0, size 480x320
 # ads7846 spi0.1: touchscreen, irq 43
-# fb_ili9486 spi0.0: fbtft_property_value: rotate = 90
+# fb_ili9486 spi0.0: fbtft_property_value: rotate = 270
 # graphics fb1: fb_ili9486 frame buffer, 480x320
 ```
 
@@ -285,7 +282,7 @@ ssh root@10.42.0.196 'dmesg | grep -E "fb|ILI|ads7846|waveshare" | head -15'
 ssh root@10.42.0.196 'cat /proc/fb'
 # Expected:
 # 0 BCM2708 FB       <-- GPU framebuffer (HDMI)
-# 1 fb_ili9486       <-- Waveshare display
+# 1 fb_ili9486       <-- 3.5" LCD display
 ```
 
 ### Verify Touch Input
@@ -314,7 +311,7 @@ ssh root@10.42.0.196 'ldd /opt/leafsense/LeafSense | head -15'
 
 ### Create Startup Script
 ```bash
-ssh root@10.42.0.196 'cat > /opt/leafsense/start_leafsense.sh << '\''EOF'\''
+ssh root@10.42.0.196 'cat > /opt/leafsense/start.sh << '\''EOF'\''
 #!/bin/sh
 # LeafSense Display Startup Script
 
@@ -323,13 +320,13 @@ killall LeafSense 2>/dev/null || true
 sleep 1
 
 exec env \
-    QT_QPA_PLATFORM=linuxfb \
-    QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins \
-    QT_QPA_FONTDIR=/usr/share/fonts \
-    QT_QPA_MOUSEDRIVER=linuxinput \
-    ./LeafSense -platform linuxfb:fb=/dev/fb1
+    QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320 \
+    QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx" \
+    QT_QPA_FB_HIDECURSOR=1 \
+    QT_QPA_FB_NO_LIBINPUT=1 \
+    ./LeafSense
 EOF
-chmod +x /opt/leafsense/start_leafsense.sh'
+chmod +x /opt/leafsense/start.sh'
 ```
 
 ---
@@ -382,13 +379,13 @@ sleep 4
 ssh root@10.42.0.196 'ps aux | grep LeafSense | grep -v grep'
 ```
 
-### Test 3: Waveshare 3.5" Touchscreen (fb1)
+### Test 3: 3.5" LCD Touchscreen (fb1)
 ```bash
 ssh root@10.42.0.196 'killall LeafSense 2>/dev/null; cd /opt/leafsense && \
     nohup env \
-        QT_QPA_PLATFORM=linuxfb \
-        QT_QPA_MOUSEDRIVER=linuxinput \
-        ./LeafSense -platform linuxfb:fb=/dev/fb1 > /tmp/leafsense.log 2>&1 &'
+        QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320 \
+        QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx" \
+        ./LeafSense > /tmp/leafsense.log 2>&1 &'
 
 sleep 4
 ssh root@10.42.0.196 'ps aux | grep LeafSense | grep -v grep && echo "✓ Running on touchscreen"'
@@ -458,15 +455,15 @@ ssh root@10.42.0.196 'killall LeafSense 2>/dev/null && echo "LeafSense stopped"'
 | Device | Description | Resolution |
 |--------|-------------|------------|
 | `/dev/fb0` | GPU/HDMI output | Varies |
-| `/dev/fb1` | Waveshare ILI9486 | 480x320 |
+| `/dev/fb1` | ILI9486 3.5" LCD | 480x320 |
 
 ### Environment Variables for Qt5
 
 ```bash
-export QT_QPA_PLATFORM=linuxfb
-export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins
-export QT_QPA_FONTDIR=/usr/share/fonts
-export QT_QPA_MOUSEDRIVER=linuxinput
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_FB_HIDECURSOR=1
+export QT_QPA_FB_NO_LIBINPUT=1
 ```
 
 ---
@@ -488,7 +485,7 @@ sudo arp-scan --interface=enx00e04c3601a6 10.42.0.0/24
 # Check which framebuffer to use
 ssh root@10.42.0.196 'cat /proc/fb'
 
-# For Waveshare 3.5", use fb1 not fb0
+# For 3.5" LCD, use fb1 not fb0
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
 
@@ -679,4 +676,4 @@ This section contains the formal test cases defined for the LeafSense system val
 
 ---
 
-*Document last updated: January 9, 2026*
+*Document last updated: January 19, 2026*

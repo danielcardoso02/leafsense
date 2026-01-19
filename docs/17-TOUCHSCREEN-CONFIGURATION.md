@@ -54,9 +54,8 @@ The touch coordinates require transformation to match the rotated display. For t
 | config.txt dtoverlay | Qt Environment Variable |
 |---------------------|------------------------|
 | `piscreen,rotate=270` | `rotate=180:invertx` |
-| `waveshare35c,rotate=90` | `rotate=90` |
 
-**Note:** Different overlays (piscreen vs waveshare35c) may require different touch rotation parameters.
+**Note:** The piscreen overlay with rotate=270 requires `rotate=180:invertx` for correct touch mapping.
 
 ---
 
@@ -89,7 +88,6 @@ The touch coordinates require transformation to match the rotated display. For t
 ### Boot Partition Files
 
 1. **config.txt** - Contains dtoverlay with rotation and SPI settings
-2. **overlays/waveshare35c.dtbo** - Display driver overlay
 
 ### Root Filesystem Files
 
@@ -107,9 +105,7 @@ The touch coordinates require transformation to match the rotated display. For t
 deploy/
 ├── boot-overlay/
 │   ├── config.txt              # Complete boot configuration
-│   ├── cmdline.txt             # Kernel command line
-│   └── overlays/
-│       └── waveshare35c.dtbo   # Display overlay
+│   └── cmdline.txt             # Kernel command line
 │
 └── rootfs-overlay/
     ├── etc/
@@ -125,10 +121,9 @@ deploy/
 ### Post-Build Script
 
 The `board/leafsense/post-build.sh` script:
-1. Copies `config.txt` to boot partition
-2. Copies `waveshare35c.dtbo` to overlays
-3. Creates Qt environment configuration
-4. Creates init and startup scripts
+1. Copies `config.txt` to boot partition (includes piscreen overlay configuration)
+2. Creates Qt environment configuration with evdev touchscreen parameters
+3. Creates init and startup scripts
 
 This ensures that after reflashing, the touchscreen works immediately without any manual configuration.
 
@@ -162,7 +157,7 @@ This ensures that after reflashing, the touchscreen works immediately without an
    echo $QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS  # Should show rotate=180:invertx
    ```
 
-2. If they don't match, restart with correct rotation:
+2. If they don't match, restart with correct environment:
    ```bash
    export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
    killall LeafSense
@@ -198,8 +193,8 @@ If all these pass, the configuration is correctly preserved.
 
 **Key Points:**
 - Use **evdev**, NOT tslib
-- Current display overlay: `dtoverlay=piscreen,rotate=270`
-- Set `rotate=180:invertx` in Qt environment variable
+- Display overlay: `dtoverlay=piscreen,speed=16000000,rotate=270`
+- Touch parameter: `rotate=180:invertx` in Qt environment variable
 - Use `speed=16000000` (16MHz) to prevent touch freeze
 - All configuration files are in the Buildroot overlay
 - No calibration required after reflash

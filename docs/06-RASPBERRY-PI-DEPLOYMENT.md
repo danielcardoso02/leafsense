@@ -13,7 +13,7 @@ This document provides comprehensive step-by-step instructions for deploying the
 - microSD card (16GB+, recommended 32GB)
 - USB-Ethernet adapter or WiFi connection
 - 5V 3A USB-C power supply
-- Waveshare 3.5" LCD (C) touchscreen (optional)
+- 3.5" ILI9486 LCD touchscreen (optional)
 
 ### Software (Development Host)
 - Ubuntu 22.04+ or similar Linux distribution
@@ -293,7 +293,7 @@ sqlite3 leafsense.db < database/schema.sql
 ./LeafSense -platform linuxfb:fb=/dev/fb0
 ```
 
-### 7.3 Manual Test (Waveshare 3.5" Touchscreen)
+### 7.3 Manual Test (3.5" LCD Touchscreen)
 ```bash
 # Verify framebuffer devices
 cat /proc/fb
@@ -305,15 +305,17 @@ cd /opt/leafsense
 # Initialize database
 sqlite3 leafsense.db < database/schema.sql
 
-# Run LeafSense on Waveshare display (fb1)
-env QT_QPA_PLATFORM=linuxfb \
-    QT_QPA_MOUSEDRIVER=linuxinput \
-    ./LeafSense -platform linuxfb:fb=/dev/fb1
+# Run LeafSense on 3.5" LCD (fb1) with evdev touchscreen
+env QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320 \
+    QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx" \
+    QT_QPA_FB_HIDECURSOR=1 \
+    QT_QPA_FB_NO_LIBINPUT=1 \
+    ./LeafSense
 ```
 
 ### 7.4 Create LeafSense Startup Script
 ```bash
-cat > /opt/leafsense/start_leafsense.sh << 'EOF'
+cat > /opt/leafsense/start.sh << 'EOF'
 #!/bin/sh
 # LeafSense Display Startup Script
 
@@ -322,14 +324,14 @@ killall LeafSense 2>/dev/null || true
 sleep 1
 
 exec env \
-    QT_QPA_PLATFORM=linuxfb \
-    QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins \
-    QT_QPA_FONTDIR=/usr/share/fonts \
-    QT_QPA_MOUSEDRIVER=linuxinput \
-    ./LeafSense -platform linuxfb:fb=/dev/fb1
+    QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320 \
+    QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx" \
+    QT_QPA_FB_HIDECURSOR=1 \
+    QT_QPA_FB_NO_LIBINPUT=1 \
+    ./LeafSense
 EOF
 
-chmod +x /opt/leafsense/start_leafsense.sh
+chmod +x /opt/leafsense/start.sh
 ```
 
 ### 7.5 Create Auto-Start Service (Optional)
@@ -342,7 +344,7 @@ case "$1" in
         echo "Starting LeafSense..."
         cd /opt/leafsense
         # Use startup script for proper display configuration
-        ./start_leafsense.sh > /var/log/leafsense.log 2>&1 &
+        ./start.sh > /var/log/leafsense.log 2>&1 &
         echo "LeafSense started with PID $!"
         ;;
     stop)
@@ -418,7 +420,7 @@ export QT_QPA_PLATFORM=offscreen
 # OR with HDMI display
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb0
 
-# OR with Waveshare 3.5" touchscreen
+# OR with 3.5" LCD touchscreen
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
 ```
 
@@ -433,9 +435,9 @@ ls -lh /opt/leafsense/leafsense_model.onnx
 
 ---
 
-## Appendix A: Waveshare 3.5" LCD (C) Complete Setup
+## Appendix A: 3.5" ILI9486 LCD Complete Setup
 
-This section documents the **working configuration** for the Waveshare 3.5" LCD (C) with ILI9486 controller and ADS7846 touchscreen.
+This section documents the **working configuration** for the 3.5" ILI9486 LCD with ADS7846 touchscreen.
 
 ### A.1 Boot Configuration (config.txt)
 
@@ -444,37 +446,29 @@ Add to `/boot/config.txt`:
 # SPI enable (required for LCD)
 dtparam=spi=on
 
-# Waveshare 3.5" LCD (C) - ILI9486 + ADS7846 Touchscreen
-dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
+# 3.5" ILI9486 LCD with ADS7846 Touchscreen
+dtoverlay=piscreen,speed=16000000,rotate=270
 
 # Framebuffer for LCD
 framebuffer_width=480
 framebuffer_height=320
 ```
 
-### A.2 Device Tree Overlay
-
-Copy the overlay file to boot partition:
-```bash
-# From project directory
-sudo cp deploy/waveshare35c.dtbo /mnt/BOOT/overlays/
-```
-
-### A.3 Verify Display After Boot
+### A.2 Verify Display After Boot
 
 ```bash
 # Check framebuffer devices
 cat /proc/fb
 # Expected output:
 # 0 BCM2708 FB      (HDMI)
-# 1 fb_ili9486      (Waveshare LCD)
+# 1 fb_ili9486      (3.5" LCD)
 
 # Check LCD resolution
 cat /sys/class/graphics/fb1/virtual_size
 # Expected: 480,320 (landscape mode)
 ```
 
-### A.4 Touchscreen Configuration
+### A.3 Touchscreen Configuration
 
 **Important:** Qt's evdev touchscreen handler requires rotation parameter to match display rotation.
 
@@ -483,7 +477,7 @@ cat /sys/class/graphics/fb1/virtual_size
 export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 ```
 
-### A.5 Complete Working Startup Command
+### A.4 Complete Working Startup Command
 
 ```bash
 #!/bin/sh
@@ -503,7 +497,7 @@ export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx
 exec ./LeafSense
 ```
 
-### A.6 Auto-Start on Boot
+### A.5 Auto-Start on Boot
 
 Create `/etc/init.d/S99leafsense`:
 ```bash
