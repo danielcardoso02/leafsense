@@ -2,8 +2,8 @@
 
 ## Critical Information
 
-**Last Verified:** January 11, 2026  
-**Hardware:** Waveshare 3.5" LCD (C) with ILI9486 display and ADS7846 touchscreen  
+**Last Verified:** January 19, 2026  
+**Hardware:** 3.5" LCD with ILI9486 display and ADS7846 touchscreen  
 **Driver:** Qt5 evdev touchscreen plugin (NOT tslib)
 
 ---
@@ -14,7 +14,7 @@
 
 ```ini
 # Display and touchscreen overlay
-dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
+dtoverlay=piscreen,speed=16000000,rotate=270
 
 # Framebuffer dimensions
 framebuffer_width=480
@@ -25,9 +25,10 @@ framebuffer_height=320
 
 ```bash
 # CRITICAL: The rotation MUST be configured for correct touch mapping
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
-export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
 export QT_QPA_FB_HIDECURSOR=1
+export QT_QPA_FB_NO_LIBINPUT=1
 ```
 
 ---
@@ -40,7 +41,7 @@ export QT_QPA_FB_HIDECURSOR=1
 
 **Solution with evdev:**
 - Qt5's evdev touchscreen plugin reads directly from `/dev/input/event0`
-- The `rotate=90` parameter handles coordinate transformation for the 90° rotated display
+- The `rotate=180:invertx` parameter handles coordinate transformation for the rotated display
 - No calibration file is needed
 - No `ts_calibrate` or `ts_uinput` processes required
 
@@ -48,16 +49,14 @@ export QT_QPA_FB_HIDECURSOR=1
 
 ## Rotation Parameter Mapping
 
-The touch coordinates require transformation to match the rotated display. For the Waveshare 3.5" LCD (C) with `rotate=90` in config.txt, the Qt evdev parameter needs `rotate=90`:
+The touch coordinates require transformation to match the rotated display. For the 3.5" LCD with `rotate=270` in config.txt (piscreen overlay), the Qt evdev parameter needs `rotate=180:invertx`:
 
 | config.txt dtoverlay | Qt Environment Variable |
 |---------------------|------------------------|
-| `rotate=0` | `rotate=0` |
-| `rotate=90` | `rotate=90` |
-| `rotate=180` | `rotate=180` |
-| `rotate=270` | `rotate=270` |
+| `piscreen,rotate=270` | `rotate=180:invertx` |
+| `waveshare35c,rotate=90` | `rotate=90` |
 
-**Note:** For the Waveshare 3.5" LCD (C), both display and touch use `rotate=90` - no additional parameters needed.
+**Note:** Different overlays (piscreen vs waveshare35c) may require different touch rotation parameters.
 
 ---
 
@@ -96,7 +95,7 @@ The touch coordinates require transformation to match the rotated display. For t
 
 1. **/etc/profile.d/leafsense-qt.sh** - Qt environment variables
 2. **/etc/init.d/S99leafsense** - Auto-start script with correct environment
-3. **/opt/leafsense/start_leafsense.sh** - Manual startup script
+3. **/opt/leafsense/start.sh** - Manual startup script
 
 ---
 
@@ -120,7 +119,7 @@ deploy/
     │       └── leafsense-qt.sh # Qt environment
     └── opt/
         └── leafsense/
-            └── start_leafsense.sh  # Startup script
+            └── start.sh  # Startup script
 ```
 
 ### Post-Build Script
@@ -158,15 +157,16 @@ This ensures that after reflashing, the touchscreen works immediately without an
 
 1. Verify configuration:
    ```bash
-   cat /boot/config.txt | grep waveshare  # Should show rotate=90
-   echo $QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS  # Should show rotate=90
+   mount /dev/mmcblk0p1 /boot 2>/dev/null
+   cat /boot/config.txt | grep piscreen  # Should show rotate=270
+   echo $QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS  # Should show rotate=180:invertx
    ```
 
 2. If they don't match, restart with correct rotation:
    ```bash
-   export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+   export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
    killall LeafSense
-   /opt/leafsense/start_leafsense.sh
+   cd /opt/leafsense && ./start.sh
    ```
 
 ### Application Freezes on Touch
@@ -198,10 +198,9 @@ If all these pass, the configuration is correctly preserved.
 
 **Key Points:**
 - Use **evdev**, NOT tslib
-- Set `rotate=90` in config.txt dtoverlay
-- Set `rotate=90` in Qt environment variable
+- Current display overlay: `dtoverlay=piscreen,rotate=270`
+- Set `rotate=180:invertx` in Qt environment variable
 - Use `speed=16000000` (16MHz) to prevent touch freeze
-- Use `fps=50` to minimize screen flicker
 - All configuration files are in the Buildroot overlay
 - No calibration required after reflash
 

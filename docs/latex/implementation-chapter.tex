@@ -1,0 +1,599 @@
+% ============================================================================
+% LeafSense Implementation Chapter
+% ============================================================================
+% This document corresponds to Chapter 5 (Implementation) of the LeafSense
+% Real-Time Hydroponic Plant Monitoring System project report.
+%
+% Authors: Daniel Gonçalo Silva Cardoso (PG53753)
+%          Marco Xavier Leite Costa (PG60210)
+%
+% University of Minho - School of Engineering
+% Master's in Industrial Electronics and Computers Engineering
+% Embedded Systems and Computers
+%
+% Supervisor: Professor Adriano José Conceição Tavares
+% Date: January 2026
+% ============================================================================
+
+\chapter{Implementation}
+\label{chap:implementation}
+
+This chapter details the technical realization of the LeafSense platform. The implementation strategy moved beyond simple prototyping to establish a robust C++ Embedded Architecture, optimizing for the strict timing requirements of the sensor control loops and seamless integration with the Qt5 graphical framework.
+
+The system is built upon a custom Linux distribution generated via Buildroot 2025.08, specifically tailored for the Raspberry Pi 4 Model B.
+
+% ============================================================================
+\section{Operating System Configuration (Buildroot)}
+\label{sec:os-config}
+% ============================================================================
+
+The foundation of the device is a custom-engineered Linux image (\texttt{sdcard.img}), configured to minimize overhead while maximizing hardware control. The configuration was managed via \texttt{make menuconfig} and saved to the \texttt{.config} file.
+
+% ----------------------------------------------------------------------------
+\subsection{Target Architecture \& Toolchain}
+\label{subsec:target-arch}
+% ----------------------------------------------------------------------------
+
+The build was configured to leverage the full capabilities of the BCM2711 SoC.
+
+\begin{itemize}
+    \item \textbf{Target Architecture:} AArch64 (ARM 64-bit)
+    \item \textbf{Target CPU:} Cortex-A72
+    \begin{itemize}
+        \item Selecting the specific Cortex-A72 core ensures the compiler (GCC 14.3.0) utilizes the ARMv8-A instruction set extensions (NEON) critical for image processing performance.
+    \end{itemize}
+    \item \textbf{C Library:} glibc (GNU C Library)
+    \begin{itemize}
+        \item While musl is lighter, glibc was mandatory to ensure binary compatibility with the pre-compiled ONNX Runtime shared libraries used for AI inference.
+    \end{itemize}
+\end{itemize}
+
+% ----------------------------------------------------------------------------
+\subsection{System Initialization (Init System)}
+\label{subsec:init-system}
+% ----------------------------------------------------------------------------
+
+\begin{itemize}
+    \item \textbf{BusyBox Init:} The \texttt{BR2\_INIT\_BUSYBOX=y} option was selected.
+    \begin{itemize}
+        \item LeafSense uses BusyBox init with eudev for device management, providing a lightweight initialization system suitable for embedded applications. The startup script \texttt{S99leafsense} handles the application launch sequence.
+    \end{itemize}
+\end{itemize}
+
+% ----------------------------------------------------------------------------
+\subsection{Activated Package Ecosystem}
+\label{subsec:packages}
+% ----------------------------------------------------------------------------
+
+The following software stack was explicitly activated in the OS image to support the application requirements.
+
+\subsubsection{Graphical User Interface (Qt5)}
+
+\begin{itemize}
+    \item \texttt{BR2\_PACKAGE\_QT5=y}: Enables the Qt5 framework
+    \item \texttt{BR2\_PACKAGE\_QT5BASE\_LINUXFB=y}: Configures Qt to render directly to the Linux Framebuffer
+    \begin{itemize}
+        \item This avoids the overhead of a Window Manager (X11/Wayland), allowing the GUI to run in ``Kiosk Mode'' with minimal RAM usage.
+    \end{itemize}
+    \item \texttt{BR2\_PACKAGE\_QT5BASE\_WIDGETS=y}: Enables standard UI elements (Buttons, Labels) used in \texttt{src/application/gui}.
+    \item \texttt{BR2\_PACKAGE\_QT5BASE\_PNG=y} / \texttt{JPEG=y}: Required to load assets like \texttt{logo\_leafsense.png} located in \texttt{resources/images}.
+\end{itemize}
+
+\subsubsection{Computer Vision (OpenCV)}
+
+\begin{itemize}
+    \item \texttt{BR2\_PACKAGE\_OPENCV4=y}: The core computer vision library
+    \item \texttt{BR2\_PACKAGE\_OPENCV4\_WITH\_V4L=y}: Enables Video4Linux support for the RPi Camera
+    \item \texttt{BR2\_PACKAGE\_OPENCV4\_LIB\_IMGCODECS=y}: Image encoding/decoding support (PNG, JPEG)
+    \item \texttt{BR2\_PACKAGE\_OPENCV4\_LIB\_IMGPROC=y}: Image processing functions
+\end{itemize}
+
+\subsubsection{Hardware Interaction}
+
+\begin{itemize}
+    \item \texttt{BR2\_PACKAGE\_LIBGPIOD=y}: The modern C library for GPIO control (available for future actuator integration)
+    \item \texttt{BR2\_PACKAGE\_I2C\_TOOLS=y}: Essential for debugging the ADC and RTC sensors on the I2C bus
+    \item \texttt{BR2\_PACKAGE\_RPI\_FIRMWARE=y}: Contains the bootloader and GPU binaries required for the Pi 4
+\end{itemize}
+
+\subsubsection{Connectivity \& Maintenance}
+
+\begin{itemize}
+    \item \texttt{BR2\_PACKAGE\_DROPBEAR=y}: Enables lightweight SSH server for secure remote access (smaller footprint than OpenSSH)
+    \item \texttt{BR2\_PACKAGE\_WPA\_SUPPLICANT=y}: Handles Wi-Fi connections
+    \item \texttt{BR2\_PACKAGE\_DHCPCD=y}: Manages IP address assignment
+    \item \texttt{BR2\_PACKAGE\_PYTHON3=y} \& \texttt{BR2\_PACKAGE\_PYTHON\_PIP=y}: Included to support auxiliary scripts (\texttt{ml/train\_model.py}) and potential future expansions
+\end{itemize}
+
+% ============================================================================
+\section{Software Architecture (C++ Implementation)}
+\label{sec:software-arch}
+% ============================================================================
+
+The application logic was implemented in C++ to ensure deterministic runtime behavior and thread safety. The source code is organized into a modular hierarchy as evidenced by the project structure.
+
+% ----------------------------------------------------------------------------
+\subsection{Project Structure}
+\label{subsec:project-structure}
+% ----------------------------------------------------------------------------
+
+The project utilizes CMake (\texttt{CMakeLists.txt}) for build automation and the code is separated into logical layers:
+
+\begin{itemize}
+    \item \texttt{src/application}: Contains the high-level logic
+    \begin{itemize}
+        \item \texttt{gui/}: Qt5 widget implementations (e.g., \texttt{mainwindow.cpp}, \texttt{health\_display.cpp})
+        \item \texttt{ml/}: The Machine Learning inference wrapper (\texttt{ML.cpp})
+    \end{itemize}
+    \item \texttt{src/drivers}: The Hardware Abstraction Layer (HAL)
+    \begin{itemize}
+        \item \texttt{actuators/}: Controls physical outputs (\texttt{Heater.cpp}, \texttt{Pumps.cpp}, \texttt{AlertLed.cpp})
+        \item \texttt{sensors/}: Reads physical inputs (\texttt{ADC.cpp}, \texttt{Cam.cpp}, \texttt{PH.cpp}, \texttt{Sensor.cpp}, \texttt{TDS.cpp}, \texttt{Temp.cpp})
+    \end{itemize}
+    \item \texttt{src/middleware}: Business logic and orchestration (\texttt{Master.cpp}, \texttt{dbManager.cpp}, \texttt{MQueueHandler.cpp}, \texttt{dDatabase.cpp}, \texttt{IdealConditions.cpp})
+\end{itemize}
+
+% [IMAGE PLACEHOLDER: Project directory structure diagram]
+% Suggestion: Include a screenshot or diagram showing the complete project
+% folder structure with annotations for each layer.
+
+% ----------------------------------------------------------------------------
+\subsection{Hardware Abstraction Layer (HAL)}
+\label{subsec:hal}
+% ----------------------------------------------------------------------------
+
+Located in \texttt{src/drivers}, this layer isolates the application from hardware specifics.
+
+\subsubsection{Sensors}
+
+% [TODO: Complete this section when sensor integration is finished]
+% This section should detail:
+% - ADC.cpp class I2C implementation with ADS1115
+% - PH.cpp and TDS.cpp calibration and conversion
+% - DS18B20 temperature sensor 1-Wire implementation
+% - Camera integration with V4L2 (OpenCV)
+
+\textit{[To be completed upon sensor integration]}
+
+\subsubsection{Actuators}
+
+% [TODO: Complete this section when actuator integration is finished]
+% This section should detail:
+% - Pumps.cpp GPIO control via libgpiod
+% - Heater control relay implementation
+% - Timing and safety mechanisms
+
+\textit{[To be completed upon actuator integration]}
+
+% ----------------------------------------------------------------------------
+\subsection{Middleware \& Orchestration}
+\label{subsec:middleware}
+% ----------------------------------------------------------------------------
+
+The Middleware layer (\texttt{src/middleware}) serves as the system's central nervous system.
+
+\begin{itemize}
+    \item \textbf{Master Controller:} The \texttt{Master.cpp} class initializes the thread pool. It spawns worker threads for sensor reading (\texttt{tReadSensors}) and actuation, using POSIX Mutexes and Condition Variables to synchronize access to shared data.
+    \item \textbf{Data Persistence:} The \texttt{dbManager.cpp} handles SQLite interactions. It creates the \texttt{leafsense.db} file in the application directory (\texttt{/opt/leafsense/}). The schema originates from \texttt{database/schema.sql} and is deployed to \texttt{/opt/leafsense/database/schema.sql}. Sensor readings are logged asynchronously via the \texttt{MQueueHandler.cpp}, ensuring the GUI never freezes during disk writes.
+\end{itemize}
+
+% [IMAGE PLACEHOLDER: Middleware architecture diagram]
+% Suggestion: Include a diagram showing the relationship between Master,
+% MQueueHandler, dbManager, and the thread pool.
+
+% ============================================================================
+\section{AI Integration: C++ ONNX Runtime}
+\label{sec:ai-integration}
+% ============================================================================
+
+A significant engineering challenge was integrating the AI Inference Engine directly into the C++ environment without relying on Python wrappers.
+
+\begin{itemize}
+    \item \textbf{Library Integration:} The system links against the ONNX Runtime C++ API. The pre-compiled libraries for AArch64 were placed in \texttt{external/onnxruntime-arm64/lib} and headers in \texttt{external/onnxruntime-arm64/include}.
+    \item \textbf{Inference Logic:} The \texttt{src/application/ml/ML.cpp} class loads the \texttt{ml/leafsense\_model.onnx}. It converts the OpenCV \texttt{cv::Mat} image data into the specific Tensor format required by the model, executes the inference, and interprets the output logits to detect diseases or deficiencies.
+\end{itemize}
+
+% [IMAGE PLACEHOLDER: ONNX Runtime integration diagram]
+% Suggestion: Include the ONNX Runtime logo and a flowchart showing the
+% inference pipeline from image capture to classification result.
+
+\subsection{Model Performance}
+
+Table~\ref{tab:ml-performance} summarizes the machine learning model performance on the Raspberry Pi 4.
+
+\begin{table}[htbp]
+    \centering
+    \caption{ML Model Performance on Raspberry Pi 4}
+    \label{tab:ml-performance}
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Metric} & \textbf{Value} \\
+        \hline
+        Model Architecture & MobileNetV3-Small \\
+        Model Size (ONNX) & 5.9 MB \\
+        Input Resolution & 224×224×3 (RGB) \\
+        Output Classes & 4 \\
+        Inference Time & ~150 ms \\
+        RAM Usage & ~50 MB \\
+        CPU Usage & ~80\% (1 core) \\
+        Accuracy & 99.39\% \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% ============================================================================
+\section{Deployment \& System Hardening}
+\label{sec:deployment}
+% ============================================================================
+
+Post-compilation, the system required specific configuration to become operational on the target device.
+
+% ----------------------------------------------------------------------------
+\subsection{Storage Expansion}
+\label{subsec:storage}
+% ----------------------------------------------------------------------------
+
+The Buildroot configuration defines a minimal filesystem size ($\approx$289MB) to ensure fast flashing. To utilize the 32GB SD card capacity for database storage (\texttt{/opt/leafsense/leafsense.db}) and image logs:
+
+\begin{itemize}
+    \item \textbf{Action:} The \texttt{resize2fs} utility (compiled on the host) was used to expand the root partition to fill the physical media.
+    \item \textbf{Verification:} \texttt{df -h} on the target confirms ($\approx$29GB) of available space.
+\end{itemize}
+
+% ----------------------------------------------------------------------------
+\subsection{Network Bridge (Provisioning)}
+\label{subsec:network}
+% ----------------------------------------------------------------------------
+
+To facilitate the transfer of the compiled binaries and models via SCP, a NAT Bridge was established.
+
+\begin{itemize}
+    \item \textbf{Host (Ubuntu):} Configured \texttt{iptables} to mask traffic from the USB-Ethernet interface.
+    \item \textbf{Target (RPi):} Configured a static route (\texttt{route add default gw}) to the host.
+    \item \textbf{Result:} This allowed the RPi to access NTP servers for time synchronization (\texttt{date -s}) and download any missing runtime dependencies.
+\end{itemize}
+
+% ----------------------------------------------------------------------------
+\subsection{SSH Hardening}
+\label{subsec:ssh}
+% ----------------------------------------------------------------------------
+
+The root account is configured with the password ``leafsense'' (\texttt{BR2\_TARGET\_GENERIC\_ROOT\_PASSWD}) for deployment access.
+
+\begin{itemize}
+    \item \textbf{Configuration:} Dropbear SSH is used instead of OpenSSH for its smaller footprint. Root login is enabled to facilitate deployment of the LeafSense binary and resources to \texttt{/opt/leafsense/}.
+    \item \textbf{Production Note:} For production deployments, the password should be changed or replaced with SSH key-based authentication.
+\end{itemize}
+
+% ----------------------------------------------------------------------------
+\subsection{Final File Structure}
+\label{subsec:file-structure}
+% ----------------------------------------------------------------------------
+
+The deployed system follows the structure shown in Listing~\ref{lst:file-structure}.
+
+\begin{lstlisting}[caption={Raspberry Pi 4 File Structure}, label={lst:file-structure}, basicstyle=\ttfamily\small]
+Raspberry Pi 4B
+|-- /opt/leafsense/
+|   |-- LeafSense              # Application (~800KB)
+|   |-- leafsense_model.onnx   # ML Model (5.9MB)
+|   |-- leafsense.db           # SQLite Database
+|   |-- start.sh               # Startup script
+|   |-- database/
+|   |   `-- schema.sql         # SQL Schema
+|   `-- gallery/               # Captured images
+|-- /usr/lib/
+|   |-- libonnxruntime.so*     # ONNX Runtime (16MB)
+|   `-- libQt5Charts.so*       # Qt5Charts (1.9MB)
+|-- /lib/modules/6.12.41-v8/
+|   `-- led.ko                 # Kernel module (13KB)
+|-- /etc/init.d/
+|   `-- S99leafsense           # Init script
+`-- /var/log/
+    `-- leafsense.log          # Application logs
+\end{lstlisting}
+
+% ============================================================================
+\section{Kernel Module Development}
+\label{sec:kernel-module}
+% ============================================================================
+
+A Linux kernel module was developed for controlling an indicator LED via GPIO. The module implements a character device driver that exposes the device \texttt{/dev/led0}.
+
+% ----------------------------------------------------------------------------
+\subsection{Main Characteristics}
+\label{subsec:kernel-characteristics}
+% ----------------------------------------------------------------------------
+
+\begin{itemize}
+    \item Direct access to BCM2837 GPIO registers via \texttt{ioremap}
+    \item GPIO base address: \texttt{0x3F200000} (BCM2837/Raspberry Pi 3)
+    \item \textbf{Note:} For Raspberry Pi 4 (BCM2711), the base address would be \texttt{0xFE200000}
+    \item GPIO used: Pin 20
+    \item Supported operations: \texttt{open}, \texttt{close}, \texttt{read}, \texttt{write}
+\end{itemize}
+
+% ----------------------------------------------------------------------------
+\subsection{Code Structure}
+\label{subsec:kernel-code}
+% ----------------------------------------------------------------------------
+
+The kernel module implements direct register access as shown in Listing~\ref{lst:gpio-registers}.
+
+\begin{lstlisting}[language=C, caption={GPIO Register Definitions (utils.h)}, label={lst:gpio-registers}]
+// Hardware Base Addresses
+#define BCM2708_PERI_BASE  0x3f000000  // RPi 3 (use 0xFE000000 for RPi 4)
+#define GPIO_BASE   (BCM2708_PERI_BASE + 0x200000)
+
+// GPIO Register Structure
+struct GpioRegisters {
+    uint32_t GPFSEL[6];  // Function Select registers
+    uint32_t Reserved1;
+    uint32_t GPSET[2];   // Pin Output Set registers
+    uint32_t Reserved2;
+    uint32_t GPCLR[2];   // Pin Output Clear registers
+};
+
+// Map registers to virtual memory (in ledmodule.c)
+s_pGpioRegisters = (struct GpioRegisters *)ioremap(GPIO_BASE, 
+                                    sizeof(struct GpioRegisters));
+
+// Configure GPIO 20 as output and control LED
+SetGPIOFunction(s_pGpioRegisters, LedGpioPin, 0b001);
+SetGPIOOutputValue(s_pGpioRegisters, LedGpioPin, outputValue);
+\end{lstlisting}
+
+\textbf{Technical Note:} The \texttt{ioremap\_nocache} function was replaced with \texttt{ioremap} due to changes in the Linux kernel 5.6+ API.
+
+% ----------------------------------------------------------------------------
+\subsection{Module Compilation}
+\label{subsec:kernel-compilation}
+% ----------------------------------------------------------------------------
+
+Module compilation requires the kernel headers from Buildroot:
+
+\begin{lstlisting}[language=bash, caption={Kernel Module Compilation}]
+cd drivers/kernel_module/
+# Environment variables are set in Makefile:
+# KDIR=/path/to/buildroot/output/build/linux-custom
+# CROSS_COMPILE=/path/to/buildroot/output/host/bin/aarch64-linux-
+# ARCH=arm64
+make
+\end{lstlisting}
+
+% [IMAGE PLACEHOLDER: LED module test photograph]
+% Suggestion: Include a photo showing the LED connected to GPIO 20 in both
+% ON and OFF states, demonstrating the kernel module functionality.
+
+% ============================================================================
+\section{Graphical User Interface}
+\label{sec:gui}
+% ============================================================================
+
+The LeafSense system incorporates a comprehensive Graphical User Interface (GUI) as a central part of its user experience. The GUI serves as the primary interaction layer, transforming raw hydroponic sensor data into visual insights and operational controls.
+
+% ----------------------------------------------------------------------------
+\subsection{Design Philosophy}
+\label{subsec:gui-design}
+% ----------------------------------------------------------------------------
+
+The GUI was developed to ensure intuitive access and clear navigation throughout the application regardless of the user's technical background. Its design prioritizes readability and visual hierarchy, allowing users to quickly assess plant health, diagnose issues, or make system changes without needing to interpret complex data formats or use command-line tools.
+
+A distinctive element of the LeafSense GUI is its support for both light and dark modes:
+
+\begin{itemize}
+    \item \textbf{Light Mode:} Generally preferred in bright environments, providing high visibility and minimizing eye strain during daytime usage.
+    \item \textbf{Dark Mode:} Optimized for low-light conditions or users working for extended periods, reducing glare and supporting comfortable prolonged system monitoring.
+\end{itemize}
+
+% ----------------------------------------------------------------------------
+\subsection{Application Windows}
+\label{subsec:gui-windows}
+% ----------------------------------------------------------------------------
+
+The application is organized into several focused windows, each designed to perform a specific role within the LeafSense ecosystem:
+
+\subsubsection{Login Window}
+
+This is the entry point to LeafSense, where users authenticate before accessing the system. The window is visually minimal and distraction-free, with no title bar or control buttons, ensuring the user's attention is solely directed towards secure access.
+
+% [IMAGE PLACEHOLDER: Login Window screenshots]
+% Suggestion: Include side-by-side screenshots showing the Login Window
+% in both Light Mode and Dark Mode.
+
+\subsubsection{Main Window (Dashboard)}
+
+After successful login, the user is presented with the main dashboard. This window aggregates real-time sensor data---such as pH, temperature, and EC levels---and current plant health assessment. It provides navigation buttons for logs, settings, info, and logout.
+
+% [IMAGE PLACEHOLDER: Main Dashboard screenshots]
+% Suggestion: Include side-by-side screenshots showing the Dashboard
+% in both Light Mode and Dark Mode, with annotations highlighting key elements.
+
+\subsubsection{Logs Window}
+
+The logs window offers a filterable view into system alerts, plant disease records, nutrient deficiency events, and maintenance history. The user can easily switch log categories using prominent filter buttons at the top.
+
+% [IMAGE PLACEHOLDER: Logs Window screenshots]
+% Suggestion: Include screenshots showing each tab (Alerts, Diseases,
+% Deficiencies, Maintenance) in both themes.
+
+\subsubsection{Settings Window}
+
+The settings window allows the user to configure system preferences, most notably changing the ideal sensor parameters and toggling between light and dark mode.
+
+% [IMAGE PLACEHOLDER: Settings Window screenshots]
+% Suggestion: Include side-by-side screenshots showing the Settings Window
+% with the threshold adjustment controls visible.
+
+\subsubsection{Analytics Window}
+
+The analytics window provides historical data visualization and analysis capabilities. It features three main tabs:
+
+\begin{itemize}
+    \item \textbf{Sensor Readings Table:} Displays historical sensor data in tabular format
+    \item \textbf{Trends Chart:} Visualizes sensor trends over time using Qt Charts
+    \item \textbf{Image Gallery:} Browsable gallery of captured plant images with ML analysis results
+\end{itemize}
+
+% [IMAGE PLACEHOLDER: Analytics Window screenshots]
+% Suggestion: Include screenshots showing each tab (Sensor Table, Trends Chart,
+% Image Gallery) in both light and dark mode.
+
+\subsubsection{Info Window}
+
+Accessible from the dashboard, this window displays relevant static and session information, such as username and login timestamp.
+
+% [IMAGE PLACEHOLDER: Info Window screenshots]
+% Suggestion: Include side-by-side screenshots showing the Info Window.
+
+\subsubsection{Dialog Popups}
+
+Dialog windows are used for critical interactions such as confirming user logout. Popups display information and action buttons (e.g., ``Yes'' and ``No'') with colors and alignment that conform to the app's overall theme.
+
+% [IMAGE PLACEHOLDER: Logout Confirmation Dialog screenshots]
+% Suggestion: Include side-by-side screenshots showing the dialog popup.
+
+% ============================================================================
+\section{Sensor Integration}
+\label{sec:sensors}
+% ============================================================================
+
+% [TODO: Complete this section when sensor hardware is fully integrated]
+% 
+% This section should include:
+% - pH Sensor (PH-4502C) calibration procedure and code
+% - Temperature Sensor (DS18B20) 1-Wire implementation
+% - TDS Sensor calibration and conversion formulas
+% - Camera (RPi Camera Module) integration with V4L2 (OpenCV)
+% - ADS1115 ADC I2C communication implementation
+% - DS3231 RTC I2C communication for timekeeping
+%
+% Suggested Images:
+% - Photo of sensor connections to the Raspberry Pi
+% - Screenshot of sensor readings in the GUI
+% - Calibration graphs/charts
+
+\textit{[To be completed upon sensor hardware integration]}
+
+% ============================================================================
+\section{Actuator Integration}
+\label{sec:actuators}
+% ============================================================================
+
+% [TODO: Complete this section when actuator hardware is fully integrated]
+%
+% This section should include:
+% - Peristaltic Pump control via GPIO
+% - Water Heater relay control
+% - Relay Module wiring and safety considerations
+% - Timing algorithms for precise dosing
+% - Safety interlocks and error handling
+%
+% Suggested Images:
+% - Photo of actuator connections
+% - Wiring diagram for relay module
+% - Screenshot of actuator control in action
+
+\textit{[To be completed upon actuator hardware integration]}
+
+% ============================================================================
+\section{System Validation}
+\label{sec:validation}
+% ============================================================================
+
+System validation was performed through a series of tests as summarized in Table~\ref{tab:validation}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{System Validation Results}
+    \label{tab:validation}
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Test} & \textbf{Result} \\
+        \hline
+        Raspberry Pi boot & \checkmark Success \\
+        SSH connectivity (root@10.42.0.196) & \checkmark Success \\
+        LED module loading (\texttt{/dev/led0}) & \checkmark Success \\
+        LED control (ON/OFF) & \checkmark Functional \\
+        Database initialization (10 tables) & \checkmark Success \\
+        ONNX model loading & \checkmark Success \\
+        LeafSense application startup & \checkmark Running \\
+        Sensor readings (mock mode) & \checkmark Recording \\
+        Auto-start on boot (S99leafsense) & \checkmark Working \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{System Metrics}
+
+Table~\ref{tab:metrics} presents the measured system metrics during operation.
+
+\begin{table}[htbp]
+    \centering
+    \caption{System Performance Metrics}
+    \label{tab:metrics}
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Metric} & \textbf{Value} \\
+        \hline
+        RAM Usage & $\approx$60 MB / 1.8 GB (3\%) \\
+        Load Average & 0.23 \\
+        Tested Uptime & 20+ minutes \\
+        Application Binary Size & $\approx$800 KB \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% [IMAGE PLACEHOLDER: System validation screenshot]
+% Suggestion: Include a screenshot of the terminal showing successful
+% boot logs, module loading, and application startup messages.
+
+% ============================================================================
+\section{Difficulties Encountered and Solutions}
+\label{sec:difficulties}
+% ============================================================================
+
+Table~\ref{tab:difficulties} documents the challenges encountered during implementation and their respective solutions.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Implementation Challenges and Solutions}
+    \label{tab:difficulties}
+    \begin{tabular}{|p{4cm}|p{4.5cm}|p{4.5cm}|}
+        \hline
+        \textbf{Problem} & \textbf{Cause} & \textbf{Solution} \\
+        \hline
+        \texttt{ioremap\_nocache} does not exist & API removed in kernel 5.6+ & Replace with \texttt{ioremap} \\
+        \hline
+        Qt5Charts not found & Not included in Buildroot by default & Add \texttt{BR2\_PACKAGE\_QT5CHARTS=y} and recompile \\
+        \hline
+        ONNX model does not load & Incorrect relative path & Copy model to \texttt{/opt/leafsense/} \\
+        \hline
+        DB tables do not exist & DB not initialized & Execute \texttt{sqlite3 /opt/leafsense/leafsense.db < /opt/leafsense/database/schema.sql} \\
+        \hline
+        Pi not found on network & DHCP did not assign IP & Use USB-Ethernet and fixed IP (10.42.0.196) \\
+        \hline
+        Qt platform ``eglfs'' not available & Plugin not compiled & Use \texttt{QT\_QPA\_PLATFORM=linuxfb} \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% ============================================================================
+\section{Future Work}
+\label{sec:future-work}
+% ============================================================================
+
+The following features are planned for future versions:
+
+\begin{enumerate}
+    \item \textbf{Real Sensor Integration} -- Replace mock implementations with functional I2C/1-Wire drivers for actual hardware readings
+    \item \textbf{NTP Synchronization} -- Implement proper network time synchronization for accurate timestamps
+    \item \textbf{Camera-to-ML Pipeline} -- Automate image capture scheduling and correlate images with sensor/actuator data for ML analysis
+    \item \textbf{Web Server} -- Enable remote access via browser interface
+    \item \textbf{Push Notifications} -- Implement alerts via Telegram/Email for critical conditions
+    \item \textbf{Mobile Dashboard} -- Develop Android/iOS companion application
+\end{enumerate}
+
+% ============================================================================
+% END OF IMPLEMENTATION CHAPTER
+% ============================================================================

@@ -381,7 +381,7 @@ tail -f /var/log/leafsense.log
 | `/opt/leafsense/LeafSense` | Application binary |
 | `/opt/leafsense/leafsense_model.onnx` | ML model |
 | `/opt/leafsense/leafsense.db` | SQLite database |
-| `/opt/leafsense/start_leafsense.sh` | Startup script |
+| `/opt/leafsense/start.sh` | Startup script |
 | `/usr/lib/libonnxruntime.so*` | ONNX Runtime libraries |
 | `/lib/modules/6.12.41-v8/led.ko` | LED kernel module |
 | `/etc/init.d/S99leafsense` | Init script |
@@ -479,26 +479,28 @@ cat /sys/class/graphics/fb1/virtual_size
 **Important:** Qt's evdev touchscreen handler requires rotation parameter to match display rotation.
 
 ```bash
-# Environment variable for touch input (rotate=90 for landscape)
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+# Environment variable for touch input (for piscreen,rotate=270)
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 ```
 
 ### A.5 Complete Working Startup Command
 
 ```bash
 #!/bin/sh
-# /opt/leafsense/start_leafsense.sh
+# /opt/leafsense/start.sh
 
 cd /opt/leafsense
 
-# Display on Waveshare LCD (fb1)
-export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+# Display on SPI LCD (fb1)
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
+export QT_QPA_FB_NO_LIBINPUT=1
+export QT_QPA_FB_HIDECURSOR=1
 
-# Touchscreen with 180-degree rotation and inverted X axis
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+# Touchscreen with rotation for piscreen overlay
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 
 # Run application
-exec ./LeafSense -platform linuxfb:fb=/dev/fb1
+exec ./LeafSense
 ```
 
 ### A.6 Auto-Start on Boot
@@ -510,9 +512,10 @@ case "$1" in
     start)
         echo "Starting LeafSense..."
         cd /opt/leafsense
-        export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
-        export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
-        ./LeafSense -platform linuxfb:fb=/dev/fb1 &
+        export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
+        export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+        export QT_QPA_FB_NO_LIBINPUT=1
+        ./LeafSense &
         ;;
     stop)
         killall LeafSense 2>/dev/null
@@ -524,10 +527,10 @@ esac
 
 | Problem | Solution |
 |---------|----------|
-| Black screen | Verify `dtoverlay=waveshare35c` in config.txt and overlay file exists |
+| Black screen | Verify `dtoverlay=piscreen` in config.txt and overlay file exists |
 | Touch not responding | Check `evtest /dev/input/event0` shows touch events |
-| Touch coordinates inverted | Add `rotate=90` or `rotate=270` to EVDEV_TOUCHSCREEN_PARAMETERS |
-| Touch off by 90 degrees | Change rotate value (0, 90, 180, 270) |
+| Touch coordinates inverted | Use `rotate=180:invertx` or other combinations |
+| Touch off by 90 degrees | Change rotate value (0, 90, 180, 270) and add invertx/inverty |
 | Application freezes on touch | Don't use tslib plugin, use evdev with rotation |
 
 ---

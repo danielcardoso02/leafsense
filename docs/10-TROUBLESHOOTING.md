@@ -561,11 +561,11 @@ evtest /dev/input/event0  # Should show ADS7846 Touchscreen
 
 # Start LeafSense with evdev touchscreen handler and rotation
 cd /opt/leafsense
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
-./LeafSense -platform linuxfb:fb=/dev/fb1
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+./LeafSense
 ```
 
-**Key insight:** The `rotate=90` parameter in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` must match the display rotation in config.txt (`dtoverlay=waveshare35c:rotate=90`) for correct touch coordinate mapping.
+**Key insight:** The touch rotation parameter must be calibrated based on your display overlay. For `dtoverlay=piscreen,rotate=270`, use `rotate=180:invertx`.
 
 ### Touchscreen coordinates wrong (touch offset)
 
@@ -574,22 +574,20 @@ Touch registers but in wrong position
 ```
 
 **Solution:**
-The display rotation must match the touch rotation parameter:
+The touch rotation parameter depends on your display overlay:
 
-| config.txt rotate | QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS |
-|-------------------|-------------------------------------|
-| rotate=0          | rotate=0 (or no rotation)           |
-| rotate=90         | rotate=90                  |
-| rotate=180        | rotate=180                          |
-| rotate=270        | rotate=270                          |
+| Display Overlay | QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS |
+|-----------------|-------------------------------------|
+| piscreen,rotate=270 | rotate=180:invertx |
+| waveshare35c,rotate=90 | rotate=90 |
 
 You may also need to add `:invertx` or `:inverty`:
 ```bash
 # If X axis is inverted
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90:invertx"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 
 # If Y axis is inverted  
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90:inverty"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:inverty"
 ```
 
 ### Application freezes when touching screen
@@ -608,10 +606,10 @@ killall LeafSense
 
 # Don't use tslib - use evdev instead
 unset QT_QPA_FB_TSLIB
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 
 # Start app
-./LeafSense -platform linuxfb:fb=/dev/fb1
+cd /opt/leafsense && ./start.sh
 ```
 
 ### Touchscreen frozen / not calibrated

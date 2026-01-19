@@ -110,7 +110,7 @@ leafsense-project/
 - [x] Logging and alerting system
 - [x] Auto-start on Raspberry Pi boot
 - [x] Waveshare 3.5" touchscreen integration (ILI9486 + ADS7846)
-- [x] Touch calibration for Waveshare display (evdev with rotate=90)
+- [x] Touch calibration for display (evdev with rotate=180:invertx)
 - [x] Static IP network configuration
 - [x] SSH remote access via Dropbear
 - [x] Camera driver implementation (OV5647 Pi Camera Module v1)

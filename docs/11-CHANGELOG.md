@@ -1,6 +1,38 @@
 # LeafSense - Changelog and Development History
 
-## Current Version: 1.5.1 (January 11, 2026)
+## Current Version: 1.5.2 (January 19, 2026)
+
+---
+
+## [1.5.2] - 2026-01-19
+
+### 🔧 Touchscreen Configuration Fix
+
+This release fixes the touchscreen calibration for the piscreen display overlay.
+
+### Changed
+
+#### Touchscreen Calibration
+- **Fixed touch mapping**: Changed from `rotate=90` to `rotate=180:invertx`
+- **Updated for piscreen overlay**: Works with `dtoverlay=piscreen,rotate=270`
+- Login/Exit buttons now map correctly
+- Updated startup script (`start.sh`) with correct parameters
+
+#### Updated Documentation
+- `deploy/rootfs-overlay/opt/leafsense/start_leafsense.sh` - New touchscreen config
+- `docs/00-PROJECT-STATUS.md` - Updated calibration info
+- `docs/15-DEMO-GUIDE.md` - Updated all touchscreen references
+- `docs/17-TOUCHSCREEN-CONFIGURATION.md` - Complete rewrite for piscreen overlay
+
+### Configuration
+
+```bash
+# Working touchscreen configuration for piscreen,rotate=270
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
+export QT_QPA_FB_NO_LIBINPUT=1
+export QT_QPA_FB_HIDECURSOR=1
+```
 
 ---
 

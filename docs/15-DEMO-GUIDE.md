@@ -104,11 +104,11 @@ killall LeafSense 2>/dev/null
 # Start LeafSense with correct environment
 cd /opt/leafsense
 env \
-    QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1 \
-    QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins \
-    QT_QPA_FONTDIR=/usr/share/fonts \
-    QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90" \
-    ./LeafSense -platform linuxfb:fb=/dev/fb1 > /var/log/leafsense.log 2>&1 &
+    QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320 \
+    QT_QPA_FB_NO_LIBINPUT=1 \
+    QT_QPA_FB_HIDECURSOR=1 \
+    QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx" \
+    ./LeafSense > /var/log/leafsense.log 2>&1 &
 
 # Verify startup
 sleep 3
@@ -125,7 +125,7 @@ tail -20 /var/log/leafsense.log
 ### Method 3: Using Startup Script
 
 ```bash
-ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
+ssh root@10.42.0.196 'cd /opt/leafsense && ./start.sh > /var/log/leafsense.log 2>&1 &'
 ```
 
 ---
@@ -148,7 +148,7 @@ ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
    - Alert status
 
 **What to observe**:
-- Touch responsiveness (cursor follows pen accurately due to evdev with rotate=90)
+- Touch responsiveness (cursor follows pen accurately due to evdev with rotate=180:invertx)
 - Sensor values updating every ~2 seconds
 - GUI rendering on 480x320 display
 
@@ -341,7 +341,7 @@ SQL
 EOF
 
 # Restart to reload data
-ssh root@10.42.0.196 'killall LeafSense; /opt/leafsense/start_leafsense.sh &'
+ssh root@10.42.0.196 'killall LeafSense; cd /opt/leafsense && ./start.sh > /var/log/leafsense.log 2>&1 &'
 ```
 
 ---
@@ -495,7 +495,7 @@ ssh root@10.42.0.196 'killall LeafSense; /opt/leafsense/start_leafsense.sh &'
 
 **Objective**: Verify touchscreen accuracy
 
-**Calibration**: ✅ Already configured with `rotate=90`
+**Calibration**: ✅ Already configured with `rotate=180:invertx`
 
 **Test**:
 1. Touch each corner of the screen
@@ -574,7 +574,7 @@ poweroff                                           # Shutdown Pi
 
 # === LeafSense CONTROL ===
 killall LeafSense                                  # Stop application
-/opt/leafsense/start_leafsense.sh &                         # Start application
+cd /opt/leafsense && ./start.sh &                  # Start application
 ps aux | grep LeafSense                            # Check if running
 tail -f /var/log/leafsense.log                    # View live logs
 
@@ -677,8 +677,8 @@ ssh root@10.42.0.196 'ps aux | grep QT_QPA_EVDEV'
 ```bash
 # Restart with correct touch parameter
 ssh root@10.42.0.196 'killall LeafSense; cd /opt/leafsense && \
-  QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90" \
-  ./LeafSense -platform linuxfb:fb=/dev/fb1 > /var/log/leafsense.log 2>&1 &'
+  QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx" \
+  ./LeafSense > /var/log/leafsense.log 2>&1 &'
 ```
 
 ### Issue 3: Database locked
@@ -697,7 +697,7 @@ ssh root@10.42.0.196 'killall -9 LeafSense'
 ssh root@10.42.0.196 'rm -f /opt/leafsense/database/leafsense.db-wal'
 
 # Restart
-ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
+ssh root@10.42.0.196 'cd /opt/leafsense && ./start.sh > /var/log/leafsense.log 2>&1 &'
 ```
 
 ### Issue 4: Camera not capturing
