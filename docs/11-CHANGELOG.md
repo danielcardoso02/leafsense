@@ -1,6 +1,47 @@
 # LeafSense - Changelog and Development History
 
-## Current Version: 1.5.2 (January 19, 2026)
+## Current Version: 1.5.3 (January 19, 2026)
+
+---
+
+## [1.5.3] - 2026-01-19
+
+### 🔧 Database Integration & Analytics Improvements
+
+This release fixes ML prediction storage and improves Analytics window data display.
+
+### Added
+
+#### ML Predictions Database Integration
+- **IMG message handler**: Images are now saved to `plant_images` table when captured
+- **PRED message handler**: ML predictions are now saved to `ml_predictions` table
+- **Gallery ML labels**: Analytics gallery now displays ML prediction labels from database
+- **New DataBridge method**: `get_image_prediction()` retrieves ML labels for images
+
+### Changed
+
+#### Analytics Window Improvements
+- **Sensor readings threshold**: Changed from 1 to 5 days for individual readings fallback
+- **Better granularity**: Shows individual sensor readings when < 5 days of data exist
+- **Gallery prediction display**: Shows "Disease (96.7%)" format instead of "Processing..."
+
+### Fixed
+
+#### Master.cpp Data Flow
+- Camera capture now sends `IMG|filename|path` to database daemon
+- ML analysis now sends `PRED|filename|label|confidence` to database daemon
+- Predictions are properly linked to images via foreign key
+
+#### dDatabase.cpp Message Handlers
+- Added `PRED` message type for ML predictions
+- Predictions linked to `plant_images` via filename lookup
+
+### Files Modified
+- `src/middleware/Master.cpp` - Added IMG and PRED message sending
+- `src/middleware/dDatabase.cpp` - Added PRED message handler
+- `src/application/gui/leafsense_data_bridge.cpp` - Added `get_image_prediction()`, fixed threshold
+- `include/application/gui/leafsense_data_bridge.h` - Added method declaration
+- `src/application/gui/analytics_window.cpp` - Gallery loads ML labels from database
 
 ---
 

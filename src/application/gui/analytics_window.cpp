@@ -518,7 +518,19 @@ void AnalyticsWindow::load_gallery_data()
         item.image_id = id++;
         item.filepath = fileInfo.absoluteFilePath();
         item.timestamp = fileInfo.lastModified().toString("yyyy-MM-dd HH:mm:ss");
-        item.prediction_label = "Processing...";  // Will be updated by ML
+        
+        // Try to get ML prediction from database
+        if (data_bridge) {
+            QString prediction = data_bridge->get_image_prediction(fileInfo.fileName());
+            if (!prediction.isEmpty()) {
+                item.prediction_label = prediction;
+            } else {
+                item.prediction_label = "No prediction";
+            }
+        } else {
+            item.prediction_label = "No prediction";
+        }
+        
         item.is_verified = false;
         
         gallery_items.append(item);

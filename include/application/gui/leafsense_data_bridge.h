@@ -176,12 +176,19 @@ public:
     /**
      * @brief Retrieve historical sensor data
      * @param days Number of days/readings to retrieve (default: 30)
-     * @return Vector of daily summaries, or individual readings if < 2 days exist
+     * @return Vector of daily summaries, or individual readings if < 5 days exist
      * 
      * First attempts to use vw_daily_sensor_summary view.
      * Falls back to individual readings if insufficient daily data exists.
      */
     QVector<DailySensorSummary> get_sensor_history(int days = 30);
+    
+    /**
+     * @brief Get ML prediction for a specific image file
+     * @param filename Name of the image file
+     * @return Prediction label (e.g., "Healthy", "Disease"), or empty if not found
+     */
+    QString get_image_prediction(const QString &filename);
 
 signals:
     /* ------------------------------------------------------------------------

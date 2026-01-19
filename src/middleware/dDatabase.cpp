@@ -67,6 +67,15 @@ std::string dDatabase::translateToSQL(std::string rawMessage) {
         // Schema: plant_images (filename, filepath)
         sql << "INSERT INTO plant_images (filename, filepath) VALUES ('"
             << parts[1] << "', '" << parts[2] << "');";
+            
+    } else if (tag == "PRED" && parts.size() >= 4) {
+        // Format: PRED|FILENAME|LABEL|CONFIDENCE
+        // Schema: ml_predictions (image_id, prediction_type, prediction_label, confidence)
+        // Link to plant_images via subquery on filename
+        sql << "INSERT INTO ml_predictions (image_id, prediction_type, prediction_label, confidence) "
+            << "SELECT id, '" << parts[2] << "', '" << parts[2] << "', " << parts[3] 
+            << " FROM plant_images WHERE filename = '" << parts[1] << "' "
+            << "ORDER BY id DESC LIMIT 1;";
     } else {
         std::cerr << "[Daemon] Unknown message format: " << rawMessage << std::endl;
         return "";

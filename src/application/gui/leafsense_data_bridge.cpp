@@ -189,9 +189,9 @@ QVector<DailySensorSummary> LeafSenseDataBridge::get_sensor_history(int days)
 
     qDebug() << "[DataBridge] Daily summary query returned" << res.rows.size() << "rows";
 
-    // If only 1 day of data exists, fall back to individual readings
-    // This is useful during development/testing when not enough historical data exists
-    if (res.rows.size() <= 1) {
+    // If less than 5 days of data exist, fall back to individual readings
+    // This provides better granularity during development/testing
+    if (res.rows.size() < 5) {
         qDebug() << "[DataBridge] Not enough daily data, using individual readings";
 
         QString query = QString(
@@ -237,6 +237,39 @@ QVector<DailySensorSummary> LeafSenseDataBridge::get_sensor_history(int days)
     }
 
     return history;
+}
+
+/* ============================================================================
+ * Image Prediction Retrieval
+ * ============================================================================ */
+
+/**
+ * @brief Gets the ML prediction label for an image file.
+ * @param filename The image filename (not full path).
+ * @return Prediction label string, or empty if not found.
+ * @author Daniel Cardoso, Marco Costa
+ */
+QString LeafSenseDataBridge::get_image_prediction(const QString &filename)
+{
+    QString query = QString(
+        "SELECT p.prediction_label, p.confidence "
+        "FROM ml_predictions p "
+        "JOIN plant_images i ON p.image_id = i.id "
+        "WHERE i.filename = '%1' "
+        "ORDER BY p.predicted_at DESC LIMIT 1;"
+    ).arg(filename);
+    
+    DBResult res = dbReader->read(query.toStdString());
+    
+    if (!res.rows.empty() && res.rows[0].size() >= 2) {
+        QString label = QString::fromStdString(res.rows[0][0]);
+        QString conf = QString::fromStdString(res.rows[0][1]);
+        // Format: "Healthy (95.2%)"
+        double confidence = conf.toDouble() * 100;
+        return QString("%1 (%2%)").arg(label).arg(confidence, 0, 'f', 1);
+    }
+    
+    return QString();
 }
 
 /* ============================================================================

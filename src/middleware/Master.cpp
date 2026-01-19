@@ -154,10 +154,24 @@ void Master::tReadSensorsFunc()
             std::string photoPath = camera->takePhoto();
             
             if (!photoPath.empty()) {
+                // Extract filename from path
+                std::string filename = photoPath.substr(photoPath.find_last_of("/") + 1);
+                
+                // Save image record to database
+                std::stringstream imgMsg;
+                imgMsg << "IMG|" << filename << "|" << photoPath;
+                msgQueue->sendMessage(imgMsg.str());
+                
                 // Run ML inference on captured image
                 MLResult mlResult = mlEngine->analyzeDetailed(photoPath);
                 
-                // Log ML prediction to database
+                // Save ML prediction to database (linked to image)
+                std::stringstream predMsg;
+                predMsg << "PRED|" << filename << "|" << mlResult.class_name 
+                        << "|" << mlResult.confidence;
+                msgQueue->sendMessage(predMsg.str());
+                
+                // Also log for history
                 std::stringstream mlLog;
                 mlLog << "LOG|ML Analysis|" << mlResult.class_name 
                       << "|Confidence: " << (mlResult.confidence * 100) << "%";
