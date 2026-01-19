@@ -266,6 +266,62 @@ The root account is configured with the password ``leafsense'' (\texttt{BR2\_TAR
 \end{itemize}
 
 % ----------------------------------------------------------------------------
+\subsection{Display \& Touchscreen Configuration}
+\label{subsec:display-config}
+% ----------------------------------------------------------------------------
+
+The system uses a 3.5" ILI9486 LCD with ADS7846 resistive touchscreen controller connected via SPI. The display configuration required careful calibration to ensure proper touch mapping.
+
+\subsubsection{Boot Configuration}
+
+The display overlay is configured in \texttt{/boot/config.txt}:
+
+\begin{lstlisting}[language=bash, caption={Display Boot Configuration}]
+# 3.5" ILI9486 LCD with ADS7846 Touchscreen
+dtoverlay=piscreen,speed=16000000,rotate=270
+
+# Framebuffer dimensions
+framebuffer_width=480
+framebuffer_height=320
+\end{lstlisting}
+
+\subsubsection{Qt Touchscreen Integration}
+
+Qt5's evdev touchscreen plugin is used instead of tslib to prevent application freezing during touch events. The touch coordinate transformation is configured via environment variables:
+
+\begin{lstlisting}[language=bash, caption={Qt Touchscreen Environment Configuration}]
+# Display on SPI LCD (fb1)
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
+
+# Touchscreen with rotation matching display overlay
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+
+# Disable libinput to prevent conflicts
+export QT_QPA_FB_NO_LIBINPUT=1
+export QT_QPA_FB_HIDECURSOR=1
+\end{lstlisting}
+
+\textbf{Technical Note:} The touch rotation parameter (\texttt{rotate=180:invertx}) must be calibrated to match the display overlay rotation (\texttt{rotate=270}). Using tslib caused SPI bus contention resulting in application freezes.
+
+\subsubsection{Startup Script}
+
+The application startup script (\texttt{/opt/leafsense/start.sh}) configures the environment and launches LeafSense:
+
+\begin{lstlisting}[language=bash, caption={LeafSense Startup Script}]
+#!/bin/sh
+cd /opt/leafsense
+killall LeafSense 2>/dev/null || true
+sleep 1
+
+exec env \
+    QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320 \
+    QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx" \
+    QT_QPA_FB_HIDECURSOR=1 \
+    QT_QPA_FB_NO_LIBINPUT=1 \
+    ./LeafSense
+\end{lstlisting}
+
+% ----------------------------------------------------------------------------
 \subsection{Final File Structure}
 \label{subsec:file-structure}
 % ----------------------------------------------------------------------------
@@ -520,6 +576,11 @@ System validation was performed through a series of tests as summarized in Table
         LeafSense application startup & \checkmark Running \\
         Sensor readings (mock mode) & \checkmark Recording \\
         Auto-start on boot (S99leafsense) & \checkmark Working \\
+        3.5" LCD display (fb1) & \checkmark Working \\
+        Touchscreen calibration (evdev) & \checkmark Calibrated \\
+        Touch input responsiveness & \checkmark Functional \\
+        ML predictions saved to database & \checkmark Working \\
+        Analytics window data display & \checkmark Working \\
         \hline
     \end{tabular}
 \end{table}
@@ -569,11 +630,17 @@ Table~\ref{tab:difficulties} documents the challenges encountered during impleme
         \hline
         ONNX model does not load & Incorrect relative path & Copy model to \texttt{/opt/leafsense/} \\
         \hline
-        DB tables do not exist & DB not initialized & Execute \texttt{sqlite3 /opt/leafsense/leafsense.db < /opt/leafsense/database/schema.sql} \\
+        DB tables do not exist & DB not initialized & Execute \texttt{sqlite3 leafsense.db < database/schema.sql} \\
         \hline
         Pi not found on network & DHCP did not assign IP & Use USB-Ethernet and fixed IP (10.42.0.196) \\
         \hline
         Qt platform ``eglfs'' not available & Plugin not compiled & Use \texttt{QT\_QPA\_PLATFORM=linuxfb} \\
+        \hline
+        Application freezes on touch & tslib SPI bus contention & Use Qt evdev plugin instead of tslib \\
+        \hline
+        Touch coordinates inverted & Display rotation mismatch & Use \texttt{rotate=180:invertx} in evdev parameters \\
+        \hline
+        ML predictions not saved & Missing database message handler & Added PRED message handler in dDatabase.cpp \\
         \hline
     \end{tabular}
 \end{table}
