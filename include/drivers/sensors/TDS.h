@@ -30,13 +30,17 @@ public:
      * @param a Pointer to ADC driver
      * @param c ADC channel number (0-3)
      */
-    TDS(ADC* a, int c) {}
+    TDS(ADC* a, int c) : adc(a), channel(c) {}
     
     /**
      * @brief Reads current TDS/EC value
      * @return TDS in ppm (parts per million)
      */
     float readSensor() override;
+
+private:
+    ADC* adc;      ///< Pointer to ADC driver
+    int channel;   ///< ADC channel (0-3)
 };
 
 #endif // TDS_H

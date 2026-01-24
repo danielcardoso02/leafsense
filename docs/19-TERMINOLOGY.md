@@ -1,7 +1,7 @@
 # LeafSense - Terminology & Concepts Guide
 
 **Version:** 1.5.1  
-**Last Updated:** January 11, 2026
+**Last Updated:** January 19, 2026
 
 ---
 

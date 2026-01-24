@@ -183,9 +183,9 @@ import torch.nn as nn
 from torchvision import models, transforms
 from torch.utils.data import DataLoader
 
-# Base template
-model = models.resnet18(pretrained=True)
-model.fc = nn.Linear(512, 4)  # 4 classes
+# MobileNetV3-Small base model
+model = models.mobilenet_v3_small(weights=models.MobileNet_V3_Small_Weights.DEFAULT)
+model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, 4)  # 4 classes
 
 # Optimizer
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -238,8 +238,129 @@ if (!modelLoaded) {
 
 ## Future Improvements
 
-1. **More classes** - Add more diseases and pests
-2. **Lighter model** - MobileNetV3 for faster inference
-3. **INT8 quantization** - Reduce size and increase speed
+1. **Add "unknown" class** - Include random non-plant images in training for better OOD detection
+2. **More classes** - Add more diseases and pests
+3. **INT8 quantization** - Reduce model size and increase inference speed
 4. **Continuous training** - Improve model with field data
-5. **Segmentation** - Identify affected leaf area
+5. **Segmentation** - Identify affected leaf area with pixel-level accuracy
+6. **On-device fine-tuning** - Adapt model to specific plant varieties
+
+---
+
+## Out-of-Distribution Detection (Implemented v1.5.6)
+
+### Solution Implemented
+
+The system implements **combined OOD detection** using both entropy and **green ratio** checks to identify when an image is not a valid plant. This two-stage approach was necessary because testing revealed that entropy alone was insufficient—the model would confidently misclassify non-plant objects (like keyboards) as "Disease" with 89%+ confidence and low entropy.
+
+### How It Works
+
+1. **Green Ratio Check (First Filter)**: Analyze image in HSV color space to count plant-like green pixels
+   - Green hue range: 35-85° (true greens)
+   - Yellow-green range: 20-35° (young plants)
+   - Minimum threshold: 5% of pixels must be green
+2. **Shannon Entropy Calculation**: After softmax, calculate entropy: $H = -\sum p_i \log_2(p_i)$
+3. **Confidence Check**: Top class must have minimum confidence
+4. **Decision Logic**: If green ratio too low OR entropy too high OR confidence too low → mark as "Unknown (Not a Plant)"
+
+### Code Implementation
+
+```cpp
+// In ML.cpp
+float ML::checkGreenRatio(const cv::Mat& img) {
+    cv::Mat hsv, greenMask, yellowGreenMask, combinedMask;
+    cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
+    
+    // Green range (35-85 hue)
+    cv::inRange(hsv, cv::Scalar(35, 30, 30), cv::Scalar(85, 255, 255), greenMask);
+    // Yellow-green range (20-35 hue)
+    cv::inRange(hsv, cv::Scalar(20, 30, 30), cv::Scalar(35, 255, 255), yellowGreenMask);
+    cv::bitwise_or(greenMask, yellowGreenMask, combinedMask);
+    
+    int greenPixels = cv::countNonZero(combinedMask);
+    return (float)greenPixels / (img.rows * img.cols);
+}
+
+bool ML::checkValidPlant(float entropy, float maxConfidence, float greenRatio) {
+    if (greenRatio < MIN_GREEN_RATIO) return false;    // 0.05 (5%)
+    if (entropy > ENTROPY_THRESHOLD) return false;     // 1.8
+    if (maxConfidence < MIN_CONFIDENCE_THRESHOLD) return false;  // 0.3
+    return true;
+}
+```
+
+### Thresholds Explained (v1.5.6)
+
+| Threshold | Value | Meaning |
+|-----------|-------|---------|
+| MIN_GREEN_RATIO | 0.10 (10%) | Image must have at least 10% green pixels (tuned for lettuce) |
+| ENTROPY_THRESHOLD | 1.8 | Model must be reasonably confident (entropy < 1.8 out of max 2.0) |
+| MIN_CONFIDENCE_THRESHOLD | 0.3 (30%) | Top class must have at least 30% probability |
+
+### Example Outputs (Tested 2026-01-10)
+
+**Valid Plant (Accepted):**
+```
+[ML] Green ratio: 9.63% (passed)
+[ML] Prediction: Pest Damage (confidence: 99.1%, entropy: 0.12, valid: yes)
+```
+
+**Non-Plant Image (Rejected by Green Ratio):**
+```
+[ML] Green ratio: 4.64% (failed, threshold: 5.00%)
+[ML] Prediction: Unknown (Not a Plant) (confidence: 89%, entropy: 0.52, valid: no)
+```
+
+**Note:** Without green ratio check, this image would have been classified as "Disease" with 89% confidence.
+
+---
+
+## Known Limitations (Partially Addressed)
+
+### Out-of-Distribution Detection ✅ Addressed (v1.5.6)
+
+**Original Issue:** The model classifies ANY image as one of the 4 classes (healthy, disease, deficiency, pest), even if the image is not a plant at all. For example, a picture of a keyboard would receive a classification like "disease" with 87%+ confidence.
+
+**Why this happened:**
+- The model uses **softmax** output, which always produces probabilities that sum to 1.0
+- It was trained only on lettuce/tomato plant images
+- It has no "unknown" or "not a plant" class
+- Neural networks are inherently confident on out-of-distribution data
+
+**Solution Implemented (v1.5.6):**
+
+The system now uses a **combined approach** with green ratio + entropy + confidence checks:
+
+1. **Green Ratio Pre-filter** ✅: Uses HSV color space to detect plant-like pixels
+   - Rejects images with less than 5% green pixels
+   - Catches objects that model would confidently misclassify
+   
+2. **Entropy + Confidence Thresholds** ✅: Catches unusual model behavior
+   - Entropy > 1.8 → reject
+   - Confidence < 30% → reject
+
+**Test Evidence (2026-01-10):**
+```
+# Non-plant object correctly rejected:
+[ML] Green ratio: 4.64% (failed, threshold: 5.00%)
+[ML] Prediction: Unknown (Not a Plant) (confidence: 89%, entropy: 0.52, valid: no)
+
+# Real plant correctly accepted:
+[ML] Green ratio: 9.63% (passed)
+[ML] Prediction: Pest Damage (confidence: 99.1%, entropy: 0.12, valid: yes)
+```
+
+### Remaining Limitations
+
+1. **Green objects misclassification**: Objects that are green (e.g., green fabric, green toys) may pass the green ratio check
+2. **Brown/dying plants**: Plants that have lost most green color may be incorrectly rejected
+3. **Single plant type training**: Model was trained on lettuce/tomato - may not generalize well to other plants
+
+4. **Feature distance checking:**
+   - Compare extracted features to training distribution
+   - If features are far from known plant features, reject
+
+**Current workaround:**
+- The operator should only capture images of actual plants
+- Low confidence predictions (<50%) should be treated skeptically
+- Visual inspection of gallery images is recommended

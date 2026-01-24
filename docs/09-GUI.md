@@ -18,10 +18,11 @@ The LeafSense graphical interface is developed in Qt5 and provides real-time vis
 ### Qt Platform Plugin
 ```bash
 # Environment variables for Waveshare touchscreen
-export QT_QPA_PLATFORM=linuxfb
-export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins
+# CRITICAL: rotate=180:invertx is REQUIRED for correct touch mapping!
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 export QT_QPA_FONTDIR=/usr/share/fonts
-export QT_QPA_MOUSEDRIVER=linuxinput
+export QT_QPA_FB_HIDECURSOR=1
 
 # Launch command
 ./LeafSense -platform linuxfb:fb=/dev/fb1

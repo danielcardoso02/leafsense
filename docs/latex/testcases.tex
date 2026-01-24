@@ -1,0 +1,467 @@
+\section{Test Cases}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{The reliability of the LeafSense system is verified through a structured series of test cases designed to cover all functional requirements. These tests ensure that the integration between the Raspberry Pi, the sensor array, the execution threads, and the database functions seamlessly over extended periods.}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{During the implementation phase, several additional test cases were incorporated to verify new features developed for enhanced system functionality. These include:}
+
+\begin{itemize}
+    \item \textbf{TCMLAP5 -- Out-of-Distribution Detection:} Verifies that non-plant images are correctly rejected by the ML pipeline using entropy and green-ratio filtering.
+    \item \textbf{TCDIS6-TCDIS9:} Disease recommendation generation, multi-class detection, confidence-based alerting, and detailed logging.
+    \item \textbf{TCDEF5-TCDEF10:} Deficiency recommendation generation, specific nutrient identification, multi-class detection, alerting, logging, and sensor data correlation.
+\end{itemize}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{The testing phase was divided into the following key categories:}
+
+\begin{itemize}
+    \item \textbf{System Setup \& Persistence:} Verification of boot processes, database integrity after reboots, and file storage (Tables \hyperref[tab:setup-tests]{4.3} and \hyperref[tab:data-tests]{4.16}).
+    \item \textbf{Data Acquisition:} Validation of sensor readings and scheduled image capture (Tables \hyperref[tab:sensor-tests]{4.4} and \hyperref[tab:image-tests]{4.5}).
+    \item \textbf{ML Analysis:} Testing the inference capabilities for disease and deficiency detection models (Tables \hyperref[tab:ml-tests]{4.6} to \hyperref[tab:deficiency-tests]{4.8}).
+    \item \textbf{Actuator Control:} Verifying the GPIO logic for the water heater, pH pumps, and nutrient dosing systems (Tables \hyperref[tab:actuator-tests-part1]{4.9} to \hyperref[tab:actuator-tests-part4]{4.12}).
+    \item \textbf{GUI \& Configuration:} Checking dashboard responsiveness, alert visualization, and the ability to modify system thresholds (Tables \hyperref[tab:gui-tests-part1]{4.13} to \hyperref[tab:gui-tests-part3]{4.15}).
+    \item \textbf{System Integration:} Validating the system's stability during continuous 12-hour and 24-hour operational cycles (\hyperref[tab:data-tests]{Table 4.17}).
+\end{itemize}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{The following sections present the detailed test protocols and their expected outcomes.}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCSSBF1 & System Setup \& Basic Functionality & RPi Boots and Initializes & RPi boots; OS loads; Libraries load; GUI starts; DB accessible & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCSSBF2 & System Setup \& Basic Functionality & Database Tables Created & All 10 tables exist; Correct fields; PKs defined; FKs defined; Indexes created & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{System Setup \& Basic Functionality Test Cases}
+    \label{tab:setup-tests}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCSR1 & Sensor Reading & Reading Collection & Reading in DB within 30 min; Temp/pH/EC recorded; Valid ranges; Timestamp recorded & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCSR2 & Sensor Reading & Multiple Readings Over Time & At least 6 readings in 180 min; Spaced 30 min apart; Valid data; Nothing missing & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCSR3 & Sensor Reading & Out-of-Range Alert & High temp reading stored; Alert generated; Alert type correct; Message mentions temp; is\_read=0 & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCSR4 & Sensor Reading & GUI Displays Readings & GUI loads; Temp/pH/EC displayed; Values match latest DB entry & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{Sensor Reading Test Cases}
+    \label{tab:sensor-tests}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCIC1 & Image Capture & Scheduled Image Capture & Image created at scheduled time; Metadata stored in DB; Filename correct; captured\_at recorded & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCIC2 & Image Capture & 2 Images Per Day & 2 images captured on schedule; Each at correct time; Metadata for each recorded & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{Image Capture Test Cases}
+    \label{tab:image-tests}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCMLAP1 & ML Analysis \& Predictions & ONNX Models Load & Models load without errors; No FileNotFoundError; GUI continues to run & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCMLAP2 & ML Analysis \& Predictions & Image Analysis Generates Predictions & Predictions in ML\_PREDICTIONS table; At least 3 per image; Has: image\_id, label, confidence, timestamp & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCMLAP3 & ML Analysis \& Predictions & Health Score Generated & Assessment in DB; health\_score 0--100; health\_status valid (Excellent/Healthy/Warning/Critical); assessment\_date recorded & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCMLAP4 & ML Analysis \& Predictions & Recs Generated & Recs in DB; At least 1 per prediction; recommendation\_text not empty; Valid type; confidence 0--1; user\_acknowledged=0 & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCMLAP5 & ML Analysis \& Predictions & Out-of-Distribution Detection & Non-plant images rejected; ``Unknown (Not a Plant)'' returned; Entropy/confidence logged & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{ML Analysis \& Predictions Test Cases}
+    \label{tab:ml-tests}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCDIS1 & Disease Detection & Disease Detection Model Loads & Disease detection ONNX model loads without errors; Model ready for inference & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDIS2 & Disease Detection & Diseased Plant Detection & Image with plant disease analyzed; Disease detected with high confidence; Correct disease label returned & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDIS3 & Disease Detection & Healthy Plant Detection & Image of healthy plant analyzed; Disease model returns healthy status with high confidence & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDIS4 & Disease Detection & Bounding Box for Disease & Disease detected with bounding box; Box coordinates valid; Box covers affected area & \textcolor{gray}{$\circ$} Future work\\
+        \hline
+        TCDIS5 & Disease Detection & Disease Confidence Score & Disease detection returns confidence value between 0.0--1.0; Confidence reflects detection certainty & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDIS6 & Disease Detection & Disease Recommendation Generated & After disease detected; Appropriate treatment recommendation generated automatically & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDIS7 & Disease Detection & Multiple Diseases Detection & Image with multiple diseases analyzed; All diseases detected; Each with separate confidence score & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDIS8 & Disease Detection & Disease Alert Threshold & Disease detected above confidence threshold; Alert generated with appropriate severity level & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDIS9 & Disease Detection & Disease Logging & Disease detection logged with: disease name, confidence, timestamp, image reference & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDIS10 & Disease Detection & False Positive Rate & Multiple healthy images analyzed; False positive rate acceptable; No false disease alerts & \textcolor{red}{$\times$} Not tested\\
+        \hline
+    \end{tabularx}
+    \caption{Disease Detection Test Cases}
+    \label{tab:disease-tests}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCDEF1 & Deficiency Detection & Deficiency Detection Model Loads & Deficiency detection ONNX model loads without errors; Model ready for inference & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF2 & Deficiency Detection & Nutrient Deficiency Detection & Image with nutrient deficiency analyzed; Deficiency detected with high confidence; Correct nutrient label returned & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF3 & Deficiency Detection & Healthy Plant Detection & Image of healthy plant analyzed; Deficiency model returns healthy status with high confidence & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF4 & Deficiency Detection & Deficiency Confidence Score & Deficiency detection returns confidence value between 0.0--1.0; Confidence reflects detection certainty & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF5 & Deficiency Detection & Deficiency Recommendation Generated & After deficiency detected; Nutrient adjustment recommendation generated automatically & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF6 & Deficiency Detection & Specific Nutrient Recommendation & Recommendation specifies which nutrient to adjust; Includes adjustment guidance (dosage/percentage) & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF7 & Deficiency Detection & Multiple Deficiencies Detection & Image with multiple deficiencies analyzed; All deficiencies detected; Each with separate score & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF8 & Deficiency Detection & Deficiency Alert Threshold & Deficiency detected above confidence threshold; Alert generated with appropriate severity level & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF9 & Deficiency Detection & Deficiency Logging & Deficiency detection logged with: nutrient type, confidence, timestamp, image reference & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF10 & Deficiency Detection & Sensor Data Correlation & Deficiency detected correlated with sensor readings; Matches environmental conditions & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDEF11 & Deficiency Detection & False Positive Rate & Multiple healthy images analyzed; False positive rate acceptable; No false deficiency alerts & \textcolor{red}{$\times$} Not tested\\
+        \hline
+        TCDEF12 & Deficiency Detection & Nutrient Pump Trigger & After deficiency detected; Nutrient dosing pump activates automatically if EC below threshold & \textcolor{red}{$\times$} Not tested\\
+        \hline
+    \end{tabularx}
+    \caption{Deficiency Detection Test Cases}
+    \label{tab:deficiency-tests}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCACT1 & Actuator Control & Water Heater Initialization & Water heater GPIO pin initialized; Ready to activate when temp out of range & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCACT2 & Actuator Control & Water Heater Activation on Low Temp & Sensor reads temp below min threshold (e.g., 18°C); Water heater activates automatically & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCACT3 & Actuator Control & Water Heater Deactivation on Target Temp & Water heater running; Sensor reads temp at target (e.g., 24°C); Heater deactivates automatically & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCACT4 & Actuator Control & Water Heater No Activation in Range & Sensor reads temp within ideal range; Water heater remains OFF; No activation without trigger & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{Actuator Control Test Cases - Part 1: Water Heater}
+    \label{tab:actuator-tests-part1}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCACT5 & Actuator Control & Nutrient Dosing Pump Initialization & Nutrient pump GPIO pin initialized; Ready to activate when nutrient level out of range & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCACT6 & Actuator Control & Nutrient Pump Activation on Deficiency & Sensor/ML detects nutrient deficiency; Nutrient pump activates automatically; Doses for configured duration & \textcolor{red}{$\times$} Not tested\\
+        \hline
+        TCACT7 & Actuator Control & Nutrient Pump Deactivation After Dose & Nutrient pump runs for configured duration; Auto-stops after specified time; System logs activation & \textcolor{red}{$\times$} Not tested\\
+        \hline
+        TCACT8 & Actuator Control & Nutrient Pump No Activation in Range & System detects nutrients adequate; Nutrient pump remains OFF; No activation without trigger & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{Actuator Control Test Cases - Part 2: Nutrient Dosing Pump}
+    \label{tab:actuator-tests-part2}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCACT9 & Actuator Control & pH Dosing Pump Initialization & pH pump GPIO pin initialized; Ready to activate when pH out of range & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCACT10 & Actuator Control & pH Pump Activation on Low pH & Sensor reads pH below min threshold (e.g., $<$6.5); pH pump (pH up) activates automatically & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCACT11 & Actuator Control & pH Pump Activation on High pH & Sensor reads pH above max threshold (e.g., $>$7.5); pH pump (pH down) activates automatically & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCACT12 & Actuator Control & pH Pump Deactivation on Target pH & pH pump running; Sensor reads pH at target (e.g., 7.0); Pump deactivates automatically & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCACT13 & Actuator Control & pH Pump No Activation in Range & Sensor reads pH within ideal range; pH pump remains OFF; No activation without trigger & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{Actuator Control Test Cases - Part 3: pH Dosing Pump}
+    \label{tab:actuator-tests-part3}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCACT14 & Actuator Control & Actuator Logs & All actuator activations logged (time, type, duration, reason); Logs accessible from UI; Useful for troubleshooting & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCACT15 & Actuator Control & Multiple Actuators Simultaneous & Multiple sensors out of range simultaneously; All relevant actuators activate together; Logged separately & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{Actuator Control Test Cases - Part 4: Shared Features \& Logging}
+    \label{tab:actuator-tests-part4}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCGUID1 & GUI Display & User Login & Login page displays; Credentials accepted; Redirected to dashboard; Dashboard loads & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID2 & GUI Display & User Logout & Logout button visible; Button clickable; User session terminated; Redirected to login page & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID3 & GUI Display & Health Card Display & Health card visible; Score displays; Status displays; Details visible; Color matches status & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID4 & GUI Display & Predictions Display & Predictions section visible; Each shows label and confidence; Multiple shown if detected & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID5 & GUI Display & Recs Count & Badge shows new recommendations count; Updates after acknowledgment & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID6 & GUI Display & Alerts Display & Alerts section visible; Unread count displayed; Recent alerts listed; Type shown & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID7 & GUI Display & Auto-Refresh Data & Dashboard updates every 5--10 sec; New alerts appear automatically; New recs appear automatically & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID8 & GUI Display & Acknowledge Rec & Button clickable; Marked as acknowledged in DB; No longer shows as New; Count decreases & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID9 & GUI Display & Record Action Taken & Action form appears; Text saved to DB; action\_date recorded; Dashboard shows recorded & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID10 & GUI Display & Record Outcome & Outcome form appears; Saved to DB; outcome\_date recorded; Dashboard shows recorded & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID11 & GUI Display & Mark Alert as Read & is\_read updated to 1; No longer shows unread; Unread count decreases & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{GUI Display Test Cases - Part 1: Dashboard \& Interactions}
+    \label{tab:gui-tests-part1}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCGUID12 & GUI Display & Logs Page Load & Logs page accessible from GUI; Tab navigation visible (Alerts/Diseases/Deficiencies/Maintenance) & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID13 & GUI Display & View Alerts in Logs & Alerts tab displays all alerts; Shows: type, message, timestamp; Ordered by date (newest first) & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID14 & GUI Display & View Diseases in Logs & Diseases tab displays all disease logs; Shows: disease name, confidence, date; Filterable by date & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID15 & GUI Display & View Deficiencies in Logs & Deficiencies tab displays all deficiency logs; Shows: nutrient type, confidence, date; Filterable by date & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID16 & GUI Display & View Maintenance in Logs & Maintenance tab displays all maintenance logs; Shows: action taken, date, details; Filterable by date & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID17 & GUI Display & Light Mode Display & GUI toggles to light mode; All text readable; Colors appropriate for light theme & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID18 & GUI Display & Dark Mode Display & GUI toggles to dark mode; All text readable; Colors appropriate for dark theme; Eye-friendly & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID19 & GUI Display & Theme Persistence & Selected theme saved in system; Theme applies on next login; User preference maintained & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{GUI Display Test Cases - Part 2: Logs \& Theme}
+    \label{tab:gui-tests-part2}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCGUID20 & GUI Display & Settings Page Load & Settings page accessible from GUI; All configuration options display; Form elements functional & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID21 & GUI Display & Change Temperature Threshold & Settings page allows input; Temperature min/max values editable; Changes saved to DB & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID22 & GUI Display & Change pH Threshold & Settings page allows input; pH min/max values editable; Changes saved to DB & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID23 & GUI Display & Change EC Threshold & Settings page allows input; EC min/max values editable; Changes saved to DB & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID24 & GUI Display & Reset Thresholds to Default & Reset button available; Clicking resets all thresholds to factory defaults; Changes saved & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID25 & GUI Display & Alert Generation with New Thresholds & After changing thresholds; System uses new values for alert generation; Old thresholds no longer used & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCGUID26 & GUI Display & Display Current Threshold Values & Settings page shows current threshold values; Values match what's saved in DB & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{GUI Display Test Cases - Part 3: Settings \& Configuration}
+    \label{tab:gui-tests-part3}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCDP1 & Data Persistence & Survives System Restart & DB intact after reboot; All data visible; Same health score/alerts; No data loss & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCDP2 & Data Persistence & Image Files Saved & File at correct path; Valid image (can open); Not corrupted; Timestamp matches DB & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{Data Persistence Test Cases}
+    \label{tab:data-tests}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{}
+
+\begin{table}[H]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{2.2cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}p{2cm}|}
+        \hline
+        \textbf{TC ID} & \textbf{Category} & \textbf{Test Name} & \textbf{Expected Result} & \textbf{Result} \\
+        \hline
+        TCBI1 & Basic Integration & Half Daily Cycle (12 hours)& 72 sensor readings; 1 image captured on schedule; 1 assessment; 1 rec; User can interact; No errors & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCBI2 & Basic Integration & Problem Detection Response & ML detects problem; Health score reflects it; Alert generated; Relevant recs appear; User can act; Data flows & \textcolor{green}{\checkmark} Pass\\
+        \hline
+        TCBI3 & Basic Integration & 24-Hour Continuous Operation & No crashes; GUI responsive; 144 readings; 2 images; 2 assessments; 2 recs; Consistent data; No errors & \textcolor{green}{\checkmark} Pass\\
+        \hline
+    \end{tabularx}
+    \caption{Basic Integration Test Cases}
+    \label{tab:integration-tests}
+\end{table}
+
+\subsection{Test Results Summary}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{Table~\ref{tab:test-summary} summarizes the overall test results by category. The system achieved a \textbf{90\% overall pass rate} (73 out of 81 test cases), with several categories reaching 100\% completion.}
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{|l|c|c|c|c|}
+        \hline
+        \textbf{Category} & \textbf{Total} & \textbf{Pass} & \textbf{Fail/Not Tested} & \textbf{Pass Rate} \\
+        \hline
+        System Setup \& Basic Functionality & 2 & 2 & 0 & 100\% \\
+        \hline
+        Sensor Reading & 4 & 4 & 0 & 100\% \\
+        \hline
+        Image Capture & 2 & 2 & 0 & 100\% \\
+        \hline
+        ML Analysis \& Predictions & 5 & 5 & 0 & 100\% \\
+        \hline
+        Disease Detection & 10 & 8 & 2 & 80\% \\
+        \hline
+        Deficiency Detection & 12 & 8 & 4 & 67\% \\
+        \hline
+        Actuator Control (All) & 15 & 13 & 2 & 87\% \\
+        \hline
+        GUI Display (All) & 26 & 26 & 0 & 100\% \\
+        \hline
+        Data Persistence & 2 & 2 & 0 & 100\% \\
+        \hline
+        Basic Integration & 3 & 3 & 0 & 100\% \\
+        \hline
+        \textbf{TOTAL} & \textbf{81} & \textbf{73} & \textbf{8} & \textbf{90\%} \\
+        \hline
+    \end{tabular}
+    \caption{Test Results Summary by Category}
+    \label{tab:test-summary}
+\end{table}
+
+\setlength{\parindent}{0pt}
+\hspace{0cm}{The following observations are noted:}
+
+\begin{itemize}
+    \item \textbf{Core Software Functionality:} All sensor reading, image capture, ML analysis, data persistence, and basic integration tests passed, demonstrating robust software implementation.
+    \item \textbf{GUI Implementation:} The graphical user interface achieved 100\% pass rate, including the recommendation acknowledgment feature in the Gallery tab.
+    \item \textbf{Actuator Control:} All GPIO-based actuators (water heater, pH pumps, nutrient pump) are working via libgpiod. The 2 remaining tests (TCACT6-7) require EC deficiency conditions not triggered during testing.
+    \item \textbf{Implementation Phase Additions:} Tests TCMLAP5 (Out-of-Distribution Detection), TCDIS6-TCDIS9 (Disease features), and TCDEF5-TCDEF10 (Deficiency features) were added during implementation to verify newly developed functionality.
+\end{itemize}

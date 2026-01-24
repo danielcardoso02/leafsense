@@ -1,6 +1,352 @@
 # LeafSense - Changelog and Development History
 
-## Current Version: 1.5.3 (January 19, 2026)
+## Current Version: 1.6.1 (January 23, 2026)
+
+---
+
+## [1.6.1] - 2026-01-23
+
+### 🔧 Bug Fixes & Terminal Output Cleanup
+
+This release fixes the database query for health score calculation and removes ANSI color codes from terminal logs.
+
+### Fixed
+
+#### Database Query Bug
+- **Table Name Fix**: Changed query from `predictions` to `ml_predictions`
+- **Column Name Fix**: Changed `prediction` to `prediction_label`
+- **Health Score**: Now correctly reads ML predictions from database
+- **File**: `src/application/gui/leafsense_data_bridge.cpp`
+
+#### Terminal Log Cleanup
+- **Removed ANSI Colors**: All sensor driver logs are now plain white
+- **Files Cleaned**:
+  - `src/drivers/sensors/ADC.cpp` - Removed CYAN, YELLOW, RED, RESET
+  - `src/drivers/sensors/Temp.cpp` - Removed GREEN, RESET
+  - `src/drivers/sensors/PH.cpp` - Removed GREEN, YELLOW, RESET
+  - `src/drivers/sensors/TDS.cpp` - Removed GREEN, YELLOW, RESET
+- **Note**: GUI logs remain color-coded (intentional design)
+
+### Verified Working
+| Component | Status |
+|-----------|--------|
+| Terminal logs | ✅ All white (no ANSI escape codes) |
+| Health Score | ✅ Dynamic calculation from sensors + ML |
+| Database query | ✅ Uses correct table `ml_predictions` |
+| GPIO actuators | ✅ Real hardware via libgpiod |
+| Sensors | ✅ Mock mode (real mode ready) |
+
+---
+
+## [1.6.0] - 2026-01-23
+
+### 🔌 I2C & GPIO Hardware Integration
+
+This release implements real hardware support for I2C sensors and GPIO actuators.
+
+### Added
+
+#### I2C ADC Support (ADS1115)
+- **ADC Driver**: Full I2C implementation in `ADC.cpp` using Linux I2C interface
+- **Device Path**: `/dev/i2c-1` at address `0x48`
+- **Auto-fallback**: Mock mode when I2C hardware not available
+- **Visual Logging**: Green/Yellow/Red ANSI color logs for I2C operations
+
+#### pH Sensor I2C Integration
+- **ADC Channel 0**: Reads voltage from analog pH probe
+- **Conversion Formula**: `pH = 7.0 + (1.65 - voltage) * 4.24`
+- **Visual Logs**: `[pH] Channel 0: Voltage=X.XXV, pH=X.XX`
+
+#### TDS Sensor I2C Integration  
+- **ADC Channel 1**: Reads voltage from analog TDS probe
+- **Conversion Formula**: `TDS = voltage * 435.0` (ppm)
+- **Visual Logs**: `[TDS] Channel 1: Voltage=X.XXV, EC=XXXXppm`
+
+#### Heater GPIO Control (libgpiod)
+- **GPIO 26**: Controls water heater relay via libgpiod
+- **Functions**: `gpiod_chip_open_by_name()`, `gpiod_line_set_value()`
+- **Temperature Control**: ON when <18°C, OFF when >24°C (hysteresis)
+- **Visual Logs**: `[Heater] GPIO 26 -> HIGH (ON)` / `LOW (OFF)`
+
+#### System Configuration
+- **i2c-dev module**: Auto-loads at boot via `/etc/modules`
+- **Boot config**: `dtparam=i2c_arm=on`, `dtparam=i2c1=on` in `/boot/config.txt`
+
+### Files Changed
+- `src/drivers/sensors/ADC.cpp` - Full I2C implementation
+- `src/drivers/sensors/ADC.h` - Added I2C members
+- `src/drivers/sensors/PH.cpp` - ADC integration with visual logs
+- `src/drivers/sensors/PH.h` - Added ADC pointer and channel
+- `src/drivers/sensors/TDS.cpp` - ADC integration with visual logs
+- `src/drivers/sensors/TDS.h` - Added ADC pointer and channel
+- `src/drivers/sensors/Temp.cpp` - Mock range 15-25°C for testing
+- `src/drivers/actuators/Heater.cpp` - libgpiod GPIO control
+- `src/drivers/actuators/Heater.h` - libgpiod members
+- `src/CMakeLists.txt` - Added libgpiod linking
+- `docs/00-PROJECT-STATUS.md` - Updated implementation status
+
+### Tested Hardware
+| Component | Status | Notes |
+|-----------|--------|-------|
+| I2C Bus | ✅ Working | `/dev/i2c-1` accessible |
+| ADC Init | ✅ Working | Address 0x48 initialized |
+| GPIO 26 | ✅ Working | Heater ON/OFF verified |
+| pH/TDS I2C | ⏳ Pending | Requires physical ADS1115 |
+
+---
+
+## [1.5.9] - 2026-01-23
+
+### 🎯 TCGUID8 Implementation: Acknowledge Recommendation
+
+This release implements the Acknowledge Recommendation feature in the Gallery tab.
+
+### Added
+
+#### Acknowledge Recommendation Feature
+- **Acknowledge Button**: Green button in Gallery tab to acknowledge ML recommendations
+- **Database Integration**: Sets `user_acknowledged=1` in `ml_recommendations` table
+- **Recommendation Panel**: Side-by-side layout with image (60%) and scrollable recommendation text (40%)
+- **Theme Support**: Recommendation panel respects light/dark theme colors
+
+#### Gallery Tab Improvements
+- **Better Navigation Arrows**: Unicode symbols (◀ ▶) instead of < >
+- **Touch-friendly Scrolling**: Recommendation panel supports swipe/drag scrolling
+- **Responsive Layout**: Image and recommendation displayed side-by-side
+
+### Updated Test Status
+- **Pass Rate**: 80% → 81% (65 → 66 out of 81 tests)
+- **TCGUID8**: Acknowledge Recommendation → ✅ Pass
+
+### Documentation Updated
+- `docs/latex/testcases.tex` - TCGUID8 marked as Pass
+- `docs/TEST-CASES-STATUS.md` - Updated to 81% pass rate (66/81)
+- `docs/latex/results-chapter.tex` - Updated Gallery figure caption
+- `docs/latex/images/gui_analytics_gallery.png` - New screenshot with recommendation panel
+
+---
+
+## [1.5.8] - 2026-01-23
+
+### 📋 Test Case Verification & Documentation Update
+
+This release verifies threshold settings functionality and updates test documentation.
+
+### Verified
+- **TCGUID21-23**: Settings UI threshold spinboxes work correctly
+  - Temperature, pH, and EC thresholds can be modified via Settings dialog
+  - Values are saved to ThemeManager and used by alert generation system
+  - In-memory storage is appropriate for embedded system that boots fresh
+
+### Updated Test Status
+- **Pass Rate**: 77% → 80% (62 → 65 out of 81 tests)
+- **TCGUID21**: Change Temperature Threshold → ✅ Pass
+- **TCGUID22**: Change pH Threshold → ✅ Pass  
+- **TCGUID23**: Change EC Threshold → ✅ Pass
+- **TCDIS4**: Bounding Box → ⚪ Future Work (requires object detection model)
+- **TCGUID8**: Acknowledge Recommendation → ⚪ Future Work (no UI button exists)
+
+### Documentation Updated
+- `docs/latex/testcases.tex` - Updated all test results, added summary table
+- `docs/TEST-CASES-STATUS.md` - Updated to 80% pass rate (65/81)
+- `docs/00-PROJECT-STATUS.md` - Updated test summary and categories
+
+---
+
+## [1.5.7] - 2026-01-22
+
+### 🔔 Mark Alerts as Read & Test Evidence Collection
+
+This release adds the mark-alerts-as-read feature and comprehensive test evidence collection.
+
+### Added
+
+#### Mark Alerts as Read Feature
+- **`mark_alerts_as_read()`**: New method in LeafSenseDataBridge to update all alerts to is_read=1
+- **`has_unread_alerts()`**: Query to check for unread alerts
+- **GUI integration**: Both status bullets (dashboard and alerts display) reset to green when Logs are viewed
+- **Database trigger**: Clicking Logs button marks all alerts as read
+
+#### Test Evidence Collection (17 Screenshots)
+Comprehensive test evidence gathered for 77% pass rate (62/81 tests):
+- TCSR2: 7,300+ sensor readings over 3+ days
+- TCMLAP5: OOD detection (2 images rejected as "Not a Plant")
+- TCDIS2: Real lettuce classified (99.74% confidence)
+- TCGUID11: Mark alerts as read (14/15 marked)
+- TCBI1/TCBI3: Continuous operation (36+ images, no crashes)
+- Hardware validation: RPi4, GPIO, ILI9486, ADS7846
+
+#### Updated Documentation Images
+- `ml_captured_plant.jpg`: Real lettuce leaf captured by OV5647 camera
+- `gui_analytics_gallery.png`: Remote framebuffer capture with lettuce gallery
+
+### Files Modified
+- `src/application/gui/mainwindow.cpp` - Status bullet initialization, mark-as-read on Logs click
+- `src/application/gui/alerts_display.cpp` - Accept severity parameter for color setting
+- `src/application/gui/leafsense_data_bridge.cpp` - mark_alerts_as_read(), has_unread_alerts()
+- `include/application/gui/leafsense_data_bridge.h` - New method declarations
+- `include/application/gui/alerts_display.h` - Updated update_alerts signature
+- `docs/latex/implementation-chapter.tex` - Remote debugging section
+- `docs/latex/results-chapter.tex` - Updated OOD detection with real lettuce evidence
+- `docs/TEST-CASES-STATUS.md` - Updated to 77% pass rate (62/81)
+- `docs/00-PROJECT-STATUS.md` - Updated test summary
+
+---
+
+## [1.5.6] - 2026-01-22
+
+### 🎨 Green Ratio OOD Detection & Gallery Improvements
+
+This release enhances the OOD detection with color-based analysis and improves gallery navigation responsiveness.
+
+### Added
+
+#### Green Pixel Ratio Detection
+- **`checkGreenRatio()` function**: Analyzes image for green/plant-like colors using HSV color space
+- **Color-based OOD**: Rejects images with insufficient green content (< 5%)
+- **Combined OOD check**: Now uses entropy + confidence + green ratio
+
+#### Gallery Navigation Improvements
+- **Larger touch targets**: Navigation buttons increased from 40x30 to 50x40 pixels
+- **Auto-repeat enabled**: Hold button to scroll through images quickly
+- **UI responsiveness**: Added processEvents() to prevent touch event sticking
+
+### Technical Details
+
+| Threshold | Value | Description |
+|-----------|-------|-------------|
+| ENTROPY_THRESHOLD | 1.8 | Maximum allowed entropy (relaxed from 1.2) |
+| MIN_CONFIDENCE_THRESHOLD | 0.3 | Minimum top-class probability (relaxed from 0.4) |
+| MIN_GREEN_RATIO | 0.10 | Minimum green pixel ratio (10%, tuned for lettuce) |
+
+### Test Evidence (January 22, 2026)
+
+**Non-plant rejection (working):**
+```
+[ML] Green pixel ratio: 4.64388%
+[ML] Insufficient green pixels (4.64388% < 5%) - likely non-plant image
+[ML] Prediction: Unknown (Not a Plant) (confidence: 89.07%, entropy: 0.50, valid: no)
+```
+
+**Plant acceptance (working):**
+```
+[ML] Green pixel ratio: 9.62956%
+[ML] Prediction: Pest Damage (confidence: 99.11%, entropy: 0.07, valid: yes)
+```
+
+### Files Modified
+- `src/application/ml/ML.cpp` - Added checkGreenRatio() with HSV color detection
+- `include/application/ml/ML.h` - Added MIN_GREEN_RATIO threshold, updated checkValidPlant signature
+- `src/application/gui/analytics_window.cpp` - Improved gallery button size and responsiveness
+
+### Touchscreen Configuration Fix
+- **Documented correct parameters**: `rotate=180:invertx` is REQUIRED for Waveshare 3.5" LCD
+- Updated `/etc/profile.d/leafsense-qt.sh` on target device
+- Updated `deploy/rootfs-overlay/etc/profile.d/leafsense-qt.sh`
+- Updated all documentation (17-TOUCHSCREEN-CONFIGURATION.md, 09-GUI.md, etc.)
+
+**Correct touchscreen command:**
+```bash
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+./LeafSense -platform linuxfb:fb=/dev/fb1
+```
+
+---
+
+## [1.5.5] - 2026-01-22
+
+### 🔍 Out-of-Distribution Detection for ML
+
+This release adds entropy-based out-of-distribution (OOD) detection to the ML pipeline, allowing the system to identify and reject images that are not valid plants. This prevents false predictions on random objects like keyboards, books, or other non-plant images.
+
+### Added
+
+#### Entropy-Based OOD Detection
+- **`calculateEntropy()` function**: Calculates Shannon entropy of probability distribution
+- **`checkValidPlant()` function**: Determines if image is a valid plant based on entropy and confidence
+- **New MLResult fields**: Added `isValidPlant` (bool) and `entropy` (float) to inference results
+- **Configurable thresholds**: `ENTROPY_THRESHOLD=1.2`, `MIN_CONFIDENCE_THRESHOLD=0.4`
+
+#### OOD Integration in Master Controller
+- **Automatic rejection**: Non-plant images are logged as "Unknown (Not a Plant)"
+- **Skip recommendations**: System skips treatment recommendations for rejected images
+- **Detailed logging**: OOD events are logged with entropy and confidence values
+
+### Technical Details
+
+| Threshold | Value | Description |
+|-----------|-------|-------------|
+| ENTROPY_THRESHOLD | 1.2 | Maximum allowed entropy (max for 4 classes = 2.0) |
+| MIN_CONFIDENCE_THRESHOLD | 0.4 | Minimum top-class probability required |
+
+### Files Modified
+- `src/application/ml/ML.cpp` - Added calculateEntropy(), checkValidPlant(), OOD detection in inference
+- `include/application/ml/ML.h` - Added new fields and method declarations
+- `src/middleware/Master.cpp` - Added OOD handling, skip processing for rejected images
+- `docs/03-MACHINE-LEARNING.md` - Documented OOD detection implementation
+
+### How It Works
+1. After softmax, calculate entropy: H = -Σ(p × log₂(p))
+2. If entropy > 1.2 OR confidence < 40%: mark as invalid
+3. System logs "Unknown (Not a Plant)" and skips recommendations
+
+### Test Evidence (January 22, 2026)
+Captured from Raspberry Pi 4 (10.42.0.196):
+```
+[ML] Prediction: Pest Damage (confidence: 91.3475%, entropy: 0.443822, valid: yes)
+```
+- **Entropy 0.44** (well below 1.2 threshold) confirms high model certainty
+- **Confidence 91.3%** (well above 40% threshold) confirms valid plant detection
+- For non-plant images, entropy would approach 2.0 (maximum for 4-class uniform distribution)
+
+---
+
+## [1.5.4] - 2026-01-22
+
+### 🧠 ML Recommendation & Enhanced Logging System
+
+This release adds intelligent treatment recommendations based on ML predictions with sensor correlation, and improves confidence logging for all classification classes.
+
+### Added
+
+#### ML Recommendation Generation System
+- **`generateMLRecommendation()` function**: Generates context-aware treatment recommendations
+- **Sensor-ML correlation**: Recommendations consider EC and pH values for nutrient deficiencies
+- **Database integration**: Recommendations stored in `ml_recommendations` table via `REC` message
+- **Treatment guidance**: Specific recommendations for diseases, pests, and nutrient deficiencies
+
+#### Multi-Class Confidence Logging
+- **All 4 classes logged**: Now logs confidence for disease, deficiency, healthy, and pest classes
+- **Complete ML output visibility**: Users can see full probability distribution per prediction
+- **Enhanced debugging**: Better insight into model decision-making process
+
+#### Confidence Threshold Alerting
+- **70% threshold alert**: High-confidence predictions (>70%) trigger alert notifications
+- **Non-healthy condition alerts**: Alerts for disease, pest, and deficiency when confidence is high
+- **Proactive monitoring**: System actively notifies of potential plant health issues
+
+#### Specific Disease/Deficiency Logging
+- **Disease type logging**: Logs specific disease detection with timestamp and image path
+- **Deficiency logging with EC**: Logs nutrient deficiency with current EC value correlation
+- **Timestamped entries**: All entries include ISO 8601 formatted timestamps
+
+### Files Modified
+- `src/middleware/Master.cpp` - Added generateMLRecommendation(), enhanced logging
+- `include/middleware/Master.h` - Added function declaration
+- `src/middleware/dDatabase.cpp` - Added REC message handler for recommendations
+
+### Test Coverage Improvements
+- **TCDIS6**: Treatment recommendation for disease - ✅ PASS
+- **TCDIS7**: Multi-class confidence output - ✅ PASS
+- **TCDIS8**: Confidence threshold alert - ✅ PASS
+- **TCDIS9**: Disease type logging - ✅ PASS
+- **TCDEF5**: Recommendation generation for deficiency - ✅ PASS
+- **TCDEF6**: Specific nutrient recommendation - ✅ PASS
+- **TCDEF7**: Multi-class confidence output - ✅ PASS
+- **TCDEF8**: Deficiency threshold alert - ✅ PASS
+- **TCDEF9**: Deficiency type logging - ✅ PASS
+- **TCDEF10**: Sensor-ML correlation for deficiency - ✅ PASS
+- **Test pass rate**: Improved from 54% to 65% (43 → 52 tests)
 
 ---
 

@@ -245,6 +245,10 @@ void MainWindow::apply_theme()
         QString("color: %1;").arg(colors.text_secondary.name()));
     greeting_label->setStyleSheet(
         QString("color: %1;").arg(colors.text_secondary.name()));
+    
+    // Initialize status indicator to green (healthy) by default
+    status_indicator->setStyleSheet(
+        QString("color: %1; font-weight: bold;").arg(colors.status_healthy.name()));
 
     // Note: Button styling is handled by ThemeManager global stylesheet
 
@@ -344,8 +348,11 @@ void MainWindow::on_alert_received(const SystemAlert &alert)
       * @brief Slot to handle received system alerts.
       * @param alert Latest system alert
       */
-    // Update the alerts widget
-    alerts_display->update_alerts();
+    // Update the alerts widget with severity and message
+    QString alertMessage = (alert.severity == PlantHealthStatus::HEALTHY) 
+        ? "System OK" 
+        : alert.title + ": " + alert.message;
+    alerts_display->update_alerts(alert.severity, alertMessage);
 
     const ThemeColors &c = theme_mgr.get_colors();
 
@@ -457,8 +464,23 @@ void MainWindow::on_info_button_clicked()
 void MainWindow::on_logs_button_clicked()
 {
      /**
-      * @brief Opens the logs window dialog.
+      * @brief Opens the logs window dialog and marks alerts as read.
       */
+    // Mark all alerts as read when user views logs
+    if (data_bridge) {
+        data_bridge->mark_alerts_as_read();
+        
+        // Reset both status indicators to green (healthy)
+        const ThemeColors &c = theme_mgr.get_colors();
+        status_indicator->setStyleSheet(
+            QString("color: %1; font-weight: bold;").arg(c.status_healthy.name()));
+        alerts_display->update_alerts(PlantHealthStatus::HEALTHY, "System OK");
+        
+        // Reset logs button style
+        logs_btn->setStyleSheet(theme_mgr.get_button_stylesheet(false));
+        logs_btn->setText("Logs");
+    }
+    
     LogsWindow w(current_plant.name, this);
     w.exec();
 }

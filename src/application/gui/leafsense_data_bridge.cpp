@@ -158,15 +158,89 @@ SystemAlert LeafSenseDataBridge::get_latest_alert()
 }
 
 /**
- * @brief Retrieves the latest health assessment (mock/ML).
+ * @brief Retrieves the latest health assessment based on sensor data and ML predictions.
  * @return HealthAssessment struct.
  * @author Daniel Cardoso, Marco Costa
+ * 
+ * Health score calculation:
+ * - Base score: 100
+ * - Sensor penalties: pH out of range (-10 to -30), Temp out of range (-10 to -20), EC out of range (-5 to -15)
+ * - ML penalties: Disease/Pest detected (-30), Deficiency detected (-20)
  */
 HealthAssessment LeafSenseDataBridge::get_health_assessment()
 {
-    // TODO: Implement ML-based health assessment retrieval
-    // Currently returns mock data
-    return {95, PlantHealthStatus::HEALTHY, "None"};
+    int score = 100;
+    PlantHealthStatus status = PlantHealthStatus::HEALTHY;
+    QString issue = "None";
+
+    // Get current sensor data
+    SensorData sensors = get_sensor_data();
+    
+    if (sensors.is_valid) {
+        // pH assessment (optimal range: 5.5-6.5 for hydroponics)
+        if (sensors.ph < 5.0 || sensors.ph > 7.5) {
+            score -= 30;  // Severe
+            issue = "pH Critical";
+        } else if (sensors.ph < 5.5 || sensors.ph > 6.5) {
+            score -= 10;  // Warning
+            if (issue == "None") issue = "pH Warning";
+        }
+        
+        // Temperature assessment (optimal range: 18-24°C)
+        if (sensors.temperature < 15.0 || sensors.temperature > 30.0) {
+            score -= 20;  // Severe
+            if (issue == "None") issue = "Temp Critical";
+        } else if (sensors.temperature < 18.0 || sensors.temperature > 24.0) {
+            score -= 10;  // Warning
+            if (issue == "None") issue = "Temp Warning";
+        }
+        
+        // EC assessment (optimal range: 1000-1800 ppm)
+        if (sensors.ec < 500 || sensors.ec > 2500) {
+            score -= 15;  // Severe
+            if (issue == "None") issue = "EC Critical";
+        } else if (sensors.ec < 1000 || sensors.ec > 1800) {
+            score -= 5;  // Warning
+            if (issue == "None") issue = "EC Warning";
+        }
+    }
+    
+    // Check latest ML prediction from database
+    DBResult mlRes = dbReader->read(
+        "SELECT prediction_label, confidence FROM ml_predictions "
+        "ORDER BY id DESC LIMIT 1;");
+    
+    if (!mlRes.rows.empty()) {
+        QString prediction = QString::fromStdString(mlRes.rows[0][0]);
+        float confidence = std::stof(mlRes.rows[0][1]) / 100.0f; // confidence is stored as percentage
+        
+        // Apply ML-based penalties
+        if (prediction == "Disease" && confidence > 0.7) {
+            score -= 30;
+            issue = "Disease Detected";
+        } else if (prediction == "Pest Damage" && confidence > 0.7) {
+            score -= 30;
+            issue = "Pest Damage";
+        } else if (prediction == "Nutrient Deficiency" && confidence > 0.7) {
+            score -= 20;
+            issue = "Nutrient Deficiency";
+        }
+    }
+    
+    // Clamp score to 0-100
+    if (score < 0) score = 0;
+    if (score > 100) score = 100;
+    
+    // Determine status based on score
+    if (score >= 80) {
+        status = PlantHealthStatus::HEALTHY;
+    } else if (score >= 60) {
+        status = PlantHealthStatus::WARNING;
+    } else {
+        status = PlantHealthStatus::CRITICAL;
+    }
+    
+    return {score, status, issue};
 }
 
 /* ============================================================================
@@ -272,9 +346,111 @@ QString LeafSenseDataBridge::get_image_prediction(const QString &filename)
     return QString();
 }
 
+/**
+ * @brief Gets the ML recommendation text for an image.
+ * @param filename Name of the image file
+ * @return Recommendation text, or empty string if not found.
+ * @author Daniel Cardoso, Marco Costa
+ */
+QString LeafSenseDataBridge::get_image_recommendation(const QString &filename)
+{
+    QString query = QString(
+        "SELECT mr.recommendation_text "
+        "FROM ml_recommendations mr "
+        "JOIN ml_predictions mp ON mr.prediction_id = mp.id "
+        "JOIN plant_images pi ON mp.image_id = pi.id "
+        "WHERE pi.filename = '%1' "
+        "ORDER BY mr.generated_at DESC LIMIT 1;"
+    ).arg(filename);
+    
+    DBResult res = dbReader->read(query.toStdString());
+    
+    if (!res.rows.empty() && !res.rows[0].empty()) {
+        return QString::fromStdString(res.rows[0][0]);
+    }
+    
+    return QString();
+}
+
 /* ============================================================================
  * Utility Methods
  * ============================================================================ */
+
+/**
+ * @brief Marks all alerts as read in the database.
+ * @return true if operation succeeded.
+ * @author Daniel Cardoso, Marco Costa
+ */
+bool LeafSenseDataBridge::mark_alerts_as_read()
+{
+    bool success = dbReader->execute("UPDATE alerts SET is_read = 1 WHERE is_read = 0;");
+    if (success) {
+        qDebug() << "[DataBridge] All alerts marked as read";
+    }
+    return success;
+}
+
+/**
+ * @brief Checks if there are any unread alerts.
+ * @return true if unread alerts exist.
+ * @author Daniel Cardoso, Marco Costa
+ */
+bool LeafSenseDataBridge::has_unread_alerts()
+{
+    DBResult res = dbReader->read("SELECT COUNT(*) FROM alerts WHERE is_read = 0;");
+    if (!res.rows.empty() && !res.rows[0].empty()) {
+        return std::stoi(res.rows[0][0]) > 0;
+    }
+    return false;
+}
+
+/**
+ * @brief Acknowledges the recommendation for a specific image file.
+ * @param filename Name of the image file
+ * @return true if operation succeeded.
+ * @author Daniel Cardoso, Marco Costa
+ */
+bool LeafSenseDataBridge::acknowledge_recommendation(const QString &filename)
+{
+    // Update ml_recommendations.user_acknowledged = 1 for this image
+    // Join through ml_predictions -> plant_images to find by filename
+    QString sql = QString(
+        "UPDATE ml_recommendations SET user_acknowledged = 1 "
+        "WHERE prediction_id IN ("
+        "  SELECT mp.id FROM ml_predictions mp "
+        "  JOIN plant_images pi ON mp.image_id = pi.id "
+        "  WHERE pi.filename = '%1'"
+        ");"
+    ).arg(filename);
+    
+    bool success = dbReader->execute(sql.toStdString());
+    if (success) {
+        qDebug() << "[DataBridge] Recommendation acknowledged for:" << filename;
+    }
+    return success;
+}
+
+/**
+ * @brief Checks if recommendation for an image is acknowledged.
+ * @param filename Name of the image file
+ * @return true if recommendation is acknowledged.
+ * @author Daniel Cardoso, Marco Costa
+ */
+bool LeafSenseDataBridge::is_recommendation_acknowledged(const QString &filename)
+{
+    QString sql = QString(
+        "SELECT COALESCE(MAX(user_acknowledged), 0) FROM ml_recommendations mr "
+        "JOIN ml_predictions mp ON mr.prediction_id = mp.id "
+        "JOIN plant_images pi ON mp.image_id = pi.id "
+        "WHERE pi.filename = '%1';"
+    ).arg(filename);
+    
+    DBResult res = dbReader->read(sql.toStdString());
+    if (!res.rows.empty() && !res.rows[0].empty()) {
+        return std::stoi(res.rows[0][0]) > 0;
+    }
+    return false;
+}
 
 /**
  * @brief Gets the current UTC time as a string.

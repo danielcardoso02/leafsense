@@ -481,6 +481,53 @@ cv::resize(image, resized, cv::Size(224, 224));
 std::vector<int64_t> input_shape = {1, 3, 224, 224};
 ```
 
+### Non-plant images incorrectly classified
+```
+[ML] Prediction: Disease (confidence: 89%, entropy: 0.52, valid: yes)
+# But the image is not a plant!
+```
+
+**Understanding:** This happens when the green ratio check passes but the model confidently misclassifies a green object.
+
+**OOD Thresholds (v1.5.6):**
+| Threshold | Value | Meaning |
+|-----------|-------|---------|
+| MIN_GREEN_RATIO | 10% | Image must have 10% green pixels (lettuce) |
+| ENTROPY_THRESHOLD | 1.8 | Entropy must be below 1.8 |
+| MIN_CONFIDENCE | 30% | Top class must exceed 30% |
+
+**To diagnose:**
+```bash
+# Check ML log output
+journalctl -u leafsense | grep -E "Green|entropy|valid"
+
+# Expected for real plant:
+[ML] Green pixel ratio: 9.63%
+[ML] Prediction: Pest Damage (confidence: 99%, entropy: 0.12, valid: yes)
+
+# Expected for non-plant:
+[ML] Insufficient green pixels (4.64% < 5%) - likely non-plant image
+[ML] Prediction: Unknown (Not a Plant) (confidence: 89%, entropy: 0.52, valid: no)
+```
+
+**If green objects are being misclassified:**
+- The green ratio check can only detect non-green objects
+- Green objects (green fabric, green toys) may pass the check
+- Consider training the model with an "Unknown" class for production use
+
+### Valid plants being rejected as OOD
+```
+[ML] Insufficient green pixels - likely non-plant image
+# But it IS a plant!
+```
+
+**Cause:** The plant may have insufficient green color (brown/dying, very young, or unusual lighting).
+
+**Solutions:**
+1. Lower the threshold in ML.h: `MIN_GREEN_RATIO = 0.03f` (3%)
+2. Adjust HSV hue ranges in checkGreenRatio() to include brown (0-20°)
+3. Ensure good lighting conditions for camera
+
 ---
 
 ## Touchscreen Problems

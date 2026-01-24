@@ -5,12 +5,15 @@
 
 #include "../include/application/gui/logs_window.h"
 #include "../include/application/gui/theme/theme_manager.h"
+#include "middleware/dbManager.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QScreen>
 #include <QFrame>
 #include <QScroller>
+#include <QCoreApplication>
+#include <QDebug>
 
 /* ============================================================================
  * Constructor / Destructor
@@ -143,23 +146,77 @@ void LogsWindow::apply_theme()
  * ============================================================================ */
 
 /**
- * @brief Loads log entries from the database (currently mock data).
+ * @brief Loads log entries from the database.
  * @author Daniel Cardoso, Marco Costa
  */
 void LogsWindow::load_logs()
 {
     all_logs.clear();
     
-    // TODO: Load from database (logs table)
-    // Currently using mock data for demonstration
+    // Open database connection
+    QString dbPath = QCoreApplication::applicationDirPath() + "/leafsense.db";
+    dbManager db(dbPath.toStdString());
     
-    all_logs.append({"2025-11-02 20:15:00 UTC", "Alert", "pH too high", "Current pH: 8.2 (Ideal: 6.5-7.5)"});
-    all_logs.append({"2025-11-02 18:30:00 UTC", "Alert", "Temperature warning", "Current Temp: 26.5C (Ideal: 20-25C)"});
-    all_logs.append({"2025-11-01 14:20:00 UTC", "Alert", "EC low alert", "Current EC: 1200 ppm"});
-    all_logs.append({"2025-11-01 10:00:00 UTC", "Disease", "No diseases detected", "Plant health check: All parameters normal"});
-    all_logs.append({"2025-10-31 15:30:00 UTC", "Disease", "Minor leaf spot", "Location: Lower leaves"});
-    all_logs.append({"2025-11-02 16:00:00 UTC", "Deficiency", "Nitrogen deficiency", "Symptoms: Yellowing"});
-    all_logs.append({"2025-11-02 22:00:00 UTC", "Maintenance", "Nutrient dosing", "Amount: 50ml"});
+    // Load from logs table - maps log_type to our display categories
+    // Database log_type: 'Disease', 'Deficiency', 'Maintenance', 'ML Analysis'
+    // We map 'ML Analysis' to appropriate category based on content
+    DBResult res = db.read(
+        "SELECT timestamp, log_type, message, details FROM logs "
+        "ORDER BY timestamp DESC LIMIT 100;");
+    
+    qDebug() << "[LogsWindow] Loaded" << res.rows.size() << "log entries";
+    
+    for (const auto& row : res.rows) {
+        if (row.size() >= 4) {
+            LogEntry entry;
+            entry.timestamp = QString::fromStdString(row[0]);
+            entry.message = QString::fromStdString(row[2]);
+            entry.details = QString::fromStdString(row[3]);
+            
+            // Map log_type to display category
+            QString dbType = QString::fromStdString(row[1]);
+            if (dbType == "Disease" || dbType == "Pest Damage") {
+                entry.type = "Disease";
+            } else if (dbType == "Deficiency") {
+                entry.type = "Deficiency";
+            } else if (dbType == "Maintenance") {
+                entry.type = "Maintenance";
+            } else if (dbType == "ML Analysis") {
+                // Check message content to categorize
+                if (entry.message.contains("Disease") || entry.message.contains("Pest")) {
+                    entry.type = "Disease";
+                } else if (entry.message.contains("Deficiency")) {
+                    entry.type = "Deficiency";
+                } else {
+                    entry.type = "Maintenance";  // Healthy checks go to maintenance
+                }
+            } else {
+                entry.type = "Maintenance";  // Default
+            }
+            
+            all_logs.append(entry);
+        }
+    }
+    
+    // Also load alerts (they go to Alerts tab)
+    DBResult alertRes = db.read(
+        "SELECT timestamp, type, message, details FROM alerts "
+        "ORDER BY timestamp DESC LIMIT 50;");
+    
+    qDebug() << "[LogsWindow] Loaded" << alertRes.rows.size() << "alert entries";
+    
+    for (const auto& row : alertRes.rows) {
+        if (row.size() >= 3) {
+            LogEntry entry;
+            entry.timestamp = QString::fromStdString(row[0]);
+            entry.type = "Alert";
+            entry.message = QString::fromStdString(row[2]);
+            entry.details = row.size() >= 4 ? QString::fromStdString(row[3]) : "";
+            all_logs.append(entry);
+        }
+    }
+    
+    qDebug() << "[LogsWindow] Total entries:" << all_logs.size();
 }
 
 /* ============================================================================

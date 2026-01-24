@@ -158,6 +158,32 @@ public:
     SystemAlert get_latest_alert();
     
     /**
+     * @brief Mark all alerts as read in the database
+     * @return true if operation succeeded
+     */
+    bool mark_alerts_as_read();
+    
+    /**
+     * @brief Check if there are any unread alerts
+     * @return true if unread alerts exist
+     */
+    bool has_unread_alerts();
+    
+    /**
+     * @brief Acknowledge recommendation for a specific image
+     * @param filename Name of the image file
+     * @return true if operation succeeded
+     */
+    bool acknowledge_recommendation(const QString &filename);
+    
+    /**
+     * @brief Check if recommendation for an image is acknowledged
+     * @param filename Name of the image file
+     * @return true if recommendation is acknowledged
+     */
+    bool is_recommendation_acknowledged(const QString &filename);
+    
+    /**
      * @brief Get system status string
      * @return Status description
      */
@@ -189,6 +215,13 @@ public:
      * @return Prediction label (e.g., "Healthy", "Disease"), or empty if not found
      */
     QString get_image_prediction(const QString &filename);
+    
+    /**
+     * @brief Get ML recommendation text for a specific image file
+     * @param filename Name of the image file
+     * @return Recommendation text, or empty if not found
+     */
+    QString get_image_recommendation(const QString &filename);
 
 signals:
     /* ------------------------------------------------------------------------

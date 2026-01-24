@@ -76,6 +76,26 @@ std::string dDatabase::translateToSQL(std::string rawMessage) {
             << "SELECT id, '" << parts[2] << "', '" << parts[2] << "', " << parts[3] 
             << " FROM plant_images WHERE filename = '" << parts[1] << "' "
             << "ORDER BY id DESC LIMIT 1;";
+            
+    } else if (tag == "REC" && parts.size() >= 5) {
+        // Format: REC|FILENAME|TYPE|TEXT|CONFIDENCE
+        // Schema: ml_recommendations (prediction_id, recommendation_type, recommendation_text, confidence)
+        // Link to ml_predictions via filename lookup -> image_id lookup
+        
+        // Escape single quotes in recommendation text
+        std::string recText = parts[3];
+        size_t pos = 0;
+        while ((pos = recText.find("'", pos)) != std::string::npos) {
+            recText.replace(pos, 1, "''");
+            pos += 2;
+        }
+        
+        sql << "INSERT INTO ml_recommendations (prediction_id, recommendation_type, recommendation_text, confidence) "
+            << "SELECT mp.id, '" << parts[2] << "', '" << recText << "', " << parts[4] << " "
+            << "FROM ml_predictions mp "
+            << "JOIN plant_images pi ON mp.image_id = pi.id "
+            << "WHERE pi.filename = '" << parts[1] << "' "
+            << "ORDER BY mp.id DESC LIMIT 1;";
     } else {
         std::cerr << "[Daemon] Unknown message format: " << rawMessage << std::endl;
         return "";

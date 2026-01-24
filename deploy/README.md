@@ -35,15 +35,15 @@ sudo e2label /dev/sdX2 ROOTFS
 ### 2. Configure Display Overlay
 ```bash
 sudo mount /dev/sdX1 /mnt/BOOT
-sudo cp deploy/boot-overlay/overlays/waveshare35c.dtbo /mnt/BOOT/overlays/
+# NOTE: piscreen overlay is built into the kernel, no dtbo file copy needed
 sudo cp deploy/boot-overlay/config.txt /mnt/BOOT/config.txt
 sudo umount /mnt/BOOT
 ```
 
-**Note:** The config.txt in `deploy/boot-overlay/` contains the verified working configuration:
+**Note:** The config.txt uses the `piscreen` overlay with:
 - `speed=16000000` (16MHz) - prevents touch freeze
-- `fps=50` - minimizes screen blinking
-- `rotate=180` - landscape orientation (Qt uses `rotate=90`)
+- `rotate=270` - landscape orientation
+- Qt uses `rotate=180:invertx` for touch mapping
 
 ### 3. Deploy Application
 ```bash
@@ -69,9 +69,10 @@ ssh root@10.42.0.196  # Password: leafsense
 cd /opt/leafsense
 sqlite3 leafsense.db < schema.sql
 
-# Run application
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
-./LeafSense -platform linuxfb:fb=/dev/fb1
+# Run application (or use start.sh)
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
+./LeafSense
 ```
 
 ---
@@ -101,16 +102,16 @@ make -j$(nproc)
 ## Display Configuration
 
 ### Kernel Overlay
-The Waveshare 3.5" LCD (C) requires the `waveshare35c.dtbo` overlay.
+The 3.5" LCD uses the built-in `piscreen` overlay (ILI9486 + ADS7846).
 
 ### config.txt Settings (Working Configuration)
 ```ini
 # Enable SPI
 dtparam=spi=on
 
-# Waveshare 3.5" LCD (C) with 180° rotation (landscape mode)
-# CRITICAL: speed=16000000 prevents touch freeze, fps=50 reduces blinking
-dtoverlay=waveshare35c:rotate=180,speed=16000000,fps=50
+# 3.5" LCD with piscreen overlay - landscape mode
+# CRITICAL: speed=16000000 prevents touch freeze
+dtoverlay=piscreen,speed=16000000,rotate=270
 
 # Framebuffer dimensions
 framebuffer_width=480
@@ -129,13 +130,14 @@ The **only working solution** uses Qt's evdev touchscreen handler with rotation 
 
 ```bash
 # Environment variable to set before running LeafSense
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
 
 # Run application
-./LeafSense -platform linuxfb:fb=/dev/fb1
+./LeafSense
 ```
 
-**Key insight:** The `rotate=90` in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` corrects touch mapping for the display rotation.
+**Key insight:** The `rotate=180:invertx` in `QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS` corrects touch mapping for the `piscreen,rotate=270` display configuration.
 
 ### ❌ DO NOT USE: tslib (Causes application freezing)
 
@@ -149,10 +151,11 @@ tslib causes application freezing when the touchscreen is touched due to SPI bus
 
 ### Platform Settings
 ```bash
-# Core Qt settings for LeafSense on Waveshare LCD
-export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+# Core Qt settings for LeafSense on 3.5" LCD
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
 export QT_QPA_FB_HIDECURSOR=1
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+export QT_QPA_FB_NO_LIBINPUT=1
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 export QT_QPA_FONTDIR=/usr/share/fonts
 ```
 
@@ -174,22 +177,23 @@ Focus rectangles are disabled for touchscreen use via stylesheet:
 
 ## Application Startup
 
-### Startup Script: /opt/leafsense/start_leafsense.sh
+### Startup Script: /opt/leafsense/start.sh
 ```bash
 #!/bin/sh
-# LeafSense Startup Script - Waveshare 3.5" LCD (C)
+# LeafSense Startup Script - 3.5" LCD with piscreen overlay
 
 # Qt Platform Configuration
-export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
 export QT_QPA_FB_HIDECURSOR=1
+export QT_QPA_FB_NO_LIBINPUT=1
 export QT_QPA_FONTDIR=/usr/share/fonts
 
-# Touchscreen Configuration (CRITICAL: rotate=90 for correct mapping)
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+# Touchscreen Configuration (CRITICAL: rotate=180:invertx for piscreen,rotate=270)
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 
 # Run application
 cd /opt/leafsense
-./LeafSense -platform linuxfb:fb=/dev/fb1
+./LeafSense
 ```
 
 ### Init Script: /etc/init.d/S99leafsense

@@ -53,8 +53,10 @@ struct GalleryItem {
     QString filepath;           ///< Path to image file
     QString timestamp;          ///< When image was captured
     QString prediction_label;   ///< ML prediction (e.g., "Healthy", "Powdery Mildew")
+    QString recommendation_text; ///< ML recommendation text for the prediction
     QString bounding_box;       ///< Bounding box coords "x,y,w,h" (empty if none)
     bool is_verified;           ///< Whether user has verified this prediction
+    bool is_acknowledged;       ///< Whether user has acknowledged the recommendation
 };
 
 /* ============================================================================
@@ -110,6 +112,7 @@ private slots:
     void on_gallery_prev();
     void on_gallery_next();
     void on_verify_clicked();
+    void on_acknowledge_clicked();
 
 private:
     /* ------------------------------------------------------------------------
@@ -175,10 +178,12 @@ private:
      * UI Components - Tab 3: Gallery
      * ------------------------------------------------------------------------ */
     QLabel *image_label;        ///< Image display area
+    QLabel *rec_label;          ///< Recommendation text display
     QLabel *info_label;         ///< Image info text
     QPushButton *btn_prev;      ///< Previous image button
     QPushButton *btn_next;      ///< Next image button
     QPushButton *btn_verify;    ///< Verify prediction button
+    QPushButton *btn_acknowledge; ///< Acknowledge recommendation button
 
     /* ------------------------------------------------------------------------
      * Gallery State

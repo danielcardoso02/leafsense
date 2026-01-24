@@ -1,7 +1,7 @@
 # LeafSense - Documentation Index
 
-**Version:** 1.5.1  
-**Last Updated:** January 11, 2026
+**Version:** 1.5.5  
+**Last Updated:** January 22, 2026
 
 ---
 
@@ -225,4 +225,14 @@ cd /opt/leafsense && ./start.sh
 
 ---
 
-**Last Updated:** January 11, 2026
+**Last Updated:** January 19, 2026
+
+---
+
+## Additional Documentation
+
+For more detailed information on specific topics, refer to the following documents:
+
+- [TEST-CASES-STATUS.md](TEST-CASES-STATUS.md): Section 4.6 test case analysis and pass/fail status
+- [VIDEO-RECORDING-SCRIPT.md](VIDEO-RECORDING-SCRIPT.md): Step-by-step demo video recording guide
+- [IMPLEMENTATION-VERIFICATION.md](IMPLEMENTATION-VERIFICATION.md): Report vs implementation cross-check

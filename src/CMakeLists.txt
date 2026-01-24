@@ -30,6 +30,19 @@ find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenCV REQUIRED)
 
+# --- libgpiod for GPIO control ---
+find_library(GPIOD_LIB gpiod
+    PATHS 
+        /usr/lib
+        /usr/local/lib
+        ${CMAKE_SYSROOT}/usr/lib
+)
+if(GPIOD_LIB)
+    message(STATUS "Found libgpiod: ${GPIOD_LIB}")
+else()
+    message(WARNING "libgpiod not found - GPIO actuators will run in mock mode")
+endif()
+
 # --- ONNX Runtime ---
 # For cross-compilation, use the ARM64 version directly
 if(CMAKE_CROSSCOMPILING)
@@ -149,4 +162,9 @@ target_link_libraries(LeafSense
 # Add ONNX Runtime only if available
 if(ONNXRUNTIME_LIB)
     target_link_libraries(LeafSense ${ONNXRUNTIME_LIB})
+endif()
+
+# Add libgpiod if available
+if(GPIOD_LIB)
+    target_link_libraries(LeafSense ${GPIOD_LIB})
 endif()

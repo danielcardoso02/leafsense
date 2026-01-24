@@ -16,13 +16,12 @@
 # The rotate=90 parameter MUST match the display rotation in config.txt
 # This ensures touch coordinates are correctly mapped to screen pixels.
 #
-# Rotation mapping:
-#   Display rotate=0   -> Touch rotate=0
-#   Display rotate=90  -> Touch rotate=90
-#   Display rotate=180 -> Touch rotate=180
-#   Display rotate=270 -> Touch rotate=270
+# Rotation mapping for Waveshare 3.5" LCD (C) with piscreen overlay:
+#   The correct configuration is rotate=180:invertx
+#   This was verified working on January 22, 2026
 #
-export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+# DO NOT CHANGE - This is the verified working configuration!
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
 
 # ============================================
 # DISPLAY CONFIGURATION

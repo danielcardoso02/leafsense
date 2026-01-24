@@ -4,29 +4,41 @@
  * @layer Drivers/Actuators
  * 
  * Controls the water heater relay for temperature management.
- * Implements simple on/off control with state tracking.
+ * Uses libgpiod for GPIO control.
  */
 
 #ifndef HEATER_H
 #define HEATER_H
 
+#include <string>
+#include <gpiod.h>
+
 /**
  * @class Heater
- * @brief GPIO-controlled water heater relay
+ * @brief GPIO-controlled water heater relay using libgpiod
  * 
- * Real mode: Controls relay via GPIO pin
- * Mock mode: Prints state changes to console
+ * Controls a relay via libgpiod library.
+ * Default GPIO pin: 21 (BCM numbering)
  */
 class Heater {
 private:
-    bool state;  ///< Current heater state (true = ON)
+    bool state;                    ///< Current heater state (true = ON)
+    int gpioPin;                   ///< GPIO pin number (BCM)
+    bool initialized;              ///< Whether GPIO was successfully initialized
+    struct gpiod_chip *chip;       ///< GPIO chip handle
+    struct gpiod_line *line;       ///< GPIO line handle
 
 public:
     /**
      * @brief Constructs heater driver
-     * @param pin GPIO pin number (BCM numbering)
+     * @param pin GPIO pin number (BCM numbering), default 21
      */
-    Heater(int pin) : state(false) {}
+    Heater(int pin = 21);
+    
+    /**
+     * @brief Destructor - turns off heater and releases GPIO
+     */
+    ~Heater();
     
     /**
      * @brief Sets heater state
@@ -39,6 +51,12 @@ public:
      * @return true if heater is ON
      */
     bool getState() { return state; }
+    
+    /**
+     * @brief Checks if GPIO was initialized successfully
+     * @return true if ready to use
+     */
+    bool isInitialized() { return initialized; }
 };
 
 #endif // HEATER_H

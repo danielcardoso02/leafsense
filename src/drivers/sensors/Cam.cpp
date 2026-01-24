@@ -123,10 +123,10 @@ static bool tryOpenCVCapture(int device, const std::string& filepath) {
     camera.set(cv::CAP_PROP_BUFFERSIZE, 1);
     
     // Discard first few frames (camera warmup)
+    // Frame capture itself takes sufficient time - no sleep needed
     cv::Mat frame;
-    for (int i = 0; i < 10; i++) {
-        camera >> frame;
-        usleep(100000); // 100ms delay
+    for (int i = 0; i < 5; i++) {
+        camera >> frame;  // Blocking read provides natural delay
     }
     
     // Capture final frame

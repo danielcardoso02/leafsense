@@ -2,9 +2,12 @@
 
 ## Critical Information
 
-**Last Verified:** January 19, 2026  
+**Last Verified:** January 22, 2026  
 **Hardware:** 3.5" LCD with ILI9486 display and ADS7846 touchscreen  
 **Driver:** Qt5 evdev touchscreen plugin (NOT tslib)
+
+> ⚠️ **IMPORTANT:** The touchscreen configuration `rotate=180:invertx` is REQUIRED.
+> Do not change this - it was verified working on January 22, 2026.
 
 ---
 

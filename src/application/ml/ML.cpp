@@ -173,15 +173,114 @@ std::vector<float> ML::softmax(const std::vector<float>& logits)
 }
 
 /* ============================================================================
+ * Out-of-Distribution Detection
+ * ============================================================================ */
+
+/**
+ * @brief Check if image contains sufficient green/plant-like colors
+ * @param imagePath Path to image file
+ * @return Ratio of green pixels (0.0 to 1.0)
+ * 
+ * Plants typically have significant green content. This heuristic helps
+ * reject obvious non-plant images (keyboards, walls, etc.) that the ML
+ * model might incorrectly classify due to lack of OOD training data.
+ */
+float ML::checkGreenRatio(const std::string& imagePath)
+{
+    cv::Mat image = cv::imread(imagePath);
+    if (image.empty()) {
+        return 0.0f;
+    }
+    
+    // Convert to HSV for better green detection
+    cv::Mat hsv;
+    cv::cvtColor(image, hsv, cv::COLOR_BGR2HSV);
+    
+    // Green color range in HSV
+    // Hue: 35-85 (green range), Saturation: 30+ (not gray), Value: 30+ (not too dark)
+    cv::Mat greenMask;
+    cv::inRange(hsv, cv::Scalar(35, 30, 30), cv::Scalar(85, 255, 255), greenMask);
+    
+    // Also check for yellow-green (sick plants) and brown-green (diseased)
+    cv::Mat yellowGreenMask;
+    cv::inRange(hsv, cv::Scalar(20, 30, 30), cv::Scalar(35, 255, 255), yellowGreenMask);
+    
+    // Combine masks
+    cv::Mat combinedMask;
+    cv::bitwise_or(greenMask, yellowGreenMask, combinedMask);
+    
+    // Calculate ratio of green-ish pixels
+    int greenPixels = cv::countNonZero(combinedMask);
+    int totalPixels = image.rows * image.cols;
+    
+    float greenRatio = static_cast<float>(greenPixels) / static_cast<float>(totalPixels);
+    
+    std::cout << "[ML] Green pixel ratio: " << (greenRatio * 100) << "%" << std::endl;
+    
+    return greenRatio;
+}
+
+float ML::calculateEntropy(const std::vector<float>& probs)
+{
+    // Shannon entropy: H = -sum(p * log2(p))
+    // For 4 classes: H=0 means 100% certain, H=2.0 means uniform distribution
+    float entropy = 0.0f;
+    for (float p : probs) {
+        if (p > 1e-7f) {  // Avoid log(0)
+            entropy -= p * std::log2(p);
+        }
+    }
+    return entropy;
+}
+
+bool ML::checkValidPlant(float entropy, float maxConfidence, float greenRatio)
+{
+    // A valid plant prediction should have:
+    // 1. Sufficient green/plant-like colors in the image
+    // 2. Low entropy (model is confident about one class)
+    // 3. High maximum confidence
+    //
+    // The green ratio check is critical because neural networks trained only
+    // on plant images will still produce confident predictions for non-plant
+    // inputs (they haven't learned what "not a plant" looks like).
+    
+    // Check 1: Image must contain some green/plant-like colors
+    if (greenRatio < MIN_GREEN_RATIO) {
+        std::cout << "[ML] Insufficient green pixels (" << (greenRatio * 100) << "% < " 
+                  << (MIN_GREEN_RATIO * 100) << "%) - likely non-plant image" << std::endl;
+        return false;
+    }
+    
+    // Check 2: Entropy should be low (model is confident)
+    // For 4 classes, max entropy is log2(4) = 2.0 (uniform distribution)
+    if (entropy > ENTROPY_THRESHOLD) {
+        std::cout << "[ML] High entropy (" << entropy << " > " << ENTROPY_THRESHOLD 
+                  << ") - possible non-plant image" << std::endl;
+        return false;
+    }
+    
+    // Check 3: Confidence should be above threshold
+    if (maxConfidence < MIN_CONFIDENCE_THRESHOLD) {
+        std::cout << "[ML] Low confidence (" << (maxConfidence * 100) << "% < " 
+                  << (MIN_CONFIDENCE_THRESHOLD * 100) << "%) - possible non-plant image" << std::endl;
+        return false;
+    }
+    
+    return true;
+}
+
+/* ============================================================================
  * Inference
  * ============================================================================ */
 
 MLResult ML::analyzeDetailed(const std::string& imagePath)
 {
     MLResult result;
-    result.class_id = 0;
+    result.class_id = 2;  // Default to Healthy
     result.class_name = "Healthy";
     result.confidence = 1.0f;
+    result.isValidPlant = true;
+    result.entropy = 0.0f;
     
     // Mock mode if not initialized
     if (!initialized) {
@@ -248,20 +347,43 @@ MLResult ML::analyzeDetailed(const std::string& imagePath)
         result.class_id = std::distance(result.probs.begin(), maxIt);
         result.confidence = *maxIt;
         
+        // Calculate entropy for out-of-distribution detection
+        result.entropy = calculateEntropy(result.probs);
+        
+        // Check green ratio for color-based OOD detection
+        float greenRatio = checkGreenRatio(imagePath);
+        
+        // Combined OOD check: entropy + confidence + green ratio
+        result.isValidPlant = checkValidPlant(result.entropy, result.confidence, greenRatio);
+        
         if (result.class_id < (int)CLASS_NAMES.size()) {
             result.class_name = CLASS_NAMES[result.class_id];
         } else {
             result.class_name = "Unknown";
         }
         
+        // Modify output if not a valid plant
+        if (!result.isValidPlant) {
+            std::cout << "[ML] Out-of-distribution detected: " << imagePath << std::endl;
+            std::cout << "[ML] Entropy: " << result.entropy << ", Max confidence: " 
+                      << (result.confidence * 100) << "%, Green ratio: " 
+                      << (greenRatio * 100) << "%" << std::endl;
+            result.class_name = "Unknown (Not a Plant)";
+            result.class_id = -1;  // Indicate invalid
+        }
+        
         std::cout << "[ML] Prediction: " << result.class_name 
-                  << " (confidence: " << (result.confidence * 100) << "%)" << std::endl;
+                  << " (confidence: " << (result.confidence * 100) << "%"
+                  << ", entropy: " << result.entropy 
+                  << ", valid: " << (result.isValidPlant ? "yes" : "no") << ")" << std::endl;
         
     } catch (const Ort::Exception& e) {
         std::cerr << "[ML] Inference error: " << e.what() << std::endl;
-        result.class_id = 0;
+        result.class_id = 2;
         result.class_name = "Healthy";
         result.confidence = 0.0f;
+        result.isValidPlant = false;
+        result.entropy = 2.0f;
     }
     
     return result;

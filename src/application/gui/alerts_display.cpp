@@ -5,9 +5,11 @@
 
 #include "../include/application/gui/alerts_display.h"
 #include "../include/application/gui/theme/theme_manager.h"
+#include "../include/application/gui/leafsense_data_bridge.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFont>
+#include <QDateTime>
 
 /* ============================================================================
  * Constructor
@@ -105,10 +107,28 @@ void AlertsDisplay::apply_theme()
 
 /**
  * @brief Updates the alert display with current system status.
+ * @param severity Current alert severity level (for coloring the status dot)
+ * @param message Alert message to display
  * @author Daniel Cardoso, Marco Costa
  */
-void AlertsDisplay::update_alerts()
+void AlertsDisplay::update_alerts(PlantHealthStatus severity, const QString &message)
 {
-    alert_label->setText("System OK");
+    alert_label->setText(message);
     status_label->setText("•");
+    
+    // Update status indicator color based on severity
+    ThemeManager &tm = ThemeManager::instance();
+    const ThemeColors &colors = tm.get_colors();
+    
+    QColor statusColor;
+    switch (severity) {
+        case PlantHealthStatus::CRITICAL: statusColor = colors.status_critical; break;
+        case PlantHealthStatus::WARNING:  statusColor = colors.status_warning;  break;
+        default:                          statusColor = colors.status_healthy;  break;
+    }
+    status_label->setStyleSheet(QString("color: %1; font-weight: bold;").arg(statusColor.name()));
+    
+    // Update "Last check" time with current time
+    QDateTime now = QDateTime::currentDateTimeUtc();
+    time_label->setText(QString("Last check: %1 UTC").arg(now.toString("hh:mm:ss")));
 }

@@ -1,0 +1,147 @@
+\chapter{Conclusion}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{This chapter presents the conclusions drawn from the development of the LeafSense automated hydroponic monitoring platform, reflecting on the objectives achieved, challenges overcome, and the overall contribution of this work to the field of precision agriculture.}
+
+\section{Project Summary}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{The LeafSense project successfully delivered a functional embedded system for automated plant health monitoring in hydroponic environments. The system integrates multiple technologies into a cohesive platform running on a Raspberry Pi 4 Model B with a custom Buildroot-based Linux distribution.}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{The primary objectives established at the project's inception have been achieved:}
+
+\begin{itemize}
+    \item \textbf{Custom Embedded Linux:} A tailored Buildroot 2025.08 image was created, optimized for the BCM2711 SoC with the Cortex-A72 architecture, reducing boot time and memory footprint while maintaining full hardware compatibility.
+    
+    \item \textbf{Machine Learning Integration:} A MobileNetV3-Small model was trained on the PlantVillage dataset, achieving 99.39\% accuracy in laboratory conditions. The model was exported to ONNX format and integrated directly into C++ using ONNX Runtime, eliminating Python dependencies at runtime.
+    
+    \item \textbf{Out-of-Distribution Detection:} A novel two-stage OOD detection mechanism combining green ratio analysis and Shannon entropy calculation was implemented to reject non-plant inputs, addressing a critical limitation discovered during testing.
+    
+    \item \textbf{Graphical User Interface:} A touch-optimized Qt5 interface was developed with support for light and dark themes, providing intuitive access to sensor data, ML predictions, historical trends, and system configuration.
+    
+    \item \textbf{Data Persistence:} An SQLite database architecture was implemented for storing sensor readings, ML predictions, captured images, and user interactions, enabling historical analysis and traceability.
+    
+    \item \textbf{Kernel Module Development:} A Linux kernel module for GPIO-based LED control was developed, demonstrating low-level hardware interaction capabilities for future actuator integration.
+\end{itemize}
+
+\section{Key Achievements}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{The following metrics summarize the project's technical achievements:}
+
+\begin{table}[h!]
+    \begin{center}
+        \caption{LeafSense Project Metrics}
+        \begin{tabular}{|l|c|}
+            \hline
+            \textbf{Metric} & \textbf{Value} \\
+            \hline
+            Test Cases Passed & 73/81 (90\%) \\
+            \hline
+            ML Model Accuracy & 99.39\% \\
+            \hline
+            Inference Time & $\sim$150 ms \\
+            \hline
+            Application Binary Size & $\sim$850 KB \\
+            \hline
+            Total Deployment Size & $\sim$24 MB \\
+            \hline
+            Boot Time & $<$15 seconds \\
+            \hline
+            Display Resolution & 480$\times$320 (touchscreen) \\
+            \hline
+            Supported Themes & 2 (Light/Dark) \\
+            \hline
+        \end{tabular}
+        \label{tab:project-metrics}
+    \end{center}
+\end{table}
+
+\section{Difficulties Encountered and Solutions}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{The development process presented several technical challenges that required creative problem-solving. Table~\ref{tab:difficulties} documents these challenges and their respective solutions.}
+
+\begin{table}[H]
+    \caption{Implementation Challenges and Solutions}
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|
+        >{\centering\arraybackslash}p{3cm} |
+        >{\centering\arraybackslash}p{3.5cm} |
+        >{\centering\arraybackslash}X |
+    }
+        \hline
+        \textbf{Problem} & \textbf{Cause} & \textbf{Solution} \\
+        \hline
+        \texttt{ioremap\_nocache} does not exist
+        & API removed in kernel 5.6+
+        & Replace with \texttt{ioremap} \\
+        \hline
+        Qt5Charts not found
+        & Not included in Buildroot by default
+        & Add \texttt{BR2\_PACKAGE\_QT5CHARTS=y} and recompile \\
+        \hline
+        ONNX model does not load
+        & Incorrect relative path
+        & Copy model to \texttt{/opt/leafsense/} \\
+        \hline
+        DB tables do not exist
+        & Database not initialized
+        & Execute \texttt{sqlite3 leafsense.db < schema.sql} \\
+        \hline
+        Pi not found on network
+        & DHCP did not assign IP
+        & Use USB-Ethernet and fixed IP (\texttt{10.42.0.196}) \\
+        \hline
+        Qt platform ``eglfs'' not available
+        & Plugin not compiled
+        & Use \texttt{QT\_QPA\_PLATFORM=linuxfb} \\
+        \hline
+        False ML predictions on non-plant objects
+        & Model trained only on plant images
+        & Implement OOD detection with green ratio and entropy thresholds \\
+        \hline
+        Touchscreen inverted/rotated
+        & Default evdev orientation
+        & Add \texttt{rotate=180:invertx} to evdev parameters \\
+        \hline
+        App freezes on Waveshare display
+        & Wrong framebuffer device
+        & Use \texttt{linuxfb:fb=/dev/fb1} for secondary display \\
+        \hline
+        Small touch targets
+        & UI designed for larger displays
+        & Enlarged buttons, Unicode arrows, scrollable panels \\
+        \hline
+    \end{tabularx}
+    \label{tab:difficulties}
+\end{table}
+
+\section{Lessons Learned}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{The development of LeafSense provided valuable insights into embedded systems engineering:}
+
+\begin{enumerate}
+    \item \textbf{Iterative Development is Essential:} Many requirements emerged during testing on the target hardware that were not apparent during the design phase. The OOD detection system, for example, was added after observing the model's behavior with unexpected inputs.
+    
+    \item \textbf{Cross-Compilation Complexity:} Building for ARM64 from an x86 host required careful management of toolchains, library paths, and binary compatibility. Pre-compiled ONNX Runtime libraries simplified this process significantly.
+    
+    \item \textbf{Touch Interface Design:} Designing for a 480$\times$320 touchscreen required rethinking UI layouts that worked well on desktop screens. Touch-friendly button sizes and scrollable panels were critical for usability.
+    
+    \item \textbf{Documentation as Development:} Maintaining comprehensive documentation throughout development facilitated debugging and knowledge transfer, particularly for the complex Buildroot configuration.
+\end{enumerate}
+
+\section{Final Remarks}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{LeafSense demonstrates the feasibility of deploying machine learning models on resource-constrained embedded systems for agricultural applications. The combination of a custom Linux distribution, efficient C++ implementation, and optimized neural network architecture enables real-time plant health monitoring without cloud connectivity.}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{The project establishes a solid foundation for future enhancements, including real sensor integration, automated actuation, and remote monitoring capabilities. The modular architecture ensures that these additions can be incorporated without fundamental redesign of the existing system.}
+
+\setlength{\parindent}{0pt}
+\hspace{1cm}{With 90\% of test cases passing (73/81) and a functional prototype demonstrated on the target hardware, the LeafSense project has achieved its core objectives and validated the approach of combining embedded systems with machine learning for precision agriculture applications.}

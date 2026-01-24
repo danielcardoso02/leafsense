@@ -30,13 +30,17 @@ public:
      * @param a Pointer to ADC driver
      * @param c ADC channel number (0-3)
      */
-    PH(ADC* a, int c) {}
+    PH(ADC* a, int c) : adc(a), channel(c) {}
     
     /**
      * @brief Reads current pH value
      * @return pH level (0.0 - 14.0)
      */
     float readSensor() override;
+
+private:
+    ADC* adc;      ///< Pointer to ADC driver
+    int channel;   ///< ADC channel (0-3)
 };
 
 #endif // PH_H

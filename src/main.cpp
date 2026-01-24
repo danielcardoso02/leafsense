@@ -90,6 +90,20 @@ int main(int argc, char *argv[])
     // Enable Qt Virtual Keyboard for touchscreen input
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     
+    // Configure framebuffer for Waveshare 3.5" touchscreen (fb1)
+    // fb0 is HDMI, fb1 is the SPI touchscreen
+    qputenv("QT_QPA_FB_DRM", QByteArray("1"));
+    qputenv("QT_QPA_PLATFORM", QByteArray("linuxfb:fb=/dev/fb1:size=480x320"));
+    
+    // Configure touchscreen input (ADS7846 on event0)
+    // Display uses rotate=270, so touch needs rotate=180:invertx to match
+    // This was verified to work correctly with the piscreen overlay
+    qputenv("QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS", 
+            QByteArray("/dev/input/event0:rotate=180:invertx"));
+    
+    // Also enable generic touch plugin as fallback
+    qputenv("QT_QPA_GENERIC_PLUGINS", QByteArray("evdevtouch:/dev/input/event0"));
+    
     QApplication app(argc, argv);
     app.setApplicationName("LeafSense");
 
@@ -100,8 +114,8 @@ int main(int argc, char *argv[])
     // Create message queue for inter-thread communication
     mqueueToDB = new MQueueHandler();
     
-    // Start database daemon thread
-    dbDaemon = new dDatabase(mqueueToDB, "leafsense.db"); 
+    // Start database daemon thread (use absolute path for Pi deployment)
+    dbDaemon = new dDatabase(mqueueToDB, "/opt/leafsense/leafsense.db"); 
     pthread_create(&tDatabase, NULL, dbDaemonFunc, (void*)dbDaemon);
     
     // Start master controller (manages sensors and actuators)

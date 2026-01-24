@@ -16,6 +16,7 @@
  * ============================================================================ */
 #include <QWidget>
 #include <QLabel>
+#include "leafsense_data_bridge.h"  // For PlantHealthStatus enum
 
 /**
  * @class AlertsDisplay
@@ -47,8 +48,11 @@ public:
     
     /**
      * @brief Updates the alert display with current system status
+     * @param severity Current alert severity level (for coloring the status dot)
+     * @param message Alert message to display
      */
-    void update_alerts();
+    void update_alerts(PlantHealthStatus severity = PlantHealthStatus::HEALTHY, 
+                       const QString &message = "System OK");
     
     /**
      * @brief Applies the current theme colors to all UI elements

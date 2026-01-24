@@ -68,6 +68,9 @@ private:
     bool running;                ///< Thread run flag
     bool sensorsCorrecting;      ///< Flag: correction in progress
     int cameraCaptureCounter;    ///< Counter for periodic camera capture
+    int cameraCaptureInterval; ///< Camera capture interval in tSig activations (900 = 30 min)
+    int readSensorCD;            ///< Cooldown counter for sensor reading
+    int readSensorInterval; ///< Sensor read interval in tSig activations
 
     /* ------------------------------------------------------------------------
      * Configuration
@@ -98,6 +101,7 @@ private:
     pthread_t tTime;             ///< Heartbeat timer thread
     pthread_t tSig;              ///< Signal dispatcher thread
     pthread_t tReadSensors;      ///< Sensor polling thread
+    pthread_t tCamera;           ///< Camera capture & ML thread
     pthread_t tWaterHeater;      ///< Heater control thread
     pthread_t tPHU;              ///< pH Up pump thread
     pthread_t tPHD;              ///< pH Down pump thread
@@ -106,8 +110,8 @@ private:
     /* ------------------------------------------------------------------------
      * Synchronization Primitives
      * ------------------------------------------------------------------------ */
-    pthread_mutex_t mutexRS, mutexTime, mutexN, mutexPHU, mutexPHD, mutexWH;
-    pthread_cond_t condRS, condTime, condN, condPHU, condPHD, condWH;
+    pthread_mutex_t mutexRS, mutexTime, mutexN, mutexPHU, mutexPHD, mutexWH, mutexCam;
+    pthread_cond_t condRS, condTime, condN, condPHU, condPHD, condWH, condCam;
 
     /* ------------------------------------------------------------------------
      * Private Methods - Synchronization
@@ -132,13 +136,34 @@ private:
     void triggerSignal(pthread_cond_t* c, pthread_mutex_t* m);
     
     /**
-     * @brief Updates alert LED based on sensor readings
+     * @brief Updates alert LED based on sensor readings (legacy)
      * 
      * Checks if any parameter is out of ideal range and controls
      * the LED via kernel module (/dev/led0).
      * LED ON = Alert active, LED OFF = All parameters normal
      */
     void updateAlertLED();
+    
+    /**
+     * @brief Controls alert LED based on ML classification
+     * 
+     * Turns LED ON when bad class detected (Disease, Deficiency, Pest)
+     * Turns LED OFF when Healthy or OOD
+     * @param alertActive true to turn LED ON, false for OFF
+     */
+    void setMLAlertLED(bool alertActive);
+    
+    /**
+     * @brief Generates recommendations based on ML prediction results
+     * 
+     * Creates specific treatment recommendations based on detected issues.
+     * Correlates ML predictions with current sensor readings for
+     * more accurate nutrient deficiency recommendations.
+     * 
+     * @param mlResult The ML inference result with class and confidence
+     * @param filename The image filename for database linking
+     */
+    void generateMLRecommendation(const MLResult& mlResult, const std::string& filename);
 
 public:
     /* ------------------------------------------------------------------------
@@ -165,6 +190,7 @@ public:
     static void* tTimeFuncStatic(void* arg);
     static void* tSigFuncStatic(void* arg);
     static void* tReadSensorsFuncStatic(void* arg);
+    static void* tCameraFuncStatic(void* arg);
     static void* tWaterHeaterFuncStatic(void* arg);
     static void* tPHUFuncStatic(void* arg);
     static void* tPHDFuncStatic(void* arg);
@@ -176,6 +202,7 @@ public:
     void tTimeFunc();         ///< Heartbeat: triggers every 2s
     void tSigFunc();          ///< Dispatcher: forwards time signal
     void tReadSensorsFunc();  ///< Reads sensors, triggers actuators
+    void tCameraFunc();       ///< Camera capture & ML analysis
     void tWaterHeaterFunc();  ///< Toggles heater state
     void tPHUFunc();          ///< Doses pH Up solution
     void tPHDFunc();          ///< Doses pH Down solution

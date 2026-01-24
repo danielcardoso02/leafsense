@@ -6,8 +6,8 @@
 # CRITICAL: Do not modify touchscreen/display settings without testing!
 # These settings have been verified to work correctly.
 #
-# Last verified: January 10, 2026
-# Tested configuration: Waveshare 3.5" LCD (C) + evdev touchscreen
+# Last verified: January 19, 2026
+# Tested configuration: 3.5" LCD with piscreen overlay + evdev touchscreen
 
 # Raspberry Pi 4 Base Configuration
 # =================================
@@ -46,18 +46,18 @@ dtparam=spi=on
 dtoverlay=dwc2
 
 # ============================================
-# WAVESHARE 3.5" LCD (C) DISPLAY CONFIGURATION
+# 3.5" LCD DISPLAY CONFIGURATION (piscreen overlay)
 # ============================================
 # Controller: ILI9486 (SPI display)
 # Touchscreen: ADS7846 (SPI touchscreen)
-# Resolution: 480x320 (landscape mode with rotate=90)
+# Resolution: 480x320 (landscape mode with rotate=270)
 #
 # CRITICAL SETTINGS - DO NOT MODIFY:
 # - speed=16000000 (16MHz) prevents touch freeze at higher speeds
-# - fps=50 reduces screen blinking (balance between quality and stability)
-# - rotate=90 sets landscape orientation
+# - rotate=270 sets landscape orientation
+# - Qt uses rotate=180:invertx for touch mapping
 #
-dtoverlay=waveshare35c:rotate=90,speed=16000000,fps=50
+dtoverlay=piscreen,speed=16000000,rotate=270
 
 # HDMI fallback settings (required for LCD initialization)
 hdmi_force_hotplug=1

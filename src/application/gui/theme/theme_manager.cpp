@@ -289,8 +289,19 @@ QString ThemeManager::get_stylesheet() const
             border: none;
             background-color: transparent;
         }
-    )")
-        .arg(c.bg_primary.name())           // %1
+        QScrollArea#recScrollArea {
+            border: none;
+            background-color: %3;
+            border-radius: 4px;
+        }
+        QLabel#recLabel {
+            background-color: %3;
+            color: %2;
+            border-radius: 4px;
+            padding: 6px;
+            font-size: 10px;
+        }
+    )")        .arg(c.bg_primary.name())           // %1
         .arg(c.text_primary.name())         // %2
         .arg(c.bg_secondary.name())         // %3
         .arg(c.bg_tertiary.name())          // %4

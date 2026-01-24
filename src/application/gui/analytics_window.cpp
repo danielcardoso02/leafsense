@@ -28,6 +28,7 @@
 #include <QRandomGenerator>
 #include <QPainter>
 #include <QPixmap>
+#include <QScrollArea>
 #include <QDir>
 #include <QFileInfo>
 
@@ -138,13 +139,35 @@ void AnalyticsWindow::setup_ui()
     QWidget *tab_gallery = new QWidget();
     QVBoxLayout *gallery_layout = new QVBoxLayout(tab_gallery);
     gallery_layout->setContentsMargins(5, 5, 5, 5);
+    gallery_layout->setSpacing(4);
 
-    // Image display area
+    // Horizontal layout for image + recommendation side by side
+    QHBoxLayout *content_layout = new QHBoxLayout();
+    content_layout->setSpacing(6);
+
+    // Image display area (left side, 60%)
     image_label = new QLabel("No Images");
     image_label->setAlignment(Qt::AlignCenter);
     image_label->setStyleSheet("background-color: #222; border-radius: 4px; color: #fff;");
     image_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    gallery_layout->addWidget(image_label, 1);
+    content_layout->addWidget(image_label, 6);
+
+    // Recommendation display (right side, 40% - scrollable via touch)
+    rec_label = new QLabel("");
+    rec_label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    rec_label->setWordWrap(true);
+    rec_label->setObjectName("recLabel");  // For theme styling
+
+    QScrollArea *rec_scroll = new QScrollArea();
+    rec_scroll->setWidget(rec_label);
+    rec_scroll->setWidgetResizable(true);
+    rec_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    rec_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);  // Hidden but touch scrolling works
+    rec_scroll->setObjectName("recScrollArea");  // For theme styling
+    rec_scroll->setMinimumWidth(140);
+    content_layout->addWidget(rec_scroll, 4);
+
+    gallery_layout->addLayout(content_layout, 1);
 
     // Image info label
     info_label = new QLabel("-");
@@ -155,20 +178,31 @@ void AnalyticsWindow::setup_ui()
     // Navigation controls
     QHBoxLayout *controls = new QHBoxLayout();
 
-    btn_prev = new QPushButton("<");
-    btn_prev->setFixedSize(40, 30);
+    btn_prev = new QPushButton("◀");
+    btn_prev->setFixedSize(50, 40);  // Larger touch target
+    btn_prev->setAutoRepeat(true);
+    btn_prev->setAutoRepeatDelay(400);
+    btn_prev->setAutoRepeatInterval(200);
     connect(btn_prev, &QPushButton::clicked, this, &AnalyticsWindow::on_gallery_prev);
 
     btn_verify = new QPushButton("Confirm Issue");
-    btn_verify->setFixedHeight(30);
+    btn_verify->setFixedHeight(40);
     connect(btn_verify, &QPushButton::clicked, this, &AnalyticsWindow::on_verify_clicked);
 
-    btn_next = new QPushButton(">");
-    btn_next->setFixedSize(40, 30);
+    btn_acknowledge = new QPushButton("Acknowledge");
+    btn_acknowledge->setFixedHeight(40);
+    connect(btn_acknowledge, &QPushButton::clicked, this, &AnalyticsWindow::on_acknowledge_clicked);
+
+    btn_next = new QPushButton("▶");
+    btn_next->setFixedSize(50, 40);  // Larger touch target
+    btn_next->setAutoRepeat(true);
+    btn_next->setAutoRepeatDelay(400);
+    btn_next->setAutoRepeatInterval(200);
     connect(btn_next, &QPushButton::clicked, this, &AnalyticsWindow::on_gallery_next);
 
     controls->addWidget(btn_prev);
     controls->addWidget(btn_verify);
+    controls->addWidget(btn_acknowledge);
     controls->addWidget(btn_next);
 
     gallery_layout->addLayout(controls);
@@ -527,8 +561,14 @@ void AnalyticsWindow::load_gallery_data()
             } else {
                 item.prediction_label = "No prediction";
             }
+            // Get recommendation text
+            item.recommendation_text = data_bridge->get_image_recommendation(fileInfo.fileName());
+            // Check if recommendation is acknowledged
+            item.is_acknowledged = data_bridge->is_recommendation_acknowledged(fileInfo.fileName());
         } else {
             item.prediction_label = "No prediction";
+            item.recommendation_text = "";
+            item.is_acknowledged = false;
         }
         
         item.is_verified = false;
@@ -554,10 +594,12 @@ void AnalyticsWindow::update_gallery_display()
     if (gallery_items.empty()) {
         qDebug() << "[Gallery] No images to display";
         image_label->setText("No Images Available\n\nImages will appear here after camera capture");
+        rec_label->setText("No recommendation");
         info_label->setText("Waiting for images...");
         btn_prev->setEnabled(false);
         btn_next->setEnabled(false);
         btn_verify->setEnabled(false);
+        btn_acknowledge->setEnabled(false);
         return;
     }
 
@@ -592,13 +634,31 @@ void AnalyticsWindow::update_gallery_display()
         // Scale to fit label
         QSize labelSize = image_label->size();
         if (labelSize.width() < 10) {
-            labelSize = QSize(300, 200);  // Fallback size
+            labelSize = QSize(200, 150);  // Fallback size (smaller for side-by-side layout)
         }
         qDebug() << "[Gallery] Scaling to" << labelSize;
         image_label->setPixmap(drawing.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
         qCritical() << "[Gallery] Failed to load image:" << item.filepath;
         image_label->setText("Failed to load image:\n" + item.filepath);
+    }
+
+    // Update recommendation label (full text, scrollable)
+    const ThemeColors &colors = ThemeManager::instance().get_colors();
+    if (!item.recommendation_text.isEmpty()) {
+        rec_label->setText("<b>Recommendation:</b> " + item.recommendation_text);
+        rec_label->setStyleSheet(QString(
+            "background-color: %1; border-radius: 4px; color: %2; "
+            "padding: 6px; font-size: 10px;")
+            .arg(colors.bg_secondary.name())
+            .arg(colors.text_primary.name()));
+    } else {
+        rec_label->setText("<i>No recommendation available</i>");
+        rec_label->setStyleSheet(QString(
+            "background-color: %1; border-radius: 4px; color: %2; "
+            "padding: 6px; font-size: 10px;")
+            .arg(colors.bg_secondary.name())
+            .arg(colors.text_secondary.name()));
     }
 
     // Update info label
@@ -617,12 +677,12 @@ void AnalyticsWindow::update_gallery_display()
     btn_prev->setEnabled(current_img_index > 0);
     btn_next->setEnabled(current_img_index < gallery_items.size() - 1);
 
-    // Update verify button state
+    // Update verify button state - green when verified
     if (item.is_verified) {
         btn_verify->setText("Verified");
         btn_verify->setEnabled(false);
         btn_verify->setStyleSheet(
-            "background-color: #cccccc; color: #666; border: none; border-radius: 4px;");
+            "background-color: #4CAF50; color: white; border: none; border-radius: 4px;");
     } else {
         btn_verify->setText("Confirm Issue");
         btn_verify->setEnabled(true);
@@ -630,6 +690,19 @@ void AnalyticsWindow::update_gallery_display()
         btn_verify->setStyleSheet(
             QString("background-color: %1; color: white; border: none; border-radius: 4px; font-weight: bold;")
                 .arg(tm.get_colors().accent_orange.name()));
+    }
+    
+    // Update acknowledge button state - green when acknowledged (same green as Confirm Issue)
+    if (item.is_acknowledged) {
+        btn_acknowledge->setText("Ack'd");
+        btn_acknowledge->setEnabled(false);
+        btn_acknowledge->setStyleSheet(
+            "background-color: #4CAF50; color: white; border: none; border-radius: 4px;");
+    } else {
+        btn_acknowledge->setText("Acknowledge");
+        btn_acknowledge->setEnabled(true);
+        btn_acknowledge->setStyleSheet(
+            "background-color: #4CAF50; color: white; border: none; border-radius: 4px; font-weight: bold;");
     }
 }
 
@@ -645,6 +718,8 @@ void AnalyticsWindow::on_gallery_prev()
 {
     if (current_img_index > 0) {
         current_img_index--;
+        // Process events to ensure button release is registered
+        QApplication::processEvents();
         update_gallery_display();
     }
 }
@@ -657,6 +732,8 @@ void AnalyticsWindow::on_gallery_next()
 {
     if (current_img_index < gallery_items.size() - 1) {
         current_img_index++;
+        // Process events to ensure button release is registered
+        QApplication::processEvents();
         update_gallery_display();
     }
 }
@@ -671,6 +748,33 @@ void AnalyticsWindow::on_verify_clicked()
     gallery_items[current_img_index].is_verified = true;
     
     // TODO: Update database (ml_detections.is_verified = 1)
+    
+    update_gallery_display();
+}
+
+/**
+ * @brief Handles acknowledgment of the current recommendation.
+ * @author Daniel Cardoso, Marco Costa
+ */
+void AnalyticsWindow::on_acknowledge_clicked()
+{
+    if (gallery_items.isEmpty() || !data_bridge) {
+        return;
+    }
+    
+    GalleryItem &item = gallery_items[current_img_index];
+    
+    // Get filename from filepath
+    QFileInfo fileInfo(item.filepath);
+    QString filename = fileInfo.fileName();
+    
+    // Update database
+    if (data_bridge->acknowledge_recommendation(filename)) {
+        item.is_acknowledged = true;
+        qDebug() << "[Gallery] Recommendation acknowledged for:" << filename;
+    } else {
+        qWarning() << "[Gallery] Failed to acknowledge recommendation for:" << filename;
+    }
     
     update_gallery_display();
 }

@@ -4,6 +4,9 @@
 
 LeafSense uses SQLite as an embedded database for persistent storage of sensor data, logs, alerts, and ML results.
 
+**Schema Version:** V1.0  
+**Last Updated:** January 19, 2026
+
 ## Location
 
 | Environment | Path |
@@ -14,18 +17,54 @@ LeafSense uses SQLite as an embedded database for persistent storage of sensor d
 
 ## Schema
 
+The database consists of **10 tables** and **4 views**.
+
 ### Main Tables
 
-#### `sensor_readings`
+#### 1. `user`
+System user (single-user constraint: id=1).
+
+```sql
+CREATE TABLE IF NOT EXISTS user (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    username TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP
+);
+```
+
+| Column | Type | Description |
+|--------|------|-----------|
+| id | INTEGER | Constrained to 1 (single-user system) |
+| username | TEXT | Username (unique) |
+| password_hash | TEXT | SHA-256 hashed password |
+| created_at | TIMESTAMP | Account creation date |
+| last_login | TIMESTAMP | Last login timestamp |
+
+#### 2. `plant`
+Plant registry (single-plant constraint: id=1).
+
+```sql
+CREATE TABLE IF NOT EXISTS plant (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    name TEXT NOT NULL,
+    planted_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### 3. `sensor_readings`
 Stores environment sensor readings.
 
 ```sql
-CREATE TABLE sensor_readings (
+CREATE TABLE IF NOT EXISTS sensor_readings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    temperature REAL NOT NULL,
-    ph REAL NOT NULL,
-    ec REAL NOT NULL,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    temperature REAL,
+    ph REAL,
+    ec REAL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -35,229 +74,230 @@ CREATE TABLE sensor_readings (
 | temperature | REAL | Temperature in °C |
 | ph | REAL | pH Value (0-14) |
 | ec | REAL | Electrical conductivity (µS/cm) |
-| timestamp | DATETIME | Reading date/time |
+| timestamp | TIMESTAMP | Reading date/time |
 
-#### `logs`
-Logging system for events and actions.
-
-```sql
-CREATE TABLE logs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    log_type VARCHAR(50) NOT NULL,
-    message TEXT NOT NULL,
-    details TEXT,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-| Column | Type | Description |
-|--------|------|-----------|
-| id | INTEGER | Primary key |
-| log_type | VARCHAR | Type: Maintenance, Alert, System, ML |
-| message | TEXT | Main message |
-| details | TEXT | Additional details |
-| timestamp | DATETIME | Event date/time |
-
-#### `alerts`
+#### 4. `alerts`
 System alerts.
 
 ```sql
-CREATE TABLE alerts (
+CREATE TABLE IF NOT EXISTS alerts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    alert_type VARCHAR(50) NOT NULL,
-    severity VARCHAR(20) NOT NULL CHECK(severity IN ('low','medium','high','critical')),
+    type TEXT NOT NULL,  -- 'Warning', 'Critical', 'Info'
     message TEXT NOT NULL,
-    is_read BOOLEAN DEFAULT 0,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    details TEXT,
+    is_read INTEGER DEFAULT 0,  -- 0 for Unread, 1 for Read
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
 | Column | Type | Description |
 |--------|------|-----------|
-| severity | VARCHAR | low, medium, high, critical |
-| is_read | BOOLEAN | Whether read by user |
+| type | TEXT | Warning, Critical, or Info |
+| message | TEXT | Alert message |
+| is_read | INTEGER | 0 = Unread, 1 = Read |
 
-#### `health_assessments`
-Plant health assessments.
+#### 5. `logs`
+Logging system for events and actions.
 
 ```sql
-CREATE TABLE health_assessments (
+CREATE TABLE IF NOT EXISTS logs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    plant_id INTEGER,
-    assessment_type VARCHAR(50),
-    status VARCHAR(50) NOT NULL,
-    confidence REAL,
-    notes TEXT,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (plant_id) REFERENCES plant(id)
+    log_type TEXT NOT NULL,  -- 'Disease', 'Deficiency', 'Maintenance', 'Alert'
+    message TEXT NOT NULL,
+    details TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-#### `ml_predictions`
-ML inference results.
+| Column | Type | Description |
+|--------|------|-----------|
+| log_type | TEXT | Disease, Deficiency, Maintenance, or Alert |
+| message | TEXT | Log message |
+| details | TEXT | Additional details |
 
-```sql
-CREATE TABLE ml_predictions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    image_path TEXT,
-    predicted_class VARCHAR(100) NOT NULL,
-    confidence REAL NOT NULL,
-    all_probabilities TEXT,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-#### `ml_detections`
-Disease detections.
-
-```sql
-CREATE TABLE ml_detections (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    prediction_id INTEGER,
-    disease_name VARCHAR(100),
-    severity VARCHAR(20),
-    affected_area REAL,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (prediction_id) REFERENCES ml_predictions(id)
-);
-```
-
-#### `ml_recommendations`
-ML-based recommendations.
-
-```sql
-CREATE TABLE ml_recommendations (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    detection_id INTEGER,
-    recommendation TEXT NOT NULL,
-    priority VARCHAR(20),
-    is_completed BOOLEAN DEFAULT 0,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (detection_id) REFERENCES ml_detections(id)
-);
-```
-
-#### `plant`
-Registry of monitored plants.
-
-```sql
-CREATE TABLE plant (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(100) NOT NULL,
-    species VARCHAR(100),
-    planting_date DATE,
-    location VARCHAR(100),
-    notes TEXT
-);
-```
-
-#### `plant_images`
+#### 6. `plant_images`
 Captured plant images.
 
 ```sql
-CREATE TABLE plant_images (
+CREATE TABLE IF NOT EXISTS plant_images (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    plant_id INTEGER,
-    image_path TEXT NOT NULL,
-    capture_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (plant_id) REFERENCES plant(id)
+    filename TEXT NOT NULL,
+    filepath TEXT NOT NULL,
+    captured_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    image_hash TEXT,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-#### `user`
-System users.
+#### 7. `ml_predictions`
+ML inference results (linked to images via foreign key).
 
 ```sql
-CREATE TABLE user (
+CREATE TABLE IF NOT EXISTS ml_predictions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    email VARCHAR(100),
-    role VARCHAR(20) DEFAULT 'user',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    image_id INTEGER NOT NULL,
+    prediction_type TEXT NOT NULL,  -- 'Disease', 'Deficiency', 'Healthy'
+    prediction_label TEXT NOT NULL,
+    confidence REAL NOT NULL,
+    bounding_box TEXT,  -- JSON string coordinates
+    predicted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    model_version TEXT,
+    FOREIGN KEY (image_id) REFERENCES plant_images(id) ON DELETE CASCADE
+);
+```
+
+| Column | Type | Description |
+|--------|------|-----------|
+| image_id | INTEGER | Foreign key to plant_images |
+| prediction_type | TEXT | Disease, Deficiency, Healthy, or Pest |
+| prediction_label | TEXT | Specific label (e.g., "Tomato Leaf Mold") |
+| confidence | REAL | Confidence score (0.0-1.0) |
+
+#### 8. `health_assessments`
+Plant health assessments.
+
+```sql
+CREATE TABLE IF NOT EXISTS health_assessments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    image_id INTEGER NOT NULL,
+    health_score REAL NOT NULL,  -- 0.0 to 100.0
+    health_status TEXT NOT NULL,  -- 'Excellent', 'Healthy', 'Warning', 'Critical'
+    assessment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    assessment_details TEXT,
+    FOREIGN KEY (image_id) REFERENCES plant_images(id) ON DELETE CASCADE
+);
+```
+
+#### 9. `ml_detections`
+Verified detections with feedback.
+
+```sql
+CREATE TABLE IF NOT EXISTS ml_detections (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    prediction_id INTEGER NOT NULL,
+    is_verified INTEGER DEFAULT 0,
+    actual_label TEXT,
+    confidence_correct INTEGER,  -- 0 (False) or 1 (True)
+    treatment_applied TEXT,
+    notes TEXT,
+    verified_at TIMESTAMP,
+    action_logged INTEGER DEFAULT 0,
+    FOREIGN KEY (prediction_id) REFERENCES ml_predictions(id) ON DELETE CASCADE
+);
+```
+
+#### 10. `ml_recommendations`
+ML-based treatment recommendations.
+
+```sql
+CREATE TABLE IF NOT EXISTS ml_recommendations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    prediction_id INTEGER NOT NULL,
+    recommendation_type TEXT NOT NULL,
+    recommendation_text TEXT NOT NULL,
+    confidence REAL,
+    generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_acknowledged INTEGER DEFAULT 0,
+    action_taken TEXT,
+    action_date TIMESTAMP,
+    outcome TEXT,
+    outcome_date TIMESTAMP,
+    FOREIGN KEY (prediction_id) REFERENCES ml_predictions(id) ON DELETE CASCADE
 );
 ```
 
 ### Views
 
 #### `vw_latest_sensor_reading`
-Latest sensor reading.
+Returns the most recent sensor reading.
 
 ```sql
-CREATE VIEW vw_latest_sensor_reading AS
-SELECT * FROM sensor_readings
-ORDER BY timestamp DESC
+CREATE VIEW IF NOT EXISTS vw_latest_sensor_reading AS
+SELECT * FROM sensor_readings 
+ORDER BY timestamp DESC 
 LIMIT 1;
 ```
 
-#### `vw_daily_sensor_summary`
-Daily sensor summary.
+#### `vw_unread_alerts`
+Returns all unread alerts, newest first.
 
 ```sql
-CREATE VIEW vw_daily_sensor_summary AS
-SELECT 
-    DATE(timestamp) as date,
-    AVG(temperature) as avg_temperature,
-    MIN(temperature) as min_temperature,
-    MAX(temperature) as max_temperature,
-    AVG(ph) as avg_ph,
-    AVG(ec) as avg_ec,
-    COUNT(*) as reading_count
-FROM sensor_readings
-GROUP BY DATE(timestamp)
-ORDER BY date DESC;
+CREATE VIEW IF NOT EXISTS vw_unread_alerts AS
+SELECT * FROM alerts 
+WHERE is_read = 0 
+ORDER BY timestamp DESC;
 ```
 
-#### `vw_unread_alerts`
-Unread alerts.
+#### `vw_daily_sensor_summary`
+Daily aggregated sensor statistics.
 
 ```sql
-CREATE VIEW vw_unread_alerts AS
-SELECT * FROM alerts
-WHERE is_read = 0
-ORDER BY 
-    CASE severity 
-        WHEN 'critical' THEN 1 
-        WHEN 'high' THEN 2 
-        WHEN 'medium' THEN 3 
-        ELSE 4 
-    END,
-    timestamp DESC;
+CREATE VIEW IF NOT EXISTS vw_daily_sensor_summary AS
+SELECT 
+    strftime('%Y-%m-%d', timestamp) as day,
+    ROUND(AVG(temperature), 2) as avg_temp,
+    MIN(temperature) as min_temp,
+    MAX(temperature) as max_temp,
+    ROUND(AVG(ph), 2) as avg_ph,
+    MIN(ph) as min_ph,
+    MAX(ph) as max_ph,
+    ROUND(AVG(ec), 2) as avg_ec,
+    MIN(ec) as min_ec,
+    MAX(ec) as max_ec,
+    COUNT(*) as reading_count
+FROM sensor_readings
+GROUP BY day
+ORDER BY day DESC;
 ```
 
 #### `vw_pending_recommendations`
-Pending recommendations.
+Pending (unacknowledged) recommendations.
 
 ```sql
-CREATE VIEW vw_pending_recommendations AS
+CREATE VIEW IF NOT EXISTS vw_pending_recommendations AS
 SELECT 
     r.id,
-    r.recommendation,
-    r.priority,
-    d.disease_name,
-    r.timestamp
+    r.recommendation_type,
+    r.recommendation_text,
+    r.confidence,
+    r.generated_at,
+    p.prediction_label,
+    p.prediction_type
 FROM ml_recommendations r
-JOIN ml_detections d ON r.detection_id = d.id
-WHERE r.is_completed = 0
-ORDER BY 
-    CASE r.priority 
-        WHEN 'critical' THEN 1 
-        WHEN 'high' THEN 2 
-        WHEN 'medium' THEN 3 
-        ELSE 4 
-    END;
+JOIN ml_predictions p ON r.prediction_id = p.id
+WHERE r.user_acknowledged = 0
+ORDER BY r.generated_at DESC;
 ```
 
-## Indexs
+## Indexes
 
 ```sql
--- Performance indexes
+-- Sensor readings (time-series queries)
 CREATE INDEX idx_sensor_timestamp ON sensor_readings(timestamp);
-CREATE INDEX idx_logs_timestamp ON logs(timestamp);
+
+-- Alerts (unread queries)
+CREATE INDEX idx_alerts_is_read ON alerts(is_read);
+
+-- Logs (category filtering)
 CREATE INDEX idx_logs_type ON logs(log_type);
-CREATE INDEX idx_alerts_severity ON alerts(severity);
-CREATE INDEX idx_alerts_read ON alerts(is_read);
-CREATE INDEX idx_ml_predictions_timestamp ON ml_predictions(timestamp);
+
+-- Plant images (recent images)
+CREATE INDEX idx_images_captured_at ON plant_images(captured_at);
+
+-- ML predictions (joins, confidence filtering)
+CREATE INDEX idx_preds_image_id ON ml_predictions(image_id);
+CREATE INDEX idx_preds_confidence ON ml_predictions(confidence);
+CREATE INDEX idx_preds_type ON ml_predictions(prediction_type);
+
+-- Health assessments (trend analysis)
+CREATE INDEX idx_assess_date ON health_assessments(assessment_date);
+
+-- ML detections (verification queries)
+CREATE INDEX idx_detect_verified ON ml_detections(is_verified);
+CREATE INDEX idx_detect_verified_at ON ml_detections(verified_at);
+
+-- ML recommendations (pending actions)
+CREATE INDEX idx_recs_ack ON ml_recommendations(user_acknowledged);
 ```
 
 ## Initialization

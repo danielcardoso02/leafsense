@@ -35,10 +35,12 @@ namespace Ort {
  * @brief Holds the result of ML inference
  */
 struct MLResult {
-    int class_id;               ///< Predicted class (0=Healthy, 1=Deficiency, etc.)
+    int class_id;               ///< Predicted class (0=Deficiency, 1=Disease, 2=Healthy, 3=Pest)
     std::string class_name;     ///< Human-readable class name
     float confidence;           ///< Confidence score (0.0 - 1.0)
     std::vector<float> probs;   ///< Probabilities for all classes
+    bool isValidPlant;          ///< Whether image appears to be a valid plant (OOD detection)
+    float entropy;              ///< Shannon entropy of probability distribution (lower = more confident)
 };
 
 /* ============================================================================
@@ -68,6 +70,11 @@ private:
     static const int IMAGE_SIZE = 224;
     static const std::vector<std::string> CLASS_NAMES;
     
+    // Out-of-distribution detection thresholds
+    static constexpr float ENTROPY_THRESHOLD = 1.8f;      ///< Max entropy for valid plant (log2(4)=2.0 is uniform)
+    static constexpr float MIN_CONFIDENCE_THRESHOLD = 0.3f; ///< Minimum confidence to be valid
+    static constexpr float MIN_GREEN_RATIO = 0.10f;       ///< Minimum green pixel ratio (10% for lettuce)
+    
     /**
      * @brief Preprocess image for inference
      * @param imagePath Path to image file
@@ -81,6 +88,29 @@ private:
      * @return Probability distribution
      */
     std::vector<float> softmax(const std::vector<float>& logits);
+    
+    /**
+     * @brief Check if image contains sufficient green/plant-like colors
+     * @param imagePath Path to image file
+     * @return Ratio of green pixels (0.0 to 1.0)
+     */
+    float checkGreenRatio(const std::string& imagePath);
+    
+    /**
+     * @brief Calculate Shannon entropy of probability distribution
+     * @param probs Probability distribution
+     * @return Entropy value (0 = certain, log2(N) = uniform/uncertain)
+     */
+    float calculateEntropy(const std::vector<float>& probs);
+    
+    /**
+     * @brief Check if prediction indicates a valid plant image
+     * @param entropy Calculated entropy
+     * @param maxConfidence Maximum class probability
+     * @param greenRatio Ratio of green pixels in image
+     * @return true if likely a valid plant image
+     */
+    bool checkValidPlant(float entropy, float maxConfidence, float greenRatio);
 
 public:
     /**

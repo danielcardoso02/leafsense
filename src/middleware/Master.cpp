@@ -8,6 +8,23 @@
 #include <sstream>
 #include <fcntl.h>
 #include <unistd.h>
+#include <ctime>
+#include <signal.h>
+
+// Global pointer for signal handler access
+static Master* g_masterInstance = nullptr;
+static pthread_cond_t* g_condTime = nullptr;
+static pthread_mutex_t* g_mutexTime = nullptr;
+
+// SIGALRM handler - triggers tSig thread
+static void sigalrmHandler(int sig) {
+    (void)sig;
+    if (g_condTime && g_mutexTime) {
+        pthread_mutex_lock(g_mutexTime);
+        pthread_cond_signal(g_condTime);
+        pthread_mutex_unlock(g_mutexTime);
+    }
+}
 
 /* ============================================================================
  * Constructor / Destructor
@@ -18,6 +35,9 @@ Master::Master(MQueueHandler* queue)
     , running(false)
     , sensorsCorrecting(false)
     , cameraCaptureCounter(0)
+    , readSensorCD(0)
+    , cameraCaptureInterval(900)  // 900 tSig activations
+    , readSensorInterval(10)      // 10 tSig activations 
 {
     // Initialize configuration
     idealConditions = new IdealConditions();
@@ -36,8 +56,8 @@ Master::Master(MQueueHandler* queue)
     camera = new Cam();
     
     // Initialize ML engine with model path
-    // Model located at: leafsense_model.onnx (in working directory)
-    mlEngine = new ML(".", "leafsense_model.onnx");
+    // Model located at: /opt/leafsense/leafsense_model.onnx
+    mlEngine = new ML("/opt/leafsense", "leafsense_model.onnx");
 
     // Initialize synchronization primitives
     createMutexes();
@@ -76,6 +96,7 @@ void Master::start()
     pthread_create(&tTime, NULL, tTimeFuncStatic, this);
     pthread_create(&tSig, NULL, tSigFuncStatic, this);
     pthread_create(&tReadSensors, NULL, tReadSensorsFuncStatic, this);
+    pthread_create(&tCamera, NULL, tCameraFuncStatic, this);
     pthread_create(&tWaterHeater, NULL, tWaterHeaterFuncStatic, this);
     pthread_create(&tPHU, NULL, tPHUFuncStatic, this);
     pthread_create(&tPHD, NULL, tPHDFuncStatic, this);
@@ -89,6 +110,7 @@ void Master::stop()
     // Wake up all waiting threads
     triggerSignal(&condTime, &mutexTime);
     triggerSignal(&condRS, &mutexRS);
+    triggerSignal(&condCam, &mutexCam);
     triggerSignal(&condWH, &mutexWH);
     triggerSignal(&condPHU, &mutexPHU);
     triggerSignal(&condPHD, &mutexPHD);
@@ -97,6 +119,7 @@ void Master::stop()
     // Wait for threads to finish
     pthread_join(tTime, NULL);
     pthread_join(tSig, NULL);
+    pthread_join(tCamera, NULL);
 }
 
 /* ============================================================================
@@ -105,18 +128,81 @@ void Master::stop()
 
 void Master::tTimeFunc() 
 {
+    std::cout << "[tTime] Timer thread started (5s interval)" << std::endl;
+    
+    // Use a dedicated mutex and condition for the timer wait
+    pthread_mutex_t timerMutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_cond_t timerCond = PTHREAD_COND_INITIALIZER;
+    
     while (running) {
-        sleep(2);  // 2 second heartbeat interval
-        triggerSignal(&condTime, &mutexTime);
+        // Use pthread_cond_timedwait instead of usleep for proper threading
+        struct timespec ts;
+        clock_gettime(CLOCK_REALTIME, &ts);
+        ts.tv_sec += 5;  // Wait for 5 seconds
+        
+        pthread_mutex_lock(&timerMutex);
+        pthread_cond_timedwait(&timerCond, &timerMutex, &ts);
+        pthread_mutex_unlock(&timerMutex);
+        
+        if (!running) break;
+        
+        std::cout << "[tTime] Timer tick - signaling tSig thread" << std::endl;
+        
+        // Signal the tSig thread
+        pthread_mutex_lock(&mutexTime);
+        pthread_cond_signal(&condTime);
+        pthread_mutex_unlock(&mutexTime);
     }
+    
+    pthread_mutex_destroy(&timerMutex);
+    pthread_cond_destroy(&timerCond);
+    
+    std::cout << "[tTime] Timer thread stopped" << std::endl;
 }
 
 void Master::tSigFunc() 
 {
+    std::cout << "[tSig] Thread started, waiting for timer signals..." << std::endl;
+    
     while (running) {
         captureSignal(&condTime, &mutexTime);
         if (!running) break;
-        triggerSignal(&condRS, &mutexRS);
+
+        std::cout << "[tSig] Tick! SensorCD=" << readSensorCD 
+                  << ", CameraCD=" << cameraCaptureCounter << std::endl;
+
+        if (nPump->getState()) {
+            triggerSignal(&condN, &mutexN);
+            msgQueue->sendMessage("LOG|Maintenance|Nutrients|Auto Off");
+        }
+        if (phuPump->getState()) {
+            triggerSignal(&condPHU, &mutexPHU);
+            msgQueue->sendMessage("LOG|Maintenance|pH Up|Auto Off");
+        }
+        if (phdPump->getState()) {
+            triggerSignal(&condPHD, &mutexPHD);
+            msgQueue->sendMessage("LOG|Maintenance|pH Down|Auto Off");
+        }
+
+        if (readSensorCD <= 0) {
+            std::cout << "[tSig] Triggering sensor read" << std::endl;
+            readSensorCD = readSensorInterval;
+            triggerSignal(&condRS, &mutexRS);
+        } else {
+            if (sensorsCorrecting) {
+                readSensorCD -= 2;
+            } else {
+                readSensorCD -= 1;
+            }
+        }
+        
+        if (cameraCaptureCounter <= 0) {
+            std::cout << "[tSig] Triggering camera capture" << std::endl;
+            cameraCaptureCounter = cameraCaptureInterval;
+            triggerSignal(&condCam, &mutexCam);
+        } else {
+            cameraCaptureCounter -= 1;
+        }
     }
 }
 
@@ -130,6 +216,7 @@ void Master::tReadSensorsFunc()
     
     while (running) {
         captureSignal(&condRS, &mutexRS);
+        sensorsCorrecting = false;
         if (!running) break;
 
         // Read all sensors
@@ -145,44 +232,9 @@ void Master::tReadSensorsFunc()
         /* --------------------------------------------------------------------
          * Periodic Camera Capture & ML Analysis (every 30 minutes)
          * First capture happens 4 seconds after startup for testing
+         * Triggers the dedicated camera thread
          * -------------------------------------------------------------------- */
-        cameraCaptureCounter++;
-        if (cameraCaptureCounter >= 900 || cameraCaptureCounter == 2) {  // Trigger at 2 for initial test, then every 30 min
-            if (cameraCaptureCounter >= 900) cameraCaptureCounter = 0;
-            
-            std::cout << "[Master] Capturing photo for ML analysis..." << std::endl;
-            std::string photoPath = camera->takePhoto();
-            
-            if (!photoPath.empty()) {
-                // Extract filename from path
-                std::string filename = photoPath.substr(photoPath.find_last_of("/") + 1);
-                
-                // Save image record to database
-                std::stringstream imgMsg;
-                imgMsg << "IMG|" << filename << "|" << photoPath;
-                msgQueue->sendMessage(imgMsg.str());
-                
-                // Run ML inference on captured image
-                MLResult mlResult = mlEngine->analyzeDetailed(photoPath);
-                
-                // Save ML prediction to database (linked to image)
-                std::stringstream predMsg;
-                predMsg << "PRED|" << filename << "|" << mlResult.class_name 
-                        << "|" << mlResult.confidence;
-                msgQueue->sendMessage(predMsg.str());
-                
-                // Also log for history
-                std::stringstream mlLog;
-                mlLog << "LOG|ML Analysis|" << mlResult.class_name 
-                      << "|Confidence: " << (mlResult.confidence * 100) << "%";
-                msgQueue->sendMessage(mlLog.str());
-                
-                std::cout << "[Master] ML Result: " << mlResult.class_name 
-                          << " (" << (mlResult.confidence * 100) << "%)" << std::endl;
-            } else {
-                std::cerr << "[Master] Failed to capture photo" << std::endl;
-            }
-        }
+        
 
         // Get ideal ranges for control decisions
         idealConditions->getTemp(tempRange);
@@ -192,9 +244,16 @@ void Master::tReadSensorsFunc()
         /* --------------------------------------------------------------------
          * Temperature Control (with hysteresis)
          * -------------------------------------------------------------------- */
+        std::cout << "[Master] Temp Control: Current=" << t << "°C, Range=[" 
+                  << tempRange[0] << "-" << tempRange[1] << "], Heater=" 
+                  << (heater->getState() ? "ON" : "OFF") << std::endl;
+                  
         if (t < tempRange[0] && !heater->getState()) {
+            std::cout << "[Master] Temperature LOW (" << t << " < " << tempRange[0] << ") -> Turning heater ON" << std::endl;
+            sensorsCorrecting = true;
             triggerSignal(&condWH, &mutexWH);
         } else if (t > tempRange[1] && heater->getState()) {
+            std::cout << "[Master] Temperature HIGH (" << t << " > " << tempRange[1] << ") -> Turning heater OFF" << std::endl;
             triggerSignal(&condWH, &mutexWH);
         }
 
@@ -202,8 +261,10 @@ void Master::tReadSensorsFunc()
          * pH Control
          * -------------------------------------------------------------------- */
         if (p < phRange[0]) {
+            sensorsCorrecting = true;
             triggerSignal(&condPHU, &mutexPHU);
         } else if (p > phRange[1]) {
+            sensorsCorrecting = true;
             triggerSignal(&condPHD, &mutexPHD);
         }
 
@@ -211,6 +272,7 @@ void Master::tReadSensorsFunc()
          * TDS/Nutrient Control
          * -------------------------------------------------------------------- */
         if (e < tdsRange[0]) {
+            sensorsCorrecting = true;
             triggerSignal(&condN, &mutexN);
         }
         
@@ -218,6 +280,168 @@ void Master::tReadSensorsFunc()
          * Update Alert LED (kernel module integration)
          * -------------------------------------------------------------------- */
         updateAlertLED();
+    }
+}
+
+/* ============================================================================
+ * Thread Functions - Camera & ML Analysis
+ * ============================================================================ */
+
+void Master::tCameraFunc() 
+{
+    while (running) {
+        captureSignal(&condCam, &mutexCam);
+        if (!running) break;
+        
+        std::cout << "[Camera] Capturing photo for ML analysis..." << std::endl;
+        std::string photoPath = camera->takePhoto();
+        
+        if (!photoPath.empty()) {
+            // Extract filename from path
+            std::string filename = photoPath.substr(photoPath.find_last_of("/") + 1);
+            
+            // Save image record to database
+            std::stringstream imgMsg;
+            imgMsg << "IMG|" << filename << "|" << photoPath;
+            msgQueue->sendMessage(imgMsg.str());
+            
+            // Run ML inference on captured image
+            MLResult mlResult = mlEngine->analyzeDetailed(photoPath);
+            
+            // Use do-while(false) pattern to allow early exit for OOD
+            do {
+                // ============================================================
+                // Out-of-Distribution Detection (Non-plant image rejection)
+                // ============================================================
+                if (!mlResult.isValidPlant) {
+                    std::cout << "[Camera] OOD Detection: Image does not appear to be a valid plant" << std::endl;
+                    std::cout << "[Camera] Entropy: " << mlResult.entropy 
+                              << ", Confidence: " << (mlResult.confidence * 100) << "%" << std::endl;
+                    
+                    // Save as "Unknown" prediction
+                    std::stringstream predMsg;
+                    predMsg << "PRED|" << filename << "|Unknown (Not a Plant)|" << mlResult.confidence;
+                    msgQueue->sendMessage(predMsg.str());
+                    
+                    // Log the rejection
+                    std::stringstream oodLog;
+                    oodLog << "LOG|ML Analysis|Out-of-Distribution Detected"
+                           << "|Image: " << filename 
+                           << ", Entropy: " << mlResult.entropy 
+                           << ", Confidence: " << (mlResult.confidence * 100) << "%";
+                    msgQueue->sendMessage(oodLog.str());
+                    
+                    // Turn LED OFF for OOD (not a valid plant image)
+                    setMLAlertLED(false);
+                    
+                    // Skip further ML processing for this image
+                    break;
+                }
+                
+                // Save ML prediction to database (linked to image)
+                {
+                    std::stringstream predMsg;
+                    predMsg << "PRED|" << filename << "|" << mlResult.class_name 
+                            << "|" << mlResult.confidence;
+                    msgQueue->sendMessage(predMsg.str());
+                }
+                
+                // Also log for history
+                {
+                    std::stringstream mlLog;
+                    mlLog << "LOG|ML Analysis|" << mlResult.class_name 
+                          << "|Confidence: " << (mlResult.confidence * 100) << "%";
+                    msgQueue->sendMessage(mlLog.str());
+                }
+                
+                std::cout << "[Camera] ML Result: " << mlResult.class_name 
+                          << " (" << (mlResult.confidence * 100) << "%)" << std::endl;
+            
+                // ============================================================
+                // LED Alert Control - ON for bad classes, OFF for Healthy
+                // Class IDs: 0=Deficiency, 1=Disease, 2=Healthy, 3=Pest
+                // ============================================================
+                bool isBadClass = (mlResult.class_id != 2);  // Not Healthy
+                setMLAlertLED(isBadClass);
+                
+                // ============================================================
+                // Generate Recommendations based on ML prediction (TCDIS6, TCDEF5)
+                // ============================================================
+                generateMLRecommendation(mlResult, filename);
+                
+                // ============================================================
+                // Multi-class confidence logging (TCDIS7, TCDEF7)
+                // ============================================================
+                if (mlResult.probs.size() >= 4) {
+                    std::cout << "[Camera] All class probabilities:" << std::endl;
+                    std::cout << "  - Nutrient Deficiency: " << (mlResult.probs[0] * 100) << "%" << std::endl;
+                    std::cout << "  - Disease: " << (mlResult.probs[1] * 100) << "%" << std::endl;
+                    std::cout << "  - Healthy: " << (mlResult.probs[2] * 100) << "%" << std::endl;
+                    std::cout << "  - Pest Damage: " << (mlResult.probs[3] * 100) << "%" << std::endl;
+                    
+                    // Log secondary detections above 20% confidence
+                    for (size_t i = 0; i < 4; i++) {
+                        if ((int)i != mlResult.class_id && mlResult.probs[i] > 0.20f) {
+                            std::string secondaryClass;
+                            switch(i) {
+                                case 0: secondaryClass = "Nutrient Deficiency"; break;
+                                case 1: secondaryClass = "Disease"; break;
+                                case 2: secondaryClass = "Healthy"; break;
+                                case 3: secondaryClass = "Pest Damage"; break;
+                            }
+                            std::stringstream secLog;
+                            secLog << "LOG|ML Analysis|Secondary: " << secondaryClass 
+                                   << "|Confidence: " << (mlResult.probs[i] * 100) << "%";
+                            msgQueue->sendMessage(secLog.str());
+                        }
+                    }
+                }
+                
+                // ============================================================
+                // Confidence threshold alerting (TCDIS8, TCDEF8)
+                // ============================================================
+                const float ALERT_THRESHOLD = 0.70f;  // 70% confidence threshold
+                if (mlResult.class_id != 2 && mlResult.confidence >= ALERT_THRESHOLD) {  // Not Healthy
+                    std::stringstream alertMsg;
+                    alertMsg << "ALERT|Critical|" << mlResult.class_name 
+                             << " detected with " << (mlResult.confidence * 100) << "% confidence";
+                    msgQueue->sendMessage(alertMsg.str());
+                    std::cout << "[Camera] ALERT: " << mlResult.class_name 
+                              << " detected above threshold!" << std::endl;
+                }
+                
+                // ============================================================
+                // Specific Disease/Deficiency Logging (TCDIS9, TCDEF9)
+                // ============================================================
+                if (mlResult.class_id == 1) {  // Disease
+                    std::stringstream diseaseLog;
+                    diseaseLog << "LOG|Disease|" << mlResult.class_name 
+                               << "|Image: " << filename 
+                               << ", Confidence: " << (mlResult.confidence * 100) 
+                               << "%, Timestamp: " << time(nullptr);
+                    msgQueue->sendMessage(diseaseLog.str());
+                } else if (mlResult.class_id == 0) {  // Deficiency
+                    // Get current EC for correlation
+                    float currentEC = tdsSensor->readSensor();
+                    std::stringstream defLog;
+                    defLog << "LOG|Deficiency|" << mlResult.class_name 
+                           << "|Image: " << filename 
+                           << ", Confidence: " << (mlResult.confidence * 100) 
+                           << "%, Current EC: " << currentEC << " µS/cm";
+                    msgQueue->sendMessage(defLog.str());
+                } else if (mlResult.class_id == 3) {  // Pest
+                    std::stringstream pestLog;
+                    pestLog << "LOG|Disease|Pest Damage"
+                            << "|Image: " << filename 
+                            << ", Confidence: " << (mlResult.confidence * 100) << "%";
+                    msgQueue->sendMessage(pestLog.str());
+                }
+                
+            } while(false);  // End of ML processing block (allows break for OOD skip)
+            
+        } else {
+            std::cerr << "[Camera] Failed to capture photo" << std::endl;
+        }
     }
 }
 
@@ -244,8 +468,10 @@ void Master::tPHUFunc()
         captureSignal(&condPHU, &mutexPHU);
         if (!running) break;
         
-        phuPump->pump(500);
-        msgQueue->sendMessage("LOG|Maintenance|pH Up|Dosed 500ms");
+        phuPump->pump(!phuPump->getState());
+        msgQueue->sendMessage(phuPump->getState() 
+            ? "LOG|Maintenance|pH Up|Auto" 
+            : "LOG|Maintenance|pH Up|Auto");
     }
 }
 
@@ -255,8 +481,10 @@ void Master::tPHDFunc()
         captureSignal(&condPHD, &mutexPHD);
         if (!running) break;
         
-        phdPump->pump(500);
-        msgQueue->sendMessage("LOG|Maintenance|pH Down|Dosed 500ms");
+        phdPump->pump(!phdPump->getState());
+        msgQueue->sendMessage(phdPump->getState() 
+            ? "LOG|Maintenance|pH Down|Auto" 
+            : "LOG|Maintenance|pH Down|Auto");
     }
 }
 
@@ -266,8 +494,10 @@ void Master::tNutrientsFunc()
         captureSignal(&condN, &mutexN);
         if (!running) break;
         
-        nPump->pump(1000);
-        msgQueue->sendMessage("LOG|Maintenance|Nutrients|Dosed 1000ms");
+        nPump->pump(!nPump->getState());
+        msgQueue->sendMessage(nPump->getState() 
+            ? "LOG|Maintenance|Nutrients|Auto" 
+            : "LOG|Maintenance|Nutrients|Auto");
     }
 }
 
@@ -287,6 +517,11 @@ void* Master::tSigFuncStatic(void* arg) {
 
 void* Master::tReadSensorsFuncStatic(void* arg) { 
     ((Master*)arg)->tReadSensorsFunc(); 
+    return NULL; 
+}
+
+void* Master::tCameraFuncStatic(void* arg) { 
+    ((Master*)arg)->tCameraFunc(); 
     return NULL; 
 }
 
@@ -340,6 +575,7 @@ void Master::createMutexes()
     pthread_mutex_init(&mutexPHU, NULL);
     pthread_mutex_init(&mutexPHD, NULL);
     pthread_mutex_init(&mutexWH, NULL);
+    pthread_mutex_init(&mutexCam, NULL);
 }
 
 void Master::createConds() 
@@ -350,6 +586,7 @@ void Master::createConds()
     pthread_cond_init(&condPHU, NULL);
     pthread_cond_init(&condPHD, NULL);
     pthread_cond_init(&condWH, NULL);
+    pthread_cond_init(&condCam, NULL);
 }
 
 void Master::destroyMutexes() 
@@ -360,6 +597,7 @@ void Master::destroyMutexes()
     pthread_mutex_destroy(&mutexPHU);
     pthread_mutex_destroy(&mutexPHD);
     pthread_mutex_destroy(&mutexWH);
+    pthread_mutex_destroy(&mutexCam);
 }
 
 void Master::destroyConds() 
@@ -370,47 +608,150 @@ void Master::destroyConds()
     pthread_cond_destroy(&condPHU);
     pthread_cond_destroy(&condPHD);
     pthread_cond_destroy(&condWH);
+    pthread_cond_destroy(&condCam);
 }
 
 /* ============================================================================
- * LED Alert Control
+ * LED Alert Control - Based on ML Classification
  * ============================================================================ */
+
+void Master::setMLAlertLED(bool alertActive) 
+{
+    // Control LED via libgpiod (gpioset command) - GPIO 20
+    // This is more reliable than the kernel module approach
+    const char* cmd = alertActive 
+        ? "gpioset gpiochip0 20=1" 
+        : "gpioset gpiochip0 20=0";
+    
+    int result = system(cmd);
+    
+    if (result != 0) {
+        std::cerr << "[LED] Failed to control LED via gpioset" << std::endl;
+    } else {
+        std::cout << "[LED] Alert LED -> " << (alertActive ? "ON (Bad class detected)" : "OFF") << std::endl;
+    }
+}
 
 void Master::updateAlertLED() 
 {
-    // Get ideal ranges
+    // Legacy function - now LED is controlled by ML classification
+    // This function can be removed or kept for future sensor-based alerts
+}
+
+/* ============================================================================
+ * ML Recommendation Generation (TCDIS6, TCDEF5, TCDEF6, TCDEF10)
+ * ============================================================================ */
+
+void Master::generateMLRecommendation(const MLResult& mlResult, const std::string& filename)
+{
+    // Skip recommendation if image is out-of-distribution (not a valid plant)
+    if (!mlResult.isValidPlant) {
+        std::cout << "[Master] Skipping recommendation - not a valid plant image" << std::endl;
+        return;
+    }
+    
+    std::string recType;
+    std::string recText;
+    
+    // Get current sensor values for correlation (TCDEF10)
+    float currentEC = tdsSensor->readSensor();
+    float currentPH = phSensor->readSensor();
+    float currentTemp = tempSensor->readSensor();
+    
+    // Get ideal ranges for comparison
     float tempRange[2], phRange[2], tdsRange[2];
     idealConditions->getTemp(tempRange);
     idealConditions->getPH(phRange);
     idealConditions->getTDS(tdsRange);
     
-    // Get current sensor values
-    float t = tempSensor->readSensor();
-    float p = phSensor->readSensor();
-    float e = tdsSensor->readSensor();
-    
-    // Check if any parameter is out of range
-    bool alertActive = (t < tempRange[0] || t > tempRange[1] ||
-                        p < phRange[0] || p > phRange[1] ||
-                        e < tdsRange[0] || e > tdsRange[1]);
-    
-    // Control LED via kernel module
-    static int ledFd = -1;
-    
-    // Open LED device on first call
-    if (ledFd == -1) {
-        ledFd = open("/dev/led0", O_WRONLY);
-        if (ledFd < 0) {
-            // LED module not loaded, skip LED control
-            return;
-        }
+    switch (mlResult.class_id) {
+        case 0:  // Nutrient Deficiency
+            recType = "Deficiency";
+            
+            // TCDEF6: Specific Nutrient Recommendation based on EC correlation
+            if (currentEC < tdsRange[0]) {
+                // Low EC indicates general nutrient deficiency
+                float deficit = tdsRange[0] - currentEC;
+                if (deficit > 300) {
+                    recText = "CRITICAL: Severe nutrient deficiency detected. EC is " + 
+                              std::to_string((int)currentEC) + " µS/cm (target: " + 
+                              std::to_string((int)tdsRange[0]) + "-" + std::to_string((int)tdsRange[1]) + 
+                              "). Add complete NPK nutrient solution immediately. Recommend 2-3 doses.";
+                } else if (deficit > 150) {
+                    recText = "Moderate nutrient deficiency. EC is " + 
+                              std::to_string((int)currentEC) + " µS/cm. Add balanced nutrient solution. Recommend 1-2 doses.";
+                } else {
+                    recText = "Mild nutrient deficiency. EC is " + 
+                              std::to_string((int)currentEC) + " µS/cm. Add light nutrient supplement.";
+                }
+            } else if (currentEC > tdsRange[1]) {
+                // High EC but still deficiency - likely specific nutrient missing
+                recText = "Possible specific nutrient deficiency despite adequate EC (" + 
+                          std::to_string((int)currentEC) + " µS/cm). Check for: "
+                          "Iron (Fe) if yellowing between veins, "
+                          "Calcium (Ca) if tip burn, "
+                          "Magnesium (Mg) if older leaf yellowing. "
+                          "Consider foliar spray treatment.";
+            } else {
+                // EC in range - pH might be locking out nutrients
+                if (currentPH < phRange[0] || currentPH > phRange[1]) {
+                    recText = "Nutrient lockout suspected due to pH imbalance (current: " + 
+                              std::to_string(currentPH).substr(0, 4) + ", target: " + 
+                              std::to_string(phRange[0]).substr(0, 3) + "-" + 
+                              std::to_string(phRange[1]).substr(0, 3) + "). "
+                              "Adjust pH before adding nutrients.";
+                } else {
+                    recText = "Visual nutrient deficiency detected but EC/pH are normal. "
+                              "Monitor for 24h. If symptoms persist, flush system and replenish nutrients.";
+                }
+            }
+            break;
+            
+        case 1:  // Disease
+            recType = "Disease";
+            recText = "Disease detected. IMMEDIATE ACTIONS: "
+                      "1) Isolate affected plant if possible. "
+                      "2) Remove visibly infected leaves. "
+                      "3) Apply appropriate fungicide/bactericide. "
+                      "4) Improve air circulation. "
+                      "5) Reduce humidity if above 70%. "
+                      "Current conditions - Temp: " + std::to_string((int)currentTemp) + 
+                      "°C, pH: " + std::to_string(currentPH).substr(0, 4) + 
+                      ". Monitor closely for 48 hours.";
+            break;
+            
+        case 2:  // Healthy
+            recType = "Healthy";
+            recText = "Plant appears healthy. Continue current care routine. "
+                      "Conditions: Temp " + std::to_string((int)currentTemp) + 
+                      "°C, pH " + std::to_string(currentPH).substr(0, 4) + 
+                      ", EC " + std::to_string((int)currentEC) + " µS/cm.";
+            break;
+            
+        case 3:  // Pest Damage
+            recType = "Pest";
+            recText = "Pest damage detected. RECOMMENDED ACTIONS: "
+                      "1) Inspect undersides of all leaves for insects. "
+                      "2) Look for common pests: aphids, spider mites, thrips, whiteflies. "
+                      "3) Apply neem oil or insecticidal soap. "
+                      "4) Consider introducing beneficial insects (ladybugs, lacewings). "
+                      "5) Yellow sticky traps for monitoring. "
+                      "Check again in 3-5 days.";
+            break;
+            
+        default:
+            recType = "Unknown";
+            recText = "Unknown classification. Manual inspection recommended.";
+            break;
     }
     
-    // Write '1' or '0' to LED device
-    const char* cmd = alertActive ? "1" : "0";
-    ssize_t written = write(ledFd, cmd, 1);
+    // Send recommendation to database
+    std::stringstream recMsg;
+    recMsg << "REC|" << filename << "|" << recType << "|" << recText 
+           << "|" << mlResult.confidence;
+    msgQueue->sendMessage(recMsg.str());
     
-    if (written != 1) {
-        std::cerr << "[Master] Failed to write to LED device" << std::endl;
-    }
+    // Log recommendation
+    std::cout << "[Master] Recommendation (" << recType << "): " 
+              << recText.substr(0, 80) << "..." << std::endl;
 }

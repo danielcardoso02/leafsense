@@ -1,10 +1,11 @@
 # LeafSense - Intelligent Hydroponic Monitoring System
 
-**Version:** 1.5.1  
-**Date:** January 11, 2026  
-**Status:** ✅ Complete system with display, camera, touchscreen, and ML working on Raspberry Pi 4  
+**Version:** 1.6.1  
+**Date:** January 23, 2026  
+**Status:** ✅ Complete system - Display, camera, touchscreen, ML, and GPIO actuators working on Raspberry Pi 4  
 **Platform:** Raspberry Pi 4B (ARM64) + Custom Buildroot Linux  
-**Architecture:** Cross-compiled C++17 with Qt5, OpenCV, ONNX Runtime
+**Architecture:** Cross-compiled C++17 with Qt5, OpenCV, ONNX Runtime  
+**Test Pass Rate:** 90% (73/81 test cases)
 
 > 📋 **See [docs/00-PROJECT-STATUS.md](docs/00-PROJECT-STATUS.md) for complete implementation status**
 
@@ -172,6 +173,9 @@ Complete documentation available in [`docs/`](docs/) directory:
 | 17 | [17-TOUCHSCREEN-CONFIGURATION.md](docs/17-TOUCHSCREEN-CONFIGURATION.md) | **Touchscreen setup (evdev, rotate=90)** |
 | 18 | [18-BUILDROOT-PACKAGES.md](docs/18-BUILDROOT-PACKAGES.md) | Complete Buildroot package list |
 | 19 | [19-TERMINOLOGY.md](docs/19-TERMINOLOGY.md) | Key terms and concepts explained |
+| 20 | [TEST-CASES-STATUS.md](docs/TEST-CASES-STATUS.md) | Section 4.6 test case analysis and pass/fail status |
+| 21 | [VIDEO-RECORDING-SCRIPT.md](docs/VIDEO-RECORDING-SCRIPT.md) | Step-by-step demo video recording guide |
+| 22 | [IMPLEMENTATION-VERIFICATION.md](docs/IMPLEMENTATION-VERIFICATION.md) | Report vs implementation cross-check |
 
 **Quick Links:**
 - 🎯 [Demonstration Guide](docs/15-DEMO-GUIDE.md) - Step-by-step demo procedures
@@ -426,7 +430,7 @@ For issues, questions, or contributions:
 
 ---
 
-**Last Updated:** January 11, 2026  
+**Last Updated:** January 19, 2026  
 **Build Status:** ✅ Passing  
 **System Status:** ✅ Production Ready
 
