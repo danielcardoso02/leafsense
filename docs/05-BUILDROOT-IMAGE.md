@@ -49,14 +49,18 @@ LeafSense runs on a custom-built Linux system created with **Buildroot**. This d
 4. **Fast Boot**: Boots in ~10 seconds vs 30+ seconds for full Linux distros
 5. **Embedded-Focused**: Designed for headless, single-application systems like LeafSense
 
-### Alternatives Considered
+<h3 align="center">Alternatives Considered</h3>
+
+<div align="center">
 
 | System | Size | Boot Time | Customization | Why Not Used |
-|--------|------|-----------|---------------|--------------|
+|--------|------|-----------|---------------|---------------|
 | Raspberry Pi OS | 2-4 GB | 30-40s | Low | Too bloated for single-app |
 | Yocto/OpenEmbedded | Variable | Fast | Very High | Too complex, steep learning curve |
 | Buildroot | 300 MB | ~10s | High | **✅ CHOSEN** - Best balance |
 | Alpine Linux | ~200 MB | Fast | Medium | Less Pi-specific support |
+
+</div>
 
 ---
 

@@ -22,7 +22,11 @@
 | BusyBox Init | ✅ Complete | S99leafsense init script for auto-start |
 | SSH/Networking | ✅ Complete | Static IP 10.42.0.196, passwordless SSH |
 
-### Display & Touchscreen
+</div>
+
+<h3 align="center">Display & Touchscreen</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|
@@ -32,7 +36,11 @@
 | Calibration | ✅ Complete | Qt evdev: `rotate=180:invertx` |
 | Qt Platform | ✅ Complete | linuxfb:fb=/dev/fb1:size=480x320 |
 
-### Camera System
+</div>
+
+<h3 align="center">Camera System</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|
@@ -42,7 +50,11 @@
 | Gallery | ✅ Complete | Photos saved to `/opt/leafsense/gallery/` |
 | Integration | ✅ Complete | Photos displayed in GUI Gallery tab |
 
-### Graphical User Interface
+</div>
+
+<h3 align="center">Graphical User Interface</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|
@@ -54,7 +66,11 @@
 | Settings Tab | ✅ Complete | Ideal conditions configuration |
 | Light/Dark Theme | ✅ Complete | ThemeManager with toggle |
 
-### Machine Learning
+</div>
+
+<h3 align="center">Machine Learning</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|
@@ -64,7 +80,11 @@
 | Runtime | ✅ Complete | ONNX Runtime C++ inference |
 | Integration | ✅ Complete | Automatic photo analysis with confidence scores |
 
-### Database
+</div>
+
+<h3 align="center">Database</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|
@@ -73,7 +93,11 @@
 | Logging | ✅ Complete | All sensor readings, ML predictions, events |
 | Views | ✅ Complete | Latest reading, unread alerts, summaries |
 
-### Kernel Module
+</div>
+
+<h3 align="center">Kernel Module</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|
@@ -81,7 +105,11 @@
 | GPIO Control | ✅ Complete | Direct BCM2711 register access |
 | Integration | ✅ Complete | AlertLed class wrapper |
 
-### Threading Architecture
+</div>
+
+<h3 align="center">Threading Architecture</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|
@@ -90,13 +118,17 @@
 | Priorities | ✅ Complete | 4-tier priority scheduling |
 | IPC | ✅ Complete | Message queues for daemon communication |
 
+</div>
+
 ---
 
 ## Sensor & Actuator Status
 
-### Sensors (Auto-Detect Real vs Mock)
+<h3 align="center">Sensors (Auto-Detect Real vs Mock)</h3>
 
 The following sensors have **mock implementations** that return simulated values when the physical hardware is not detected. The code automatically uses real values when hardware is connected.
+
+<div align="center">
 
 | Sensor | Mock Behavior | Real Mode Trigger |
 |--------|---------------|-------------------|
@@ -104,7 +136,11 @@ The following sensors have **mock implementations** that return simulated values
 | pH Sensor (PH-4502C) | Random 6.0-7.0 | ADS1115 ADC returns valid voltage on Channel 2 |
 | TDS/EC Sensor | Random 1200-1400ppm | ADS1115 ADC returns valid voltage on Channel 3 |
 
-### Actuators (Real GPIO via libgpiod)
+</div>
+
+<h3 align="center">Actuators (Real GPIO via libgpiod)</h3>
+
+<div align="center">
 
 | Actuator | GPIO | Status |
 |----------|------|--------|
@@ -114,7 +150,11 @@ The following sensors have **mock implementations** that return simulated values
 | Water Heater | GPIO 26 | ✅ Working |
 | Alert LED | Kernel Module | ✅ Working via `/dev/led0` |
 
-### I2C & GPIO Implementation
+</div>
+
+<h3 align="center">I2C & GPIO Implementation</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|
@@ -123,6 +163,8 @@ The following sensors have **mock implementations** that return simulated values
 | ADS1115 ADC | ✅ Driver Ready | Address 0x48, auto-fallback to mock if not connected |
 | pH Sensor | ✅ I2C Ready | Channel 2, voltage-to-pH conversion |
 | TDS Sensor | ✅ I2C Ready | Channel 3, voltage-to-ppm conversion |
+
+</div>
 
 ---
 
@@ -169,7 +211,9 @@ The Pi has no RTC, so time resets on boot. NTP synchronization works when networ
 
 ---
 
-## File Locations
+<h2 align="center">File Locations</h2>
+
+<div align="center">
 
 | Path | Contents |
 |------|----------|
@@ -178,6 +222,8 @@ The Pi has no RTC, so time resets on boot. NTP synchronization works when networ
 | `/opt/leafsense/leafsense.db` | SQLite database |
 | `/opt/leafsense/leafsense_model.onnx` | ML model |
 | `/opt/leafsense/leafsense_model_classes.txt` | Class labels |
+
+</div>
 | `/opt/leafsense/gallery/` | Captured plant photos |
 | `/usr/lib/libonnxruntime.so.1.16.3` | ONNX Runtime library |
 | `/boot/config.txt` | Boot configuration (LCD overlay) |

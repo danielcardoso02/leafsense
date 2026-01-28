@@ -8,18 +8,24 @@
 
 <p align="center"><em>Complete reference of all packages included in the LeafSense Buildroot image</em></p>
 
-### SD Card Partitions
+<h3 align="center">SD Card Partitions</h3>
+
+<div align="center">
 
 | Partition | Label | Format | Size | Contents |
 |-----------|-------|--------|------|----------|
 | 1 | BOOT | FAT32 | 64 MB | Kernel, DTB, firmware |
 | 2 | ROOTFS | ext4 | 512 MB | Root filesystem |
 
+</div>
+
 ---
 
 ## Package Categories
 
-### 1. Qt5 GUI Framework
+<h3 align="center">1. Qt5 GUI Framework</h3>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
@@ -36,17 +42,23 @@
 | `qt5svg` | SVG support |
 | `qt5charts` | Charts and graphs |
 
+</div>
+
 **Note:** `qt5base-tslib` is intentionally **NOT included** - it causes application freezing with the Waveshare 3.5" LCD. Use evdev instead.
 
 ---
 
-### 2. Touchscreen (evdev)
+<h3 align="center">2. Touchscreen (evdev)</h3>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
 | `libevdev` | Event device library |
 | `evtest` | Touchscreen testing tool |
 | `input-event-daemon` | Input event handling |
+
+</div>
 
 **Critical Configuration:**
 ```bash
@@ -57,17 +69,23 @@ The rotation parameters configure correct touch mapping for the display (works w
 
 ---
 
-### 3. Database
+<h3 align="center">3. Database</h3>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
 | `sqlite` | SQLite database engine |
 
+</div>
+
 **Usage:** LeafSense stores all data in `/opt/leafsense/leafsense.db`.
 
 ---
 
-### 4. Camera System
+<h3 align="center">4. Camera System</h3>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
@@ -86,6 +104,8 @@ The rotation parameters configure correct touch mapping for the display (works w
 | `opencv4-with-png` | PNG support in OpenCV |
 | `opencv4-with-v4l` | V4L2 support in OpenCV |
 
+</div>
+
 **Camera Status:**
 - Hardware: Pi Camera v1 (OV5647)
 - Interface: libcamera (via vc4 pipeline)
@@ -93,7 +113,9 @@ The rotation parameters configure correct touch mapping for the display (works w
 
 ---
 
-### 5. Hardware Interfaces
+<h3 align="center">5. Hardware Interfaces</h3>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
@@ -102,6 +124,8 @@ The rotation parameters configure correct touch mapping for the display (works w
 | `libgpiod` | GPIO library |
 | `libgpiod-tools` | GPIO utilities (gpioset, gpioget) |
 
+</div>
+
 **Hardware Used:**
 - I2C: ADS1115 ADC, DS3231 RTC
 - GPIO: LED control, relay control
@@ -109,11 +133,15 @@ The rotation parameters configure correct touch mapping for the display (works w
 
 ---
 
-### 6. LeafSense LED Driver (Kernel Module)
+<h3 align="center">6. LeafSense LED Driver (Kernel Module)</h3>
+
+<div align="center">
 
 | Package | Purpose |
-|---------|--------|
+|---------|---------|
 | `leafsense-led` | Custom kernel module for LED status indicator |
+
+</div>
 
 **Features:**
 - Character device at `/dev/led0`
@@ -137,7 +165,9 @@ echo "0" > /dev/led0  # Turn off
 
 ---
 
-### 7. Networking
+<h3 align="center">7. Networking</h3>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
@@ -154,6 +184,8 @@ echo "0" > /dev/led0  # Turn off
 | `wireless-tools` | WiFi utilities |
 | `iw` | WiFi configuration |
 
+</div>
+
 **Default Access:**
 ```bash
 ssh root@<PI_IP>
@@ -162,10 +194,12 @@ ssh root@<PI_IP>
 
 ---
 
-### 8. Filesystem Tools
+<h3 align="center">8. Filesystem Tools</h3>
+
+<div align="center">
 
 | Package | Purpose |
-|---------|--------|
+|---------|---------|
 | `e2fsprogs` | ext2/3/4 filesystem tools |
 | `dosfstools` | FAT filesystem tools |
 | `coreutils` | Standard Unix utilities |
@@ -173,9 +207,13 @@ ssh root@<PI_IP>
 | `gzip` | Compression |
 | `bzip2` | Compression |
 
+</div>
+
 ---
 
-### 9. System Utilities
+<h3 align="center">9. System Utilities</h3>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
@@ -188,42 +226,58 @@ ssh root@<PI_IP>
 | `bash` | Bash shell |
 | `jq` | JSON processor |
 
+</div>
+
 ---
 
-### 10. Debugging Tools
+<h3 align="center">10. Debugging Tools</h3>
+
+<div align="center">
 
 | Package | Purpose |
-|---------|--------|
+|---------|---------|
 | `strace` | System call tracer |
 | `lsof` | List open files |
 | `tcpdump` | Network packet analyzer |
 | `gdb` | GNU debugger |
 | `ltrace` | Library call tracer |
 
+</div>
+
 **Note:** These can be removed for production builds to reduce image size.
 
 ---
 
-### 11. Fonts
+<h3 align="center">11. Fonts</h3>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
 | `dejavu` | DejaVu font family |
 | `fontconfig` | Font configuration |
 
+</div>
+
 ---
 
-### 12. Image Libraries
+<h3 align="center">12. Image Libraries</h3>
+
+<div align="center">
 
 | Package | Purpose |
-|---------|--------|
+|---------|---------|
 | `jpeg` | JPEG library |
 | `libpng` | PNG library |
 | `tiff` | TIFF library |
 
+</div>
+
 ---
 
-### 13. Future-Proofing Packages
+<h3 align="center">13. Future-Proofing Packages</h3>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
@@ -236,20 +290,28 @@ ssh root@<PI_IP>
 | `hwclock` | Hardware clock utilities |
 | `syslog-ng` | System logging |
 
+</div>
+
 ---
 
-## Device Management
+<h2 align="center">Device Management</h2>
+
+<div align="center">
 
 | Package | Purpose |
 |---------|---------|
 | `eudev` | Device manager (udev) |
 | `eudev-rules-gen` | Automatic rule generation |
 
+</div>
+
 **Configuration:** `BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y`
 
 ---
 
-## System Configuration
+<h2 align="center">System Configuration</h2>
+
+<div align="center">
 
 | Setting | Value |
 |---------|-------|
@@ -257,16 +319,22 @@ ssh root@<PI_IP>
 | Hostname | `leafsense-pi` |
 | Timezone | `Europe/Lisbon` |
 
+</div>
+
 ---
 
-## Not Included (By Design)
+<h2 align="center">Not Included (By Design)</h2>
+
+<div align="center">
 
 | Package | Reason |
-|---------|--------|
+|---------|---------|
 | `tslib` | Causes application freezing with Waveshare 3.5" LCD |
 | `systemd` | Too heavy for embedded system; BusyBox init used |
 | `xorg` | Not needed; using framebuffer directly |
 | `wayland` | Not needed; using framebuffer directly |
+
+</div>
 
 ---
 

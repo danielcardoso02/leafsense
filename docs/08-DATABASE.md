@@ -8,13 +8,17 @@
 
 ---
 
-## Location
+<h2 align="center">Location</h2>
+
+<div align="center">
 
 | Environment | Path |
 |-------------|------|
 | Desktop | `./leafsense.db` |
 | Raspberry Pi | `/opt/leafsense/leafsense.db` |
 | Schema | `database/schema.sql` |
+
+</div>
 
 ## Schema
 

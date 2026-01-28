@@ -16,7 +16,9 @@
 | GPIO Pin | 20 (configurable) |
 | Kernel version | 6.12.41-v8 |
 
-## Module Architecture
+</div>
+
+<h2 align="center">Module Architecture</h2>
 
 ```
 ┌─────────────────────────────────────────────────────────┐

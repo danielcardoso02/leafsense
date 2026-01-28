@@ -191,7 +191,9 @@ set(CMAKE_C_COMPILER aarch64-linux-gcc)
 set(CMAKE_CXX_COMPILER aarch64-linux-g++)
 ```
 
-## External Dependencies
+<h2 align="center">External Dependencies</h2>
+
+<div align="center">
 
 | Library | Version | Use |
 |------------|--------|-----|
@@ -200,3 +202,5 @@ set(CMAKE_CXX_COMPILER aarch64-linux-g++)
 | OpenCV | 4.11.0 | Image Processing |
 | SQLite | 3.48.0 | Database |
 | BusyBox | 1.37.0 | Linux Utilities |
+
+</div>

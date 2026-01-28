@@ -20,14 +20,22 @@
 - **Connectivity:** WiFi, Ethernet, USB 3.0
 - **GPIO:** 40 pins for sensors and actuators
 
-### Display
+<h3 align="center">Display</h3>
+
+<div align="center">
+
 | Component | Model | Resolution |
 |-----------|-------|------------|
 | Touchscreen | Waveshare 3.5" LCD (C) | 480x320 |
 | Controller | ILI9486 (SPI) | 16-bit color |
 | Touch | ADS7846 (SPI) | Resistive |
 
-### Sensors
+</div>
+
+<h3 align="center">Sensors</h3>
+
+<div align="center">
+
 | Sensor | Interface | Function |
 |--------|-----------|----------|
 | DS18B20 | 1-Wire (GPIO19) | Water temperature |
@@ -35,13 +43,20 @@
 | EC Sensor | I2C | Electrical conductivity |
 | Camera | CSI/USB | Image capture for ML |
 
-### Actuators
+</div>
+
+<h3 align="center">Actuators</h3>
+
+<div align="center">
+
 | Actuator | Interface | Function |
 |----------|-----------|----------|
 | pH Up Pump | GPIO (Relay) | Increase pH |
 | pH Down Pump | GPIO (Relay) | Decrease pH |
 | Nutrient Pump | GPIO (Relay) | Add nutrients |
 | LED Indicator | GPIO (Kernel Module) | System status |
+
+</div>
 
 ## Technology Stack
 
@@ -130,9 +145,11 @@ leafsense-project/
 - [ ] Push notifications
 - [ ] Cloud service integration
 
-## Documentation
+<h2 align="center">Documentation</h2>
 
 Complete documentation available in `docs/` directory:
+
+<div align="center">
 
 | Document | Description |
 |----------|-------------|
@@ -148,6 +165,8 @@ Complete documentation available in `docs/` directory:
 | [09-GUI.md](09-GUI.md) | GUI implementation |
 | [10-TROUBLESHOOTING.md](10-TROUBLESHOOTING.md) | Common issues |
 | [11-CHANGELOG.md](11-CHANGELOG.md) | Version history |
+
+</div>
 | [12-SENSOR-ACTUATOR-INTEGRATION.md](12-SENSOR-ACTUATOR-INTEGRATION.md) | Hardware integration |
 | [13-TESTING-GUIDE.md](13-TESTING-GUIDE.md) | Testing procedures |
 | [14-KERNEL-MODULE.md](14-KERNEL-MODULE.md) | Kernel driver details |

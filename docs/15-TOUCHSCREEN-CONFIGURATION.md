@@ -52,21 +52,27 @@ export QT_QPA_FB_NO_LIBINPUT=1
 
 ---
 
-## Rotation Parameter Mapping
+<h2 align="center">Rotation Parameter Mapping</h2>
 
 The touch coordinates require transformation to match the rotated display. For the 3.5" LCD with `rotate=270` in config.txt (piscreen overlay), the Qt evdev parameter needs `rotate=180:invertx`:
+
+<div align="center">
 
 | config.txt dtoverlay | Qt Environment Variable |
 |---------------------|------------------------|
 | `piscreen,rotate=270` | `rotate=180:invertx` |
 
+</div>
+
 **Note:** The piscreen overlay with rotate=270 requires `rotate=180:invertx` for correct touch mapping.
 
 ---
 
-## SPI Speed and FPS Settings
+<h2 align="center">SPI Speed and FPS Settings</h2>
 
-### Why 16MHz Instead of Higher?
+<h3 align="center">Why 16MHz Instead of Higher?</h3>
+
+<div align="center">
 
 | SPI Speed | Result |
 |-----------|--------|
@@ -74,7 +80,11 @@ The touch coordinates require transformation to match the rotated display. For t
 | 16MHz | Touch works reliably, slight screen refresh flicker |
 | 12MHz | Very stable but more visible flicker |
 
-### FPS Setting
+</div>
+
+<h3 align="center">FPS Setting</h3>
+
+<div align="center">
 
 | FPS | Result |
 |-----|--------|
@@ -83,6 +93,8 @@ The touch coordinates require transformation to match the rotated display. For t
 | 40 | Acceptable blinking |
 | 50 | Minimal blinking (recommended) |
 | 60+ | May cause instability |
+
+</div>
 
 **Recommended:** `speed=16000000,fps=50`
 

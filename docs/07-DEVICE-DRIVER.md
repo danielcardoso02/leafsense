@@ -9,9 +9,14 @@
 | **Driver Type** | Character Device |
 | **Device Node** | `/dev/led0` |
 | **Major Number** | Dynamic (assigned by kernel) |
-| **Minor Number** | 0 |  
-**Module Name:** `ledmodule`  
-**Source Files:** `drivers/kernel_module/ledmodule.c`, `utils.c`, `utils.h`
+| **Minor Number** | 0 |
+
+</div>
+
+<p align="center">
+<strong>Module Name:</strong> <code>ledmodule</code><br>
+<strong>Source Files:</strong> <code>drivers/kernel_module/ledmodule.c</code>, <code>utils.c</code>, <code>utils.h</code>
+</p>
 
 ---
 

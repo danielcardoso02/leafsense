@@ -28,6 +28,9 @@ This release fixes the database query for health score calculation and removes A
 - **Note**: GUI logs remain color-coded (intentional design)
 
 ### Verified Working
+
+<div align="center">
+
 | Component | Status |
 |-----------|--------|
 | Terminal logs | ✅ All white (no ANSI escape codes) |
@@ -35,6 +38,8 @@ This release fixes the database query for health score calculation and removes A
 | Database query | ✅ Uses correct table `ml_predictions` |
 | GPIO actuators | ✅ Real hardware via libgpiod |
 | Sensors | ✅ Mock mode (real mode ready) |
+
+</div>
 
 ---
 
@@ -86,12 +91,17 @@ This release implements real hardware support for I2C sensors and GPIO actuators
 - `docs/00-PROJECT-STATUS.md` - Updated implementation status
 
 ### Tested Hardware
+
+<div align="center">
+
 | Component | Status | Notes |
 |-----------|--------|-------|
 | I2C Bus | ✅ Working | `/dev/i2c-1` accessible |
 | ADC Init | ✅ Working | Address 0x48 initialized |
 | GPIO 26 | ✅ Working | Heater ON/OFF verified |
 | pH/TDS I2C | ⏳ Pending | Requires physical ADS1115 |
+
+</div>
 
 ---
 
@@ -211,13 +221,17 @@ This release enhances the OOD detection with color-based analysis and improves g
 - **Auto-repeat enabled**: Hold button to scroll through images quickly
 - **UI responsiveness**: Added processEvents() to prevent touch event sticking
 
-### Technical Details
+<h3 align="center">Technical Details</h3>
+
+<div align="center">
 
 | Threshold | Value | Description |
 |-----------|-------|-------------|
 | ENTROPY_THRESHOLD | 1.8 | Maximum allowed entropy (relaxed from 1.2) |
 | MIN_CONFIDENCE_THRESHOLD | 0.3 | Minimum top-class probability (relaxed from 0.4) |
 | MIN_GREEN_RATIO | 0.10 | Minimum green pixel ratio (10%, tuned for lettuce) |
+
+</div>
 
 ### Test Evidence (January 22, 2026)
 
@@ -272,12 +286,16 @@ This release adds entropy-based out-of-distribution (OOD) detection to the ML pi
 - **Skip recommendations**: System skips treatment recommendations for rejected images
 - **Detailed logging**: OOD events are logged with entropy and confidence values
 
-### Technical Details
+<h3 align="center">Technical Details</h3>
+
+<div align="center">
 
 | Threshold | Value | Description |
 |-----------|-------|-------------|
 | ENTROPY_THRESHOLD | 1.2 | Maximum allowed entropy (max for 4 classes = 2.0) |
 | MIN_CONFIDENCE_THRESHOLD | 0.4 | Minimum top-class probability required |
+
+</div>
 
 ### Files Modified
 - `src/application/ml/ML.cpp` - Added calculateEntropy(), checkValidPlant(), OOD detection in inference
@@ -537,7 +555,9 @@ This release finalizes the system configuration and Buildroot packages, preparin
 - Updated 01-OVERVIEW.md documentation list with correct numbers
 - Updated 05-BUILDROOT-IMAGE.md to reference evdev instead of tslib
 
-### System Status (January 10, 2026)
+<h3 align="center">System Status (January 10, 2026)</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|
@@ -548,6 +568,8 @@ This release finalizes the system configuration and Buildroot packages, preparin
 | Database | ✅ Working | SQLite with all tables |
 | ML Model | ✅ Loaded | ONNX Runtime inference |
 | Buildroot | ✅ Configured | Ready for final build |
+
+</div>
 
 ### Known Constraints
 

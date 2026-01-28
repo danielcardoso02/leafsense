@@ -4,9 +4,12 @@
 
 ---
 
-## Display Configuration
+<h2 align="center">Display Configuration</h2>
 
-### Waveshare 3.5" LCD (C)
+<h3 align="center">Waveshare 3.5" LCD (C)</h3>
+
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | Resolution | 480x320 |
@@ -14,6 +17,8 @@
 | Touch | ADS7846 (SPI) |
 | Framebuffer | /dev/fb1 |
 | Rotation | 90° (landscape) |
+
+</div>
 
 ### Qt Platform Plugin
 ```bash
@@ -28,13 +33,20 @@ export QT_QPA_FB_HIDECURSOR=1
 ./LeafSense -platform linuxfb:fb=/dev/fb1
 ```
 
-### Framebuffer Devices
+<h3 align="center">Framebuffer Devices</h3>
+
+<div align="center">
+
 | Device | Controller | Use |
 |--------|-----------|-----|
 | /dev/fb0 | BCM2708 (GPU) | HDMI output |
 | /dev/fb1 | ILI9486 (SPI) | Waveshare LCD |
 
-## UI Stack
+</div>
+
+<h2 align="center">UI Stack</h2>
+
+<div align="center">
 
 | Component | Library |
 |------------|------------|
@@ -44,6 +56,8 @@ export QT_QPA_FB_HIDECURSOR=1
 | Database | Qt5Sql |
 | SVG | Qt5Svg |
 | Platform | linuxfb (framebuffer) |
+
+</div>
 
 ## File Structure
 

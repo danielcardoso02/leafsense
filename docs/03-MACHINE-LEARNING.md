@@ -4,7 +4,9 @@
 
 ---
 
-## Classification Classes
+<h2 align="center">Classification Classes</h2>
+
+<div align="center">
 
 | Class | Description | Recommended Action |
 |--------|-----------|------------------|
@@ -12,6 +14,8 @@
 | **Disease** | Bacterial/fungal diseases | Remove affected leaves, apply treatment |
 | **Deficiency** | NPK nutrient deficiency | Adjust nutrient solution |
 | **Pest** | Insect damage | Apply pest control measures |
+
+</div>
 
 ## Model Architecture
 
@@ -161,12 +165,17 @@ session_options.SetGraphOptimizationLevel(
 );
 ```
 
-### Performance on Raspberry Pi 4B
+<h3 align="center">Performance on Raspberry Pi 4B</h3>
+
+<div align="center">
+
 | Metric | Value |
 |--------|-------|
 | Inference time | ~150ms |
 | RAM usage | ~50MB |
 | CPU usage | ~80% (1 core) |
+
+</div>
 
 ## Model Training
 
