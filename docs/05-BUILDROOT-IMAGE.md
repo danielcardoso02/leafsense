@@ -95,7 +95,7 @@ Hostname:      leafsense-pi
 #### Graphics (for Waveshare 3.5" LCD)
 - **Qt5 5.15.14** - GUI framework
 - **fbdev** - Framebuffer device support
-- **libevdev** - Touchscreen via evdev (NOT tslib - see 17-TOUCHSCREEN-CONFIGURATION.md)
+- **libevdev** - Touchscreen via evdev (NOT tslib - see 15-TOUCHSCREEN-CONFIGURATION.md)
 
 #### Libraries
 - **OpenCV 4.11.0** - Computer vision (with V4L2 support)
@@ -905,7 +905,7 @@ make clean
 
 ### Related Documentation
 
-- [19-TERMINOLOGY.md](19-TERMINOLOGY.md) - Technical term definitions
+- [17-TERMINOLOGY.md](17-TERMINOLOGY.md) - Technical term definitions
 - [03-MACHINE-LEARNING.md](03-MACHINE-LEARNING.md) - ML model deployment
 - [06-RASPBERRY-PI-DEPLOYMENT.md](06-RASPBERRY-PI-DEPLOYMENT.md) - Deploying LeafSense
 - [10-TROUBLESHOOTING.md](10-TROUBLESHOOTING.md) - Common issues

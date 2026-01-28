@@ -243,7 +243,7 @@ This release enhances the OOD detection with color-based analysis and improves g
 - **Documented correct parameters**: `rotate=180:invertx` is REQUIRED for Waveshare 3.5" LCD
 - Updated `/etc/profile.d/leafsense-qt.sh` on target device
 - Updated `deploy/rootfs-overlay/etc/profile.d/leafsense-qt.sh`
-- Updated all documentation (17-TOUCHSCREEN-CONFIGURATION.md, 09-GUI.md, etc.)
+- Updated all documentation (15-TOUCHSCREEN-CONFIGURATION.md, 09-GUI.md, etc.)
 
 **Correct touchscreen command:**
 ```bash
@@ -392,11 +392,11 @@ This release fixes ML prediction storage and improves Analytics window data disp
 ### Documentation Updated
 - `docs/06-RASPBERRY-PI-DEPLOYMENT.md` - Fixed to use piscreen overlay and start.sh
 - `docs/10-TROUBLESHOOTING.md` - Updated touchscreen troubleshooting with correct evdev config
-- `docs/14-TESTING-GUIDE.md` - Updated testing commands with correct display configuration
-- `docs/17-TOUCHSCREEN-CONFIGURATION.md` - Removed obsolete waveshare35c references
+- `docs/13-TESTING-GUIDE.md` - Updated testing commands with correct display configuration
+- `docs/15-TOUCHSCREEN-CONFIGURATION.md` - Removed obsolete waveshare35c references
 - `docs/04-NETWORKING.md` - Fixed display overlay reference
 - `docs/05-BUILDROOT-IMAGE.md` - Updated overlay file list
-- `docs/18-BUILDROOT-PACKAGES.md` - Updated overlay structure documentation
+- `docs/16-BUILDROOT-PACKAGES.md` - Updated overlay structure documentation
 
 ### Current Working Configuration
 - **Display overlay**: `dtoverlay=piscreen,speed=16000000,rotate=270`
@@ -423,7 +423,7 @@ This release fixes the touchscreen calibration for the piscreen display overlay.
 #### Updated Documentation
 - `deploy/rootfs-overlay/opt/leafsense/start_leafsense.sh` - New touchscreen config
 - `docs/00-PROJECT-STATUS.md` - Updated calibration info
-- `docs/17-TOUCHSCREEN-CONFIGURATION.md` - Complete rewrite for piscreen overlay
+- `docs/15-TOUCHSCREEN-CONFIGURATION.md` - Complete rewrite for piscreen overlay
 
 ### Configuration
 
@@ -507,8 +507,8 @@ This release finalizes the system configuration and Buildroot packages, preparin
 - **OpenCV4 with V4L2 support** for video capture
 
 #### Documentation
-- **17-TOUCHSCREEN-CONFIGURATION.md** - Complete touchscreen setup guide
-- **18-BUILDROOT-PACKAGES.md** - Comprehensive package reference
+- **15-TOUCHSCREEN-CONFIGURATION.md** - Complete touchscreen setup guide
+- **16-BUILDROOT-PACKAGES.md** - Comprehensive package reference
 - Fixed documentation numbering (removed duplicate #14)
 - Updated README.md index with all 18 documents
 
@@ -695,7 +695,7 @@ This version adds professional image processing techniques using OpenCV and comp
   - Real-time verification of data persistence
 
 #### Documentation
-- **Terminology guide** (`docs/19-TERMINOLOGY.md`)
+- **Terminology guide** (`docs/17-TERMINOLOGY.md`)
   - Complete glossary of technical terms
   - Hardware, software, and networking concepts
   - Development and deployment terminology

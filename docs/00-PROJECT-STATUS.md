@@ -128,7 +128,7 @@ The following sensors have **mock implementations** that return simulated values
 
 ## Hardware Integration
 
-See [13-SENSOR-ACTUATOR-INTEGRATION.md](13-SENSOR-ACTUATOR-INTEGRATION.md) for complete instructions on connecting physical hardware.
+See [12-SENSOR-ACTUATOR-INTEGRATION.md](12-SENSOR-ACTUATOR-INTEGRATION.md) for complete instructions on connecting physical hardware.
 
 ### Integration Checklist
 

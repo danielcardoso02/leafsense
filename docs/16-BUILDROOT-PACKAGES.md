@@ -394,5 +394,5 @@ gpioinfo
 ## Related Documentation
 
 - [05-BUILDROOT-IMAGE.md](05-BUILDROOT-IMAGE.md) - Image creation details
-- [17-TOUCHSCREEN-CONFIGURATION.md](17-TOUCHSCREEN-CONFIGURATION.md) - Touchscreen setup
+- [15-TOUCHSCREEN-CONFIGURATION.md](15-TOUCHSCREEN-CONFIGURATION.md) - Touchscreen setup
 - [06-RASPBERRY-PI-DEPLOYMENT.md](06-RASPBERRY-PI-DEPLOYMENT.md) - Deployment guide

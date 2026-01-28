@@ -130,12 +130,12 @@ Complete documentation is available in the [`docs/`](docs/) directory:
 | [GUI](docs/09-GUI.md) | Qt5 interface implementation |
 | [Troubleshooting](docs/10-TROUBLESHOOTING.md) | Common issues and solutions |
 | [Changelog](docs/11-CHANGELOG.md) | Version history |
-| [Hardware Integration](docs/13-SENSOR-ACTUATOR-INTEGRATION.md) | Sensor and actuator setup |
-| [Testing Guide](docs/14-TESTING-GUIDE.md) | Testing procedures |
-| [Kernel Module](docs/16-KERNEL-MODULE.md) | Low-level kernel development |
-| [Touchscreen](docs/17-TOUCHSCREEN-CONFIGURATION.md) | Display calibration |
-| [Buildroot Packages](docs/18-BUILDROOT-PACKAGES.md) | Package configuration |
-| [Terminology](docs/19-TERMINOLOGY.md) | Key terms explained |
+| [Hardware Integration](docs/12-SENSOR-ACTUATOR-INTEGRATION.md) | Sensor and actuator setup |
+| [Testing Guide](docs/13-TESTING-GUIDE.md) | Testing procedures |
+| [Kernel Module](docs/14-KERNEL-MODULE.md) | Low-level kernel development |
+| [Touchscreen](docs/15-TOUCHSCREEN-CONFIGURATION.md) | Display calibration |
+| [Buildroot Packages](docs/16-BUILDROOT-PACKAGES.md) | Package configuration |
+| [Terminology](docs/17-TERMINOLOGY.md) | Key terms explained |
 
 ---
 
@@ -214,7 +214,7 @@ ls -lh /opt/leafsense/gallery/
 sqlite3 /opt/leafsense/database/leafsense.db ".tables"
 ```
 
-See [Testing Guide](docs/14-TESTING-GUIDE.md) for comprehensive test procedures.
+See [Testing Guide](docs/13-TESTING-GUIDE.md) for comprehensive test procedures.
 
 ---
 

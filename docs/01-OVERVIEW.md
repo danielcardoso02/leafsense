@@ -148,9 +148,9 @@ Complete documentation available in `docs/` directory:
 | [09-GUI.md](09-GUI.md) | GUI implementation |
 | [10-TROUBLESHOOTING.md](10-TROUBLESHOOTING.md) | Common issues |
 | [11-CHANGELOG.md](11-CHANGELOG.md) | Version history |
-| [13-SENSOR-ACTUATOR-INTEGRATION.md](13-SENSOR-ACTUATOR-INTEGRATION.md) | Hardware integration |
-| [14-TESTING-GUIDE.md](14-TESTING-GUIDE.md) | Testing procedures |
-| [16-KERNEL-MODULE.md](16-KERNEL-MODULE.md) | Kernel driver details |
-| [17-TOUCHSCREEN-CONFIGURATION.md](17-TOUCHSCREEN-CONFIGURATION.md) | LCD setup |
-| [18-BUILDROOT-PACKAGES.md](18-BUILDROOT-PACKAGES.md) | Package reference |
-| [19-TERMINOLOGY.md](19-TERMINOLOGY.md) | Technical terms |
+| [12-SENSOR-ACTUATOR-INTEGRATION.md](12-SENSOR-ACTUATOR-INTEGRATION.md) | Hardware integration |
+| [13-TESTING-GUIDE.md](13-TESTING-GUIDE.md) | Testing procedures |
+| [14-KERNEL-MODULE.md](14-KERNEL-MODULE.md) | Kernel driver details |
+| [15-TOUCHSCREEN-CONFIGURATION.md](15-TOUCHSCREEN-CONFIGURATION.md) | LCD setup |
+| [16-BUILDROOT-PACKAGES.md](16-BUILDROOT-PACKAGES.md) | Package reference |
+| [17-TERMINOLOGY.md](17-TERMINOLOGY.md) | Technical terms |
