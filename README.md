@@ -1,7 +1,7 @@
 # LeafSense - Intelligent Hydroponic Monitoring System
 
 <p align="center">
-  <img src="resources/images/logo_leafsense.png" alt="LeafSense Logo" width="200">
+  <img src="resources/images/logo_leafsense.png" alt="LeafSense Logo" width="400">
 </p>
 
 <p align="center">
