@@ -155,10 +155,11 @@ Complete documentation is available in the [`docs/`](docs/) directory:
 ### Thread Architecture
 
 ```
-Master Controller (7 threads)
+Master Controller (8 threads)
 ├── tTime          - Heartbeat timer (2s)
 ├── tSig           - Signal dispatcher
 ├── tReadSensors   - Sensor polling & control logic
+├── tCamera        - Image capture & ML inference
 ├── tWaterHeater   - Temperature control
 ├── tPHU           - pH Up pump
 ├── tPHD           - pH Down pump
