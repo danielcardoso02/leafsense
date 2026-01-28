@@ -27,7 +27,8 @@ static const float PH_CALIBRATION_OFFSET = 21.34f;  // Offset at pH 7.0
 static const float PH_CALIBRATION_SLOPE = -5.70f;   // Slope (negative for typical probes)
 
 // Alternative simple calibration (voltage at neutral pH 7.0)
-static const float PH_NEUTRAL_VOLTAGE = 2.5f;       // Voltage at pH 7.0 (typical)
+// Calibrated for current sensor: ~1.03V measured at neutral pH
+static const float PH_NEUTRAL_VOLTAGE = 1.03f;      // Voltage at pH 7.0 (measured)
 static const float PH_VOLTAGE_PER_PH = 0.18f;       // ~0.18V per pH unit (Nernst equation)
 
 /* ============================================================================

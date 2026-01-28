@@ -32,8 +32,8 @@ Heater::Heater(int pin)
         return;
     }
     
-    // Request line as output with initial value LOW (heater off)
-    int ret = gpiod_line_request_output(line, "leafsense-heater", 0);
+    // Request line as output with initial value HIGH (heater off - inverted logic)
+    int ret = gpiod_line_request_output(line, "leafsense-heater", 1);
     if (ret < 0) {
         std::cerr << "[Heater] WARNING: Cannot request GPIO " << gpioPin << " as output, running in mock mode" << std::endl;
         gpiod_chip_close(chip);
@@ -71,11 +71,12 @@ void Heater::setState(bool on)
     
     if (initialized && line) {
         // Real GPIO control via libgpiod
-        int ret = gpiod_line_set_value(line, on ? 1 : 0);
+        // Note: Inverted logic - GPIO LOW = Heater ON, GPIO HIGH = Heater OFF
+        int ret = gpiod_line_set_value(line, on ? 0 : 1);
         if (ret < 0) {
             std::cerr << "[Heater] Error setting GPIO " << gpioPin << " value" << std::endl;
         } else {
-            std::cout << "[Heater] GPIO " << gpioPin << " -> " << (on ? "HIGH (ON)" : "LOW (OFF)") << std::endl;
+            std::cout << "[Heater] GPIO " << gpioPin << " -> " << (on ? "LOW (ON)" : "HIGH (OFF)") << std::endl;
         }
     } else {
         // Mock mode fallback

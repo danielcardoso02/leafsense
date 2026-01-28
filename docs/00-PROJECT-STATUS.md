@@ -1,22 +1,17 @@
-# LeafSense Project Status - Final Report
-
-**Date:** January 23, 2026  
-**Version:** 1.6.1  
-**Authors:** Daniel Cardoso (PG53753), Marco Costa (PG60210)  
-**Course:** Master's in Industrial Electronics and Computers Engineering  
-**Institution:** University of Minho, School of Engineering
+# LeafSense Project Status
 
 ---
 
-## Executive Summary
+## Overview
 
-LeafSense is a complete embedded hydroponic monitoring system running on Raspberry Pi 4 with custom Buildroot Linux. This document provides a final status report of what is implemented, what is working, and what remains for future development.
+LeafSense is a complete embedded hydroponic monitoring system running on Raspberry Pi 4 with custom Buildroot Linux. This document provides a status report of all implemented features.
 
 ---
 
-## ✅ Fully Implemented & Working
+## Implemented Features
 
-### 1. Operating System (Buildroot)
+### Operating System (Buildroot)
+
 | Component | Status | Details |
 |-----------|--------|---------|
 | Custom Linux Image | ✅ Complete | Buildroot 2025.08, kernel 6.12.41-v8 |
@@ -27,7 +22,8 @@ LeafSense is a complete embedded hydroponic monitoring system running on Raspber
 | BusyBox Init | ✅ Complete | S99leafsense init script for auto-start |
 | SSH/Networking | ✅ Complete | Static IP 10.42.0.196, passwordless SSH |
 
-### 2. Display & Touchscreen
+### Display & Touchscreen
+
 | Component | Status | Details |
 |-----------|--------|---------|
 | Waveshare 3.5" LCD (C) | ✅ Complete | ILI9486 controller, 480×320 resolution |
@@ -36,7 +32,8 @@ LeafSense is a complete embedded hydroponic monitoring system running on Raspber
 | Calibration | ✅ Complete | Qt evdev: `rotate=180:invertx` |
 | Qt Platform | ✅ Complete | linuxfb:fb=/dev/fb1:size=480x320 |
 
-### 3. Camera System
+### Camera System
+
 | Component | Status | Details |
 |-----------|--------|---------|
 | Hardware | ✅ Complete | OV5647 (Pi Camera v1), 5MP |
@@ -45,7 +42,8 @@ LeafSense is a complete embedded hydroponic monitoring system running on Raspber
 | Gallery | ✅ Complete | Photos saved to `/opt/leafsense/gallery/` |
 | Integration | ✅ Complete | Photos displayed in GUI Gallery tab |
 
-### 4. Graphical User Interface
+### Graphical User Interface
+
 | Component | Status | Details |
 |-----------|--------|---------|
 | Login Screen | ✅ Complete | Username/password authentication |
@@ -56,7 +54,8 @@ LeafSense is a complete embedded hydroponic monitoring system running on Raspber
 | Settings Tab | ✅ Complete | Ideal conditions configuration |
 | Light/Dark Theme | ✅ Complete | ThemeManager with toggle |
 
-### 5. Machine Learning
+### Machine Learning
+
 | Component | Status | Details |
 |-----------|--------|---------|
 | Model | ✅ Complete | MobileNetV3-Small trained on 4 classes |
@@ -65,7 +64,8 @@ LeafSense is a complete embedded hydroponic monitoring system running on Raspber
 | Runtime | ✅ Complete | ONNX Runtime C++ inference |
 | Integration | ✅ Complete | Automatic photo analysis with confidence scores |
 
-### 6. Database
+### Database
+
 | Component | Status | Details |
 |-----------|--------|---------|
 | Schema | ✅ Complete | 10 tables (users, plants, sensors, alerts, ML, etc.) |
@@ -73,14 +73,16 @@ LeafSense is a complete embedded hydroponic monitoring system running on Raspber
 | Logging | ✅ Complete | All sensor readings, ML predictions, events |
 | Views | ✅ Complete | Latest reading, unread alerts, summaries |
 
-### 7. Kernel Module
+### Kernel Module
+
 | Component | Status | Details |
 |-----------|--------|---------|
 | LED Driver | ✅ Complete | Character device at `/dev/led0` |
 | GPIO Control | ✅ Complete | Direct BCM2711 register access |
 | Integration | ✅ Complete | AlertLed class wrapper |
 
-### 8. Threading Architecture
+### Threading Architecture
+
 | Component | Status | Details |
 |-----------|--------|---------|
 | POSIX Threads | ✅ Complete | tReadSensors, tCamera, actuator threads |
@@ -90,27 +92,30 @@ LeafSense is a complete embedded hydroponic monitoring system running on Raspber
 
 ---
 
-## ⏳ Mock Sensor Drivers (Hardware Not Connected)
+## Sensor & Actuator Status
+
+### Sensors (Auto-Detect Real vs Mock)
 
 The following sensors have **mock implementations** that return simulated values when the physical hardware is not detected. The code automatically uses real values when hardware is connected.
 
-### Sensors (Auto-Detect Real vs Mock)
-| Sensor | Current Behavior | Real Mode Trigger |
-|--------|------------------|-------------------|
-| DS18B20 (Temperature) | Mock: random 15-25°C | 1-Wire device found at `/sys/bus/w1/devices/28-*` |
-| pH Sensor (PH-4502C) | Mock: random 6.0-7.0 | ADS1115 ADC returns valid voltage on Channel 0 |
-| TDS/EC Sensor | Mock: random 1200-1400ppm | ADS1115 ADC returns valid voltage on Channel 1 |
+| Sensor | Mock Behavior | Real Mode Trigger |
+|--------|---------------|-------------------|
+| DS18B20 (Temperature) | Random 15-25°C | 1-Wire device found at `/sys/bus/w1/devices/28-*` |
+| pH Sensor (PH-4502C) | Random 6.0-7.0 | ADS1115 ADC returns valid voltage on Channel 0 |
+| TDS/EC Sensor | Random 1200-1400ppm | ADS1115 ADC returns valid voltage on Channel 1 |
 
 ### Actuators (Real GPIO via libgpiod)
-| Actuator | Current Behavior | Status |
-|----------|------------------|--------|
-| pH Up Pump (GPIO 6) | Real GPIO control | ✅ `[Pump GPIO6] Initialized successfully (libgpiod)` |
-| pH Down Pump (GPIO 13) | Real GPIO control | ✅ `[Pump GPIO13] -> HIGH (ON)` verified |
-| Nutrient Pump (GPIO 5) | Real GPIO control | ✅ `[Pump GPIO5] Initialized successfully (libgpiod)` |
-| Water Heater (GPIO 26) | Real GPIO control | ✅ `[Heater] GPIO 26 initialized successfully (libgpiod)` |
-| Alert LED | Real kernel module | ✅ `[LED] Alert LED -> ON/OFF` via `/dev/led0` |
 
-### 3. I2C & GPIO Implementation Status (January 2026)
+| Actuator | GPIO | Status |
+|----------|------|--------|
+| pH Up Pump | GPIO 6 | ✅ Working |
+| pH Down Pump | GPIO 13 | ✅ Working |
+| Nutrient Pump | GPIO 5 | ✅ Working |
+| Water Heater | GPIO 26 | ✅ Working |
+| Alert LED | Kernel Module | ✅ Working via `/dev/led0` |
+
+### I2C & GPIO Implementation
+
 | Component | Status | Details |
 |-----------|--------|---------|
 | I2C Bus | ✅ Working | `/dev/i2c-1` enabled |
@@ -118,24 +123,15 @@ The following sensors have **mock implementations** that return simulated values
 | ADS1115 ADC | ✅ Driver Ready | Address 0x48, auto-fallback to mock if not connected |
 | pH Sensor | ✅ I2C Ready | Channel 0, voltage-to-pH conversion |
 | TDS Sensor | ✅ I2C Ready | Channel 1, voltage-to-ppm conversion |
-| Heater GPIO 26 | ✅ Working | Real GPIO via libgpiod |
-| pH Up GPIO 6 | ✅ Working | Real GPIO via libgpiod |
-| pH Down GPIO 13 | ✅ Working | Real GPIO via libgpiod |
-| Nutrient GPIO 5 | ✅ Working | Real GPIO via libgpiod |
-| Alert LED | ✅ Working | Kernel module `/dev/led0` |
-
-### 4. Additional Modules (Not Integrated)
-| Module | Purpose | Interface |
-|--------|---------|-----------|
-| DS3231 RTC | Persistent timekeeping | I2C (address 0x68) - NTP used instead |
 
 ---
 
-## Integration Guide
+## Hardware Integration
 
-See [13-SENSOR-ACTUATOR-INTEGRATION.md](13-SENSOR-ACTUATOR-INTEGRATION.md) for complete instructions on replacing mock drivers with real hardware.
+See [13-SENSOR-ACTUATOR-INTEGRATION.md](13-SENSOR-ACTUATOR-INTEGRATION.md) for complete instructions on connecting physical hardware.
 
-### Quick Integration Checklist:
+### Integration Checklist
+
 - [ ] Enable 1-Wire overlay for DS18B20 temperature sensor
 - [x] Configure I2C for analog sensors (i2c-dev module auto-loads)
 - [x] ADS1115 ADC driver implemented with I2C support
@@ -146,41 +142,39 @@ See [13-SENSOR-ACTUATOR-INTEGRATION.md](13-SENSOR-ACTUATOR-INTEGRATION.md) for c
 - [x] Alert LED via kernel module (/dev/led0 working)
 - [ ] Connect physical ADS1115 and calibrate pH/TDS sensors
 - [ ] Connect DS18B20 for real temperature readings
-- [ ] (Optional) Connect DS3231 RTC for persistent time (NTP works via Ethernet)
 
 ---
 
-## Known Issues & Constraints
+## Known Issues
 
-### 1. Touchscreen Calibration Persistence
-- **Issue:** Qt evdev parameters must be set before each launch
-- **Solution:** Parameters are set in `/opt/leafsense/start.sh`:
-  ```bash
-  export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
-  ```
-- **Note:** This configuration works with dtoverlay=piscreen,rotate=270
+### Touchscreen Calibration
 
-### 2. Camera Strategy
-- **Behavior:** The camera driver tries multiple capture methods:
-  1. libcamera `cam` utility (preferred, works on Pi)
-  2. libcamera-still fallback
-  3. OpenCV V4L2 (for USB webcams)
-  4. Test pattern (if no camera available)
-- **Note:** The default OpenCV `VideoCapture` times out on Pi Camera; libcamera `cam` is required
+Qt evdev parameters must be set before each launch. This is handled in `/opt/leafsense/start_leafsense.sh`:
 
-### 3. Time Synchronization
-- **Issue:** Pi has no RTC, time resets to 1970-01-01 on boot
-- **Current:** Application uses whatever system time is available
-- **Solution:** Integrate DS3231 RTC module and sync on boot
+```bash
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+```
+
+### Camera Strategy
+
+The camera driver tries multiple capture methods:
+1. libcamera `cam` utility (preferred, works on Pi)
+2. libcamera-still fallback
+3. OpenCV V4L2 (for USB webcams)
+4. Test pattern (if no camera available)
+
+### Time Synchronization
+
+The Pi has no RTC, so time resets on boot. NTP synchronization works when network is available.
 
 ---
 
-## File Locations on Raspberry Pi
+## File Locations
 
 | Path | Contents |
 |------|----------|
 | `/opt/leafsense/LeafSense` | Main application binary |
-| `/opt/leafsense/start.sh` | Startup script with Qt environment |
+| `/opt/leafsense/start_leafsense.sh` | Startup script |
 | `/opt/leafsense/leafsense.db` | SQLite database |
 | `/opt/leafsense/leafsense_model.onnx` | ML model |
 | `/opt/leafsense/leafsense_model_classes.txt` | Class labels |
@@ -190,51 +184,9 @@ See [13-SENSOR-ACTUATOR-INTEGRATION.md](13-SENSOR-ACTUATOR-INTEGRATION.md) for c
 
 ---
 
-## Buildroot Preservation
+## Future Development
 
-The Buildroot environment is fully configured and ready for future image rebuilds:
-
-**Location:** `~/buildroot/buildroot-2025.08/`
-
-**Key Files:**
-- `.config` - Full menuconfig settings
-- `output/images/sdcard.img` - Final flashable image
-- `board/raspberrypi4-64/` - Custom configurations
-
-**Rebuild Command:**
-```bash
-cd ~/buildroot/buildroot-2025.08
-make clean  # Only if needed
-make -j$(nproc)
-# Output: output/images/sdcard.img
-```
-
----
-
-## Deployment Commands
-
-### Start Application on Pi
-```bash
-ssh root@10.42.0.196 'cd /opt/leafsense && ./start.sh'
-```
-
-### Redeploy Binary
-```bash
-cd leafsense-project/build-arm64
-make -j$(nproc)
-sshpass -p 'leafsense' scp src/LeafSense root@10.42.0.196:/opt/leafsense/
-```
-
-### Access Pi
-```bash
-ssh root@10.42.0.196  # Password: leafsense
-```
-
----
-
-## Future Development Roadmap
-
-### Phase 1: Hardware Integration (Priority)
+### Phase 1: Hardware Integration
 1. Connect and calibrate DS18B20 temperature sensor
 2. Install ADS1115 ADC and connect pH/TDS sensors
 3. Wire peristaltic pumps to GPIO with relay modules
@@ -253,77 +205,5 @@ ssh root@10.42.0.196  # Password: leafsense
 3. Multi-plant support
 4. Integration with external services
 
----
 
-## Conclusion
-
-LeafSense is a complete, functional embedded system with full software implementation. The architecture, GUI, ML inference, database, and GPIO actuators are production-ready. Sensors operate in mock mode until physical hardware is connected—the code automatically detects and uses real sensors when available.
-
-The system has been tested on actual Raspberry Pi 4 hardware with:
-- ✅ Waveshare 3.5" LCD working at 480×320
-- ✅ Touch input properly calibrated (rotate=180:invertx)
-- ✅ Camera capturing real photos via libcamera
-- ✅ ML predictions running with OOD detection
-- ✅ Database logging all events
-- ✅ Full GUI navigation working
-- ✅ GPIO actuators controlling via libgpiod (Heater, Pumps)
-- ✅ Alert LED via kernel module
-
-**Test Pass Rate: 90% (73/81 tests)**
-
-**The project is ready for physical sensor integration (ADS1115 ADC, DS18B20).**
-
----
-
-## Evidence Collection (January 2026)
-
-Comprehensive evidence has been collected for the academic report:
-
-### Screenshots Captured
-| Category | Count | Location |
-|----------|-------|----------|
-| GUI Screens | 10 | `docs/latex/images/gui_*.png` |
-| LED Driver | 3 | `docs/latex/images/led_*.png` |
-| Database | 4 | `docs/latex/images/db_*.png` |
-| ML Pipeline | 3 | `docs/latex/images/ml_*.png` |
-| Hardware Drivers | 4 | `docs/latex/images/*_evidence_*.png` |
-| Test Evidence | 17 | `test_*.png` screenshots from Jan 22 session |
-| **Total** | **41** | |
-
-### Documentation Created
-- `docs/latex/results-chapter.tex` - Complete LaTeX chapter with all evidence
-- `docs/TEST-CASES-STATUS.md` - Analysis of 81 test cases from section 4.6
-- `docs/VIDEO-RECORDING-SCRIPT.md` - Step-by-step demo recording guide
-
-### Images Updated (January 22, 2026)
-- `ml_captured_plant.jpg` - Real lettuce leaf captured by OV5647 camera
-- `gui_analytics_gallery.png` - Remote framebuffer capture of gallery with lettuce images and recommendation panel
-
-### Test Results Summary
-Based on section 4.6 of the implementation report:
-- **Total Test Cases:** 81
-- **Passing:** 73 (90%)
-- **Not Tested:** 8 (statistical analysis, bounding box, nutrient pump EC trigger)
-
-**Test Categories at 100% Pass Rate:**
-- System Setup & Basic Functionality
-- Sensor Reading
-- Image Capture
-- ML Analysis & Predictions
-- Actuator Control - Water Heater
-- Actuator Control - pH Pump
-- Actuator Control - Shared Features
-- GUI Dashboard & Interactions
-- GUI Logs & Theme
-- GUI Settings & Configuration
-- Data Persistence
-- Basic Integration
-
-**Latest Testing Session (January 23, 2026):**
-- Fixed database query for health score (ml_predictions table)
-- Removed ANSI color codes from terminal logs
-- Verified all GPIO actuators working via libgpiod
-- Pass rate increased from 81% to 90% (73/81 tests)
-
-See `docs/TEST-CASES-STATUS.md` for detailed analysis.
 

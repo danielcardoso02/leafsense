@@ -51,8 +51,8 @@ Master::Master(MQueueHandler* queue)
     // Initialize sensors (Mock drivers)
     adc = new ADC(0x48);
     tempSensor = new Temp("mock_addr");
-    phSensor = new PH(adc, 0);
-    tdsSensor = new TDS(adc, 1);
+    phSensor = new PH(adc, 2);    // Channel 2 (A2 on ADS1115)
+    tdsSensor = new TDS(adc, 3);  // Channel 3 (A3 on ADS1115)
     camera = new Cam();
     
     // Initialize ML engine with model path

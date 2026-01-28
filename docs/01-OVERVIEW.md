@@ -134,37 +134,23 @@ leafsense-project/
 
 Complete documentation available in `docs/` directory:
 
-| # | File | Description |
-|---|------|-------------|
-| 00 | TERMINOLOGY.md | Technical terms and concepts |
-| 01 | OVERVIEW.md | This file |
-| 02 | ARCHITECTURE.md | System architecture and design patterns |
-| 03 | MACHINE-LEARNING.md | ML model details and training |
-| 04 | NETWORKING.md | Network configuration options |
-| 05 | BUILDROOT-IMAGE.md | Custom Linux image creation |
-| 06 | RASPBERRY-PI-DEPLOYMENT.md | Deployment procedures |
-| 07 | DEVICE-DRIVER.md | LED kernel module guide |
-| 08 | DATABASE.md | Database schema and queries |
-| 09 | GUI.md | GUI design and implementation |
-| 10 | TROUBLESHOOTING.md | Common issues and solutions |
-| 11 | CHANGELOG.md | Version history |
-| 12 | IMPLEMENTATION-REPORT.md | Technical implementation report |
-| 13 | SENSOR-ACTUATOR-INTEGRATION.md | Hardware integration guide |
-| 14 | TESTING-GUIDE.md | Testing procedures |
-| 15 | DEMO-GUIDE.md | Demonstration guide |
-| 16 | KERNEL-MODULE.md | LED driver implementation |
-| 17 | TOUCHSCREEN-CONFIGURATION.md | Waveshare 3.5" LCD setup |
-| 18 | BUILDROOT-PACKAGES.md | Complete package reference |
-
-## Authors
-
-**Group 11**
-
-- Daniel Gonçalo Silva Cardoso, PG53753
-- Marco Xavier Leite Costa, PG60210
-
-**Advisor:** Professor Adriano José Conceição Tavares
-
-## License
-
-This project was developed as part of the Embedded Systems and Computers course - Master's in Industrial Electronics and Computers Engineering.
+| Document | Description |
+|----------|-------------|
+| [00-PROJECT-STATUS.md](00-PROJECT-STATUS.md) | Implementation status |
+| [01-OVERVIEW.md](01-OVERVIEW.md) | This file |
+| [02-ARCHITECTURE.md](02-ARCHITECTURE.md) | System architecture |
+| [03-MACHINE-LEARNING.md](03-MACHINE-LEARNING.md) | ML model training |
+| [04-NETWORKING.md](04-NETWORKING.md) | Network configuration |
+| [05-BUILDROOT-IMAGE.md](05-BUILDROOT-IMAGE.md) | Linux image creation |
+| [06-RASPBERRY-PI-DEPLOYMENT.md](06-RASPBERRY-PI-DEPLOYMENT.md) | Deployment procedures |
+| [07-DEVICE-DRIVER.md](07-DEVICE-DRIVER.md) | Kernel module guide |
+| [08-DATABASE.md](08-DATABASE.md) | Database schema |
+| [09-GUI.md](09-GUI.md) | GUI implementation |
+| [10-TROUBLESHOOTING.md](10-TROUBLESHOOTING.md) | Common issues |
+| [11-CHANGELOG.md](11-CHANGELOG.md) | Version history |
+| [13-SENSOR-ACTUATOR-INTEGRATION.md](13-SENSOR-ACTUATOR-INTEGRATION.md) | Hardware integration |
+| [14-TESTING-GUIDE.md](14-TESTING-GUIDE.md) | Testing procedures |
+| [16-KERNEL-MODULE.md](16-KERNEL-MODULE.md) | Kernel driver details |
+| [17-TOUCHSCREEN-CONFIGURATION.md](17-TOUCHSCREEN-CONFIGURATION.md) | LCD setup |
+| [18-BUILDROOT-PACKAGES.md](18-BUILDROOT-PACKAGES.md) | Package reference |
+| [19-TERMINOLOGY.md](19-TERMINOLOGY.md) | Technical terms |
