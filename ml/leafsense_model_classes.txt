@@ -1,0 +1,4 @@
+deficiency
+disease
+healthy
+pest

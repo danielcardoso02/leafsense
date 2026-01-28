@@ -1,0 +1,90 @@
+#!/bin/sh
+#
+# LeafSense Auto-Start Script
+# ===========================
+# This script starts LeafSense automatically on boot.
+#
+# IMPORTANT: Touchscreen configuration is critical here.
+# The QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS must include rotate=90
+# to match the display rotation in config.txt.
+#
+# This configuration has been tested and verified to work.
+# DO NOT modify without thorough testing.
+#
+# Last verified: January 10, 2026
+
+DAEMON=/opt/leafsense/LeafSense
+STARTUP_SCRIPT=/opt/leafsense/start_leafsense.sh
+PIDFILE=/var/run/leafsense.pid
+LOGFILE=/var/log/leafsense.log
+
+# Source the environment configuration
+[ -f /etc/profile.d/leafsense-qt.sh ] && . /etc/profile.d/leafsense-qt.sh
+
+case "$1" in
+    start)
+        echo "Starting LeafSense..."
+        
+        if [ -f $PIDFILE ]; then
+            PID=$(cat $PIDFILE)
+            if kill -0 $PID 2>/dev/null; then
+                echo "LeafSense already running (pid $PID)"
+                exit 0
+            else
+                rm -f $PIDFILE
+            fi
+        fi
+        
+        # Wait for display framebuffer to be ready
+        sleep 2
+        
+        # Ensure gallery directory exists
+        mkdir -p /opt/leafsense/gallery
+        
+        # CRITICAL: Set touchscreen environment
+        # rotate=90 must match config.txt display rotation
+        export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1
+        export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=90"
+        export QT_QPA_FB_HIDECURSOR=1
+        
+        # Start LeafSense
+        cd /opt/leafsense
+        ./LeafSense -platform linuxfb:fb=/dev/fb1 >> $LOGFILE 2>&1 &
+        echo $! > $PIDFILE
+        
+        echo "LeafSense started (pid $(cat $PIDFILE))"
+        ;;
+        
+    stop)
+        echo "Stopping LeafSense..."
+        if [ -f $PIDFILE ]; then
+            kill $(cat $PIDFILE) 2>/dev/null
+            rm -f $PIDFILE
+        fi
+        killall LeafSense 2>/dev/null
+        echo "LeafSense stopped"
+        ;;
+        
+    restart)
+        $0 stop
+        sleep 2
+        $0 start
+        ;;
+        
+    status)
+        if [ -f $PIDFILE ] && kill -0 $(cat $PIDFILE) 2>/dev/null; then
+            echo "LeafSense is running (pid $(cat $PIDFILE))"
+            exit 0
+        else
+            echo "LeafSense is not running"
+            exit 1
+        fi
+        ;;
+        
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
+
+exit 0

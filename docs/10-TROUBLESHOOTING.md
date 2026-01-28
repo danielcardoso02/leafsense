@@ -1,0 +1,719 @@
+# LeafSense - Troubleshooting Guide
+
+## Table of Contents
+
+1. [Compilation Problems](#compilation-problems)
+2. [Cross-Compilation Problems](#cross-compilation-problems)
+3. [Runtime Problems](#runtime-problems)
+4. [Network Problems](#network-problems)
+5. [Hardware Problems](#hardware-problems)
+6. [Database Problems](#database-problems)
+7. [Machine Learning Problems](#machine-learning-problems)
+8. [Touchscreen Problems](#touchscreen-problems)
+9. [Useful Logs](#useful-logs)
+
+---
+
+## Compilation Problems
+
+### Qt5 not found
+```
+CMake Error: Could not find a package configuration file provided by "Qt5"
+```
+
+**Solution:**
+```bash
+# Ubuntu/Debian
+sudo apt install qt5-default qtcharts5-dev libqt5svg5-dev libqt5sql5-sqlite
+
+# Or specify path explicitly
+cmake -DQt5_DIR=/path/to/qt5/lib/cmake/Qt5 ..
+```
+
+### OpenCV not found
+```
+CMake Error: Could not find OpenCV
+```
+
+**Solution:**
+```bash
+# Ubuntu/Debian
+sudo apt install libopencv-dev
+
+# Or compile from source
+git clone https://github.com/opencv/opencv.git
+cd opencv && mkdir build && cd build
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local ..
+make -j$(nproc) && sudo make install
+```
+
+### C++17 compilation error
+```
+error: 'filesystem' is not a namespace-name
+```
+
+**Solution:**
+```cmake
+# CMakeLists.txt
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# And add to linker
+target_link_libraries(LeafSense PRIVATE stdc++fs)
+```
+
+---
+
+## Cross-Compilation Problems
+
+### Toolchain not found
+```
+CMake Error: CMAKE_C_COMPILER not found
+```
+
+**Solution:**
+```bash
+# Verify Buildroot was compiled
+ls ~/buildroot/buildroot-2025.08/output/host/bin/aarch64-linux-gcc
+
+# If it doesn't exist, compile Buildroot
+cd ~/buildroot/buildroot-2025.08
+make raspberrypi4_64_defconfig
+make -j$(nproc)
+```
+
+### Invalid sysroot
+```
+cannot find -lQt5Core
+```
+
+**Solution:**
+```cmake
+# Verify CMAKE_SYSROOT in toolchain file
+set(CMAKE_SYSROOT "${TOOLCHAIN_PREFIX}/aarch64-buildroot-linux-gnu/sysroot")
+
+# Verify libraries exist
+ls ${CMAKE_SYSROOT}/usr/lib/libQt5*.so
+```
+
+### ONNX Runtime ARM64 error
+```
+undefined reference to `OrtGetApiBase'
+```
+
+**Solution:**
+```bash
+# Verify ARM64 version
+file external/onnxruntime-arm64/lib/libonnxruntime.so
+# Should show: ELF 64-bit LSB shared object, ARM aarch64
+
+# Verify linkage in CMakeLists.txt
+grep ONNXRUNTIME CMakeLists.txt
+```
+
+### ioremap_nocache does not exist
+```
+error: implicit declaration of function 'ioremap_nocache'
+```
+
+**Solution (kernel 5.6+):**
+```c
+// Before
+gpio_base = ioremap_nocache(GPIO_BASE, GPIO_SIZE);
+
+// After
+gpio_base = ioremap(GPIO_BASE, GPIO_SIZE);
+```
+
+---
+
+## Runtime Problems
+
+### Library not found
+```
+error while loading shared libraries: libQt5Charts.so.5: cannot open
+```
+
+**Solution:**
+```bash
+# Verify available libraries
+ssh root@10.42.0.196 "ls /usr/lib/libQt5*"
+
+# Copy missing library
+scp ~/buildroot/buildroot-2025.08/output/target/usr/lib/libQt5Charts.so.5.15.14 \
+    root@10.42.0.196:/usr/lib/
+
+# Create symlinks
+ssh root@10.42.0.196 "cd /usr/lib && \
+    ln -sf libQt5Charts.so.5.15.14 libQt5Charts.so.5 && \
+    ln -sf libQt5Charts.so.5.15.14 libQt5Charts.so"
+```
+
+### Qt platform plugin not found
+```
+qt.qpa.plugin: Could not find the Qt platform plugin "eglfs"
+```
+
+**Solution:**
+```bash
+# Use linuxfb for 3.5" LCD (fb1)
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb1:size=480x320
+
+# Or for HDMI (fb0)
+export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb0
+
+# Or offscreen (no display)
+export QT_QPA_PLATFORM=offscreen
+
+# See available plugins
+ls /usr/lib/qt/plugins/platforms/
+```
+
+### Segmentation fault on startup
+```
+Segmentation fault
+```
+
+**Solution:**
+```bash
+# Run with GDB (if available)
+gdb ./LeafSense
+(gdb) run
+(gdb) bt
+
+# Verify dependencies
+ldd ./LeafSense
+
+# Verify architecture
+file ./LeafSense
+```
+
+### Insufficient permissions
+```
+Permission denied: /dev/led0
+```
+
+**Solution:**
+```bash
+# Run as root
+sudo ./LeafSense
+
+# Or adjust permissions
+sudo chmod 666 /dev/led0
+
+# Or create udev rule
+echo 'KERNEL=="led0", MODE="0666"' | sudo tee /etc/udev/rules.d/99-led.rules
+```
+
+---
+
+## Network Problems
+
+### Pi not found on network
+```
+ssh: connect to host 10.42.0.196 port 22: No route to host
+```
+
+**Solution:**
+```bash
+# Verify network interface
+ip link show
+
+# Scan for Pi on network
+arp-scan --localnet
+
+# Verify USB-Ethernet cable
+dmesg | grep -i eth
+
+# Use static IP on Pi
+# Add to /etc/network/interfaces:
+# auto eth0
+# iface eth0 inet static
+# address 10.42.0.196
+# netmask 255.255.255.0
+```
+
+### SSH connection refused
+```
+Connection refused
+```
+
+**Solution:**
+```bash
+# Verify SSH is running on Pi
+ssh root@10.42.0.196 "ps aux | grep dropbear"
+
+# Start SSH if not running
+/etc/init.d/S50dropbear start
+
+# Verify port 22 is open
+netstat -tlnp | grep 22
+```
+
+### Connection timeout
+```
+Connection timed out
+```
+
+**Solution:**
+```bash
+# Verify physical connection
+ping 10.42.0.196
+
+# Check firewall
+iptables -L
+
+# Try direct cable connection
+ip addr add 10.42.0.1/24 dev enx00e04c3601a6
+```
+
+---
+
+## Hardware Problems
+
+### LED kernel module doesn't load
+```
+insmod: ERROR: could not insert module led.ko: Invalid module format
+```
+
+**Solution:**
+```bash
+# Verify kernel version
+uname -r
+
+# Recompile module for correct kernel
+export KERNEL_SRC=~/buildroot/buildroot-2025.08/output/build/linux-custom
+make clean && make
+```
+
+### Sensors not responding
+```
+[Sensor] Error: No response from pH sensor
+```
+
+**Solution:**
+```bash
+# Verify I2C devices
+i2cdetect -y 1
+
+# Check connections
+# Verify sensor power supply
+# Check wiring for shorts
+```
+
+### Camera Not Detected
+```
+vcgencmd get_camera
+supported=0 detected=0, libcamera interfaces=0
+```
+
+**Diagnosis:**
+- `supported=0` = GPU firmware doesn't support camera (config.txt issue)
+- `detected=0` = Camera hardware not physically detected
+
+**Solution - Check config.txt:**
+```bash
+# Mount boot partition
+mount /dev/mmcblk0p1 /mnt/boot
+
+# Verify camera is enabled
+cat /mnt/boot/config.txt | grep -E "start_x|gpu_mem|ov5647"
+```
+
+Required settings in `/mnt/boot/config.txt`:
+```ini
+# Enable camera support
+start_x=1
+gpu_mem=128
+
+# Camera driver (OV5647 = Pi Camera v1)
+dtoverlay=ov5647
+```
+
+**Solution - Check Hardware:**
+1. **Ribbon cable orientation**: Blue side toward Ethernet port on Pi
+2. **Secure connection**: Both ends of ribbon must be fully seated
+3. **Clean contacts**: Gently clean cable contacts with isopropyl alcohol
+4. **Try different cable**: 15-pin flex cables are fragile
+5. **Try different camera**: Module may be defective
+
+**Verify camera module:**
+```bash
+# Check kernel messages for camera
+dmesg | grep -i "ov5647\|camera\|csi"
+
+# Look for errors like:
+# "failed to open vchiq instance" = GPU firmware issue
+# "ov5647: chip id mismatch" = Wrong camera model
+# "Fixed dependency cycle" = Device tree issue (usually harmless)
+```
+
+**If still not working:**
+- Ensure `start4.elf` and `fixup4.dat` are present in boot partition
+- Try Camera v2 (IMX219) with `dtoverlay=imx219` instead
+
+### GPIO access denied
+```
+[GPIO] Error: Cannot access GPIO
+```
+
+**Solution:**
+```bash
+# Verify permissions
+ls -la /dev/gpiomem
+
+# Create udev rule
+echo 'KERNEL=="gpiomem", MODE="0666"' | sudo tee /etc/udev/rules.d/99-gpio.rules
+udevadm control --reload-rules
+```
+
+---
+
+## Database Problems
+
+### Tables do not exist
+```
+[DB] Error: no such table: sensor_readings
+```
+
+**Solution:**
+```bash
+# Initialize database
+cd /opt/leafsense
+sqlite3 leafsense.db < database/schema.sql
+
+# Verify tables
+sqlite3 leafsense.db ".tables"
+```
+
+### Database locked
+```
+[DB] Error: database is locked
+```
+
+**Solution:**
+```bash
+# Check for running processes
+fuser leafsense.db
+
+# Kill blocking process
+kill -9 <PID>
+
+# Or wait and retry
+# SQLite default timeout is 5 seconds
+```
+
+### Database corrupted
+```
+[DB] Error: database disk image is malformed
+```
+
+**Solution:**
+```bash
+# Backup corrupted database
+cp leafsense.db leafsense.db.bak
+
+# Try to recover
+sqlite3 leafsense.db ".recover" | sqlite3 leafsense_new.db
+
+# Or reinitialize
+rm leafsense.db
+sqlite3 leafsense.db < database/schema.sql
+```
+
+---
+
+## Machine Learning Problems
+
+### Model does not load
+```
+[ML] Warning: Model file not found: ./leafsense_model.onnx
+```
+
+**Solution:**
+```bash
+# Verify path
+ls -la /opt/leafsense/leafsense_model.onnx
+
+# Copy to working directory
+cp /opt/leafsense/models/leafsense_model.onnx /opt/leafsense/
+
+# Verify size (should be ~6MB)
+ls -lh /opt/leafsense/leafsense_model.onnx
+```
+
+### ONNX Runtime crash
+```
+Segmentation fault (in onnxruntime)
+```
+
+**Solution:**
+```bash
+# Verify ONNX Runtime version
+strings /usr/lib/libonnxruntime.so | grep "1.16"
+
+# Verify ARM64 compatibility
+file /usr/lib/libonnxruntime.so
+# Should show: ARM aarch64
+
+# Verify ONNX model
+python3 -c "import onnx; m=onnx.load('leafsense_model.onnx'); print(m.opset_import)"
+```
+
+### Inference too slow
+```
+Inference time: > 1000ms
+```
+
+**Solution:**
+```cpp
+// Optimize session options
+Ort::SessionOptions session_options;
+session_options.SetIntraOpNumThreads(4);  // Use 4 cores
+session_options.SetGraphOptimizationLevel(
+    GraphOptimizationLevel::ORT_ENABLE_ALL
+);
+
+// Reduce input resolution
+cv::resize(image, resized, cv::Size(224, 224));
+
+// Use batch size = 1
+std::vector<int64_t> input_shape = {1, 3, 224, 224};
+```
+
+### Non-plant images incorrectly classified
+```
+[ML] Prediction: Disease (confidence: 89%, entropy: 0.52, valid: yes)
+# But the image is not a plant!
+```
+
+**Understanding:** This happens when the green ratio check passes but the model confidently misclassifies a green object.
+
+**OOD Thresholds (v1.5.6):**
+| Threshold | Value | Meaning |
+|-----------|-------|---------|
+| MIN_GREEN_RATIO | 10% | Image must have 10% green pixels (lettuce) |
+| ENTROPY_THRESHOLD | 1.8 | Entropy must be below 1.8 |
+| MIN_CONFIDENCE | 30% | Top class must exceed 30% |
+
+**To diagnose:**
+```bash
+# Check ML log output
+journalctl -u leafsense | grep -E "Green|entropy|valid"
+
+# Expected for real plant:
+[ML] Green pixel ratio: 9.63%
+[ML] Prediction: Pest Damage (confidence: 99%, entropy: 0.12, valid: yes)
+
+# Expected for non-plant:
+[ML] Insufficient green pixels (4.64% < 5%) - likely non-plant image
+[ML] Prediction: Unknown (Not a Plant) (confidence: 89%, entropy: 0.52, valid: no)
+```
+
+**If green objects are being misclassified:**
+- The green ratio check can only detect non-green objects
+- Green objects (green fabric, green toys) may pass the check
+- Consider training the model with an "Unknown" class for production use
+
+### Valid plants being rejected as OOD
+```
+[ML] Insufficient green pixels - likely non-plant image
+# But it IS a plant!
+```
+
+**Cause:** The plant may have insufficient green color (brown/dying, very young, or unusual lighting).
+
+**Solutions:**
+1. Lower the threshold in ML.h: `MIN_GREEN_RATIO = 0.03f` (3%)
+2. Adjust HSV hue ranges in checkGreenRatio() to include brown (0-20°)
+3. Ensure good lighting conditions for camera
+
+---
+
+## Touchscreen Problems
+
+### Black display (3.5" LCD)
+```
+LeafSense runs but touchscreen is black
+```
+
+**Solution:**
+```bash
+# Verify available framebuffers
+cat /proc/fb
+# Expected: 0 BCM2708 FB, 1 fb_ili9486
+
+# Use fb1 for 3.5" LCD, not fb0
+./LeafSense -platform linuxfb:fb=/dev/fb1
+
+# Verify overlay is loaded
+dmesg | grep -E "ili9486|fb_ili9486|piscreen"
+```
+
+### Boot hang with touchscreen (white screen)
+```
+Pi hangs on boot with white screen, only red LED on
+```
+
+**Solution:**
+```bash
+# 1. Verify overlay configuration in config.txt:
+cat /boot/config.txt | grep piscreen
+# Expected: dtoverlay=piscreen,speed=16000000,rotate=270
+
+# 2. Verify framebuffer settings:
+# hdmi_force_hotplug=1
+# hdmi_group=2
+# hdmi_mode=87
+# hdmi_cvt=480 320 60 6 0 0 0
+
+# 3. If piscreen overlay doesn't work, check kernel has fbtft support
+dmesg | grep fbtft
+```
+
+### Touch not responding
+```
+Display works but touch input is ignored
+```
+
+**Solution:**
+
+There are two approaches to get touchscreen working. **Method 2 (evdev) is recommended** as it's more stable.
+
+#### Method 1: tslib (May cause freezing)
+
+```bash
+# Verify tslib is installed
+ls -la /usr/lib/libts*
+which ts_calibrate
+
+# Calibrate
+export TSLIB_TSDEVICE=/dev/input/event0
+export TSLIB_FBDEVICE=/dev/fb1
+ts_calibrate
+
+# Start with tslib (may freeze on some systems)
+export QT_QPA_FB_TSLIB=1
+./LeafSense -platform linuxfb:fb=/dev/fb1
+```
+
+#### Method 2: evdev with rotation (RECOMMENDED)
+
+**This is the working solution that doesn't freeze:**
+
+```bash
+# Verify touch device exists
+ls -la /dev/input/event*
+evtest /dev/input/event0  # Should show ADS7846 Touchscreen
+
+# Start LeafSense with evdev touchscreen handler and rotation
+cd /opt/leafsense
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+./LeafSense
+```
+
+**Key insight:** The touch rotation parameter must be calibrated based on your display overlay. For `dtoverlay=piscreen,rotate=270`, use `rotate=180:invertx`.
+
+### Touchscreen coordinates wrong (touch offset)
+
+```
+Touch registers but in wrong position
+```
+
+**Solution:**
+The touch rotation parameter depends on your display overlay:
+
+| Display Overlay | QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS |
+|-----------------|-------------------------------------|
+| piscreen,rotate=270 | rotate=180:invertx |
+
+You may also need to add `:invertx` or `:inverty`:
+```bash
+# Current working configuration for piscreen,rotate=270
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+
+# If Y axis is inverted  
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:inverty"
+```
+
+### Application freezes when touching screen
+
+```
+LeafSense freezes completely when touchscreen is touched
+```
+
+**Solution:**
+
+This commonly occurs when using tslib with Qt. Switch to evdev:
+
+```bash
+# Kill frozen app
+killall LeafSense
+
+# Don't use tslib - use evdev instead
+unset QT_QPA_FB_TSLIB
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="/dev/input/event0:rotate=180:invertx"
+
+# Start app using the startup script
+cd /opt/leafsense && ./start.sh
+```
+
+### Touchscreen frozen / not calibrated
+```
+Touch input detected but cursor does not follow finger
+```
+
+**Solution:**
+
+If using tslib approach:
+
+# Follow the on-screen instructions to touch crosshairs
+# This creates /etc/pointercal with calibration data
+
+# Step 3: Verify pointercal was created
+cat /etc/pointercal
+# Should show 7 numeric values
+
+# Step 4: Restart LeafSense with tslib support
+export QT_QPA_PLATFORM=linuxfb
+export QT_QPA_FB_DEV=/dev/fb1
+export QT_QPA_FB_HIDECURSOR=0
+export QT_QPA_FB_TSLIB=1
+cd /opt/leafsense && ./LeafSense &
+```
+
+---
+
+## Useful Logs
+
+### View system logs
+```bash
+dmesg                           # Kernel messages
+cat /var/log/messages           # System messages
+tail -f /var/log/leafsense.log  # Application logs
+```
+
+### View logs with timestamp
+```bash
+dmesg -T | tail -20
+```
+
+### Filter logs
+```bash
+grep -i error /var/log/leafsense.log
+grep -i "ML\|model\|onnx" /var/log/leafsense.log
+dmesg | grep -i "led\|gpio"
+```
+
+---
+
+## Contact
+
+For problems not resolved by this guide, check:
+1. Issues in the GitHub repository
+2. Detailed system logs
+3. Official documentation for Qt5, ONNX Runtime, Buildroot
+
+---
+
+*Document last updated: January 19, 2026*

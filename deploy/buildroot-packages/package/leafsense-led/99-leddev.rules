@@ -1,0 +1,3 @@
+# LeafSense LED device permissions
+# Allows non-root access to LED device
+KERNEL=="led0", MODE="0666", GROUP="gpio"

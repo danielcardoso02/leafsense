@@ -1,41 +1,67 @@
-# Prerequisites
-*.d
+# Build directories
+build/
+build-arm64/
+build-*/
 
-# Compiled Object files
-*.slo
-*.lo
+# Qt generated files
+*_autogen/
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+!toolchain-*.cmake
+
+# Compiled binaries
+LeafSense
 *.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
-# Compiled Dynamic libraries
 *.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
 *.a
-*.lib
+*.ko
+*.mod
+*.mod.c
+*.order
+*.symvers
 
-# Executables
-*.exe
-*.out
-*.app
+# IDE files
+.vscode/
+.idea/
+*.user
+*.autosave
 
-# debug information files
-*.dwo
+# Database files (local development)
+*.db
+*.db-journal
+
+# Doxygen generated documentation
+docs/api/
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*.swo
+*~
+.tmp/
+temp/
+
+# ML training datasets (large files - not for version control)
+ml/dataset_4class/
+ml/dataset*/
+
+# ONNX Runtime external library (downloaded separately)
+external/onnxruntime-arm64/
+
+# Gallery images (runtime generated)
+gallery/

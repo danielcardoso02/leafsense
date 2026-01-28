@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/images">
+        <!-- files -->
+        <file>images/logo_leafsense.png</file>
+        <file>images/logo_leafsense_dark.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,12 @@
+config BR2_PACKAGE_LEAFSENSE_LED
+	bool "leafsense-led"
+	depends on BR2_LINUX_KERNEL
+	help
+	  LeafSense LED Alert Driver - Linux kernel module for GPIO LED control.
+	  
+	  Provides /dev/led0 character device for controlling alert LED.
+	  Write '1' to turn ON, '0' to turn OFF.
+	  
+	  Requires GPIO pin 20 connected to LED with current-limiting resistor.
+	  
+	  https://github.com/leafsense/leafsense-project
