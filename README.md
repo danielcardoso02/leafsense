@@ -24,6 +24,8 @@ LeafSense is a complete embedded system for intelligent hydroponic plant monitor
 
 ## Features
 
+<div align="center">
+
 | Feature | Description |
 |---------|-------------|
 | **Real-Time Monitoring** | Temperature, pH, EC sensors with 2-second update cycle |
@@ -35,15 +37,18 @@ LeafSense is a complete embedded system for intelligent hydroponic plant monitor
 | **LED Alerts** | Custom kernel module for hardware alert indication |
 | **Cross-Platform** | PC (x86_64) and ARM64 builds supported |
 
-### ML Disease Classification
-- Healthy
-- Nutrient Deficiency
-- Pest Damage
-- Disease
+</div>
+
+<h4 align="center">ML Disease Classification</h4>
+<p align="center">
+• Healthy • Nutrient Deficiency • Pest Damage • Disease
+</p>
 
 ---
 
 ## Hardware Requirements
+
+<div align="center">
 
 | Component | Description |
 |-----------|-------------|
@@ -54,6 +59,8 @@ LeafSense is a complete embedded system for intelligent hydroponic plant monitor
 | **Temperature** | DS18B20 (1-Wire) |
 | **pH/EC** | Analog sensors via ADS1115 ADC (I2C) |
 | **Actuators** | GPIO-controlled peristaltic pumps and heater |
+
+</div>
 
 ---
 
@@ -114,7 +121,9 @@ ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
 
 ## Documentation
 
-Complete documentation is available in the [`docs/`](docs/) directory:
+<p align="center">Complete documentation is available in the <a href="docs/"><code>docs/</code></a> directory:</p>
+
+<div align="center">
 
 | Document | Description |
 |----------|-------------|
@@ -137,11 +146,15 @@ Complete documentation is available in the [`docs/`](docs/) directory:
 | [Buildroot Packages](docs/16-BUILDROOT-PACKAGES.md) | Package configuration |
 | [Terminology](docs/17-TERMINOLOGY.md) | Key terms explained |
 
+</div>
+
 ---
 
 ## Architecture
 
-### Software Stack
+<h3 align="center">Software Stack</h3>
+
+<div align="center">
 
 | Layer | Technology |
 |-------|------------|
@@ -152,9 +165,12 @@ Complete documentation is available in the [`docs/`](docs/) directory:
 | **Vision** | OpenCV 4.11.0 |
 | **Database** | SQLite 3.48.0 |
 
-### Thread Architecture
+</div>
 
-```
+<h3 align="center">Thread Architecture</h3>
+
+<p align="center">
+<pre>
 Master Controller (8 threads)
 ├── tTime          - Heartbeat timer (2s)
 ├── tSig           - Signal dispatcher
@@ -164,7 +180,8 @@ Master Controller (8 threads)
 ├── tPHU           - pH Up pump
 ├── tPHD           - pH Down pump
 └── tNutrients     - Nutrient dosing
-```
+</pre>
+</p>
 
 ### Project Structure
 
@@ -219,32 +236,39 @@ See [Testing Guide](docs/13-TESTING-GUIDE.md) for comprehensive test procedures.
 
 ---
 
-## Authors
+<h2 align="center">Authors</h2>
 
-**Group 11** - Embedded Systems and Computers
+<p align="center"><strong>Group 11</strong> - Embedded Systems and Computers</p>
+
+<div align="center">
 
 | Name | Student ID |
 |------|------------|
 | Daniel Gonçalo Silva Cardoso | PG53753 |
 | Marco Xavier Leite Costa | PG60210 |
 
-**Advisor:** Professor Adriano José Conceição Tavares
+</div>
 
-**Program:** Master's in Industrial Electronics and Computers Engineering  
-**Institution:** University of Minho, School of Engineering
-
----
-
-## License
-
-This project was developed as part of an academic course at the University of Minho.
+<p align="center">
+<strong>Advisor:</strong> Professor Adriano José Conceição Tavares<br>
+<strong>Program:</strong> Master's in Industrial Electronics and Computers Engineering<br>
+<strong>Institution:</strong> University of Minho, School of Engineering
+</p>
 
 ---
 
-## Acknowledgments
+<h2 align="center">License</h2>
 
-- Professor Adriano Tavares for guidance and support
-- [Qt Project](https://www.qt.io/) for the GUI framework
-- [ONNX Runtime](https://onnxruntime.ai/) for ML inference
-- [OpenCV](https://opencv.org/) for computer vision
-- [Buildroot](https://buildroot.org/) for embedded Linux
+<p align="center">This project was developed as part of an academic course at the University of Minho.</p>
+
+---
+
+<h2 align="center">Acknowledgments</h2>
+
+<p align="center">
+Professor Adriano Tavares for guidance and support<br>
+<a href="https://www.qt.io/">Qt Project</a> for the GUI framework<br>
+<a href="https://onnxruntime.ai/">ONNX Runtime</a> for ML inference<br>
+<a href="https://opencv.org/">OpenCV</a> for computer vision<br>
+<a href="https://buildroot.org/">Buildroot</a> for embedded Linux
+</p>
