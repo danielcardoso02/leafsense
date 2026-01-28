@@ -31,9 +31,9 @@ private:
 public:
     /**
      * @brief Constructs heater driver
-     * @param pin GPIO pin number (BCM numbering), default 21
+     * @param pin GPIO pin number (BCM numbering), default 26
      */
-    Heater(int pin = 21);
+    Heater(int pin = 26);
     
     /**
      * @brief Destructor - turns off heater and releases GPIO

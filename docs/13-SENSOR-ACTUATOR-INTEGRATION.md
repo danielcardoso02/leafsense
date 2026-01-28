@@ -106,7 +106,7 @@ The `Master` class (middleware) coordinates all sensors and actuators:
 
 **Hardware Setup**:
 - Interface: I2C via ADS1115 ADC (address 0x48)
-- ADC Channel: 0
+- ADC Channel: 2
 - Calibration: pH 4.0, pH 7.0, pH 10.0 solutions required
 
 **Implementation Steps**:
@@ -193,7 +193,7 @@ The `Master` class (middleware) coordinates all sensors and actuators:
 
 **Hardware Setup**:
 - Interface: I2C via ADS1115 ADC (address 0x48)
-- ADC Channel: 1
+- ADC Channel: 3
 - Calibration: TDS calibration solution (e.g., 1413 μS/cm) required
 
 **Implementation Steps**:

@@ -39,6 +39,9 @@ LeafSense
 *.db
 *.db-journal
 
+# Doxygen generated documentation
+docs/api/
+
 # Logs
 *.log
 

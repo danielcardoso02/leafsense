@@ -101,8 +101,8 @@ The following sensors have **mock implementations** that return simulated values
 | Sensor | Mock Behavior | Real Mode Trigger |
 |--------|---------------|-------------------|
 | DS18B20 (Temperature) | Random 15-25°C | 1-Wire device found at `/sys/bus/w1/devices/28-*` |
-| pH Sensor (PH-4502C) | Random 6.0-7.0 | ADS1115 ADC returns valid voltage on Channel 0 |
-| TDS/EC Sensor | Random 1200-1400ppm | ADS1115 ADC returns valid voltage on Channel 1 |
+| pH Sensor (PH-4502C) | Random 6.0-7.0 | ADS1115 ADC returns valid voltage on Channel 2 |
+| TDS/EC Sensor | Random 1200-1400ppm | ADS1115 ADC returns valid voltage on Channel 3 |
 
 ### Actuators (Real GPIO via libgpiod)
 
@@ -121,8 +121,8 @@ The following sensors have **mock implementations** that return simulated values
 | I2C Bus | ✅ Working | `/dev/i2c-1` enabled |
 | i2c-dev Module | ✅ Auto-load | Added to `/etc/modules` |
 | ADS1115 ADC | ✅ Driver Ready | Address 0x48, auto-fallback to mock if not connected |
-| pH Sensor | ✅ I2C Ready | Channel 0, voltage-to-pH conversion |
-| TDS Sensor | ✅ I2C Ready | Channel 1, voltage-to-ppm conversion |
+| pH Sensor | ✅ I2C Ready | Channel 2, voltage-to-pH conversion |
+| TDS Sensor | ✅ I2C Ready | Channel 3, voltage-to-ppm conversion |
 
 ---
 

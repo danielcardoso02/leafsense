@@ -14,7 +14,7 @@
 │  │  │   (Qt5)      │  │(ONNX Runtime)│  │  (Signal/Slots)          │  │   │
 │  │  │              │  │              │  │                          │  │   │
 │  │  │ - Dashboard  │  │ - Inference  │  │ - Sensor Updates         │  │   │
-│  │  │ - Charts     │  │ - 4 Classs   │  │ - Alert Notifications    │  │   │
+│  │  │ - Charts     │  │ - 4 Classes  │  │ - Alert Notifications    │  │   │
 │  │  │ - Settings   │  │ - 99.39% Acc │  │ - Log Management         │  │   │
 │  │  │ - Alerts     │  │              │  │                          │  │   │
 │  │  └──────┬───────┘  └──────┬───────┘  └────────────┬─────────────┘  │   │
@@ -72,7 +72,7 @@
 #### ML Engine
 - **Model**: MobileNetV3-Small for 4 classes
 - **Runtime**: ONNX Runtime 1.16.3
-- **Classs**: Healthy, Bacterial_Spot, Early_Blight, Late_Blight
+- **Classes**: Healthy, Nutrient Deficiency, Pest Damage, Disease
 - **Input**: 224x224 RGB images
 - **Accuracy**: 99.39%
 

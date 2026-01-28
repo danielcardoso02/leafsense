@@ -96,11 +96,11 @@ The LED is connected to a GPIO pin on the Raspberry Pi. The specific pin is conf
 ```
 Raspberry Pi GPIO
     |
-    +--- GPIO_PIN (e.g., GPIO17) ---[ 220Ω ]---[LED]----> GND
+    +--- GPIO 20 ---[ 220Ω ]---[LED]----> GND
 ```
 
 **Components:**
-- Raspberry Pi GPIO pin (3.3V logic)
+- Raspberry Pi GPIO pin 20 (3.3V logic)
 - 220Ω current-limiting resistor
 - LED (forward voltage ~2V, current ~15mA)
 
@@ -110,7 +110,7 @@ To change the GPIO pin, modify the driver source:
 
 ```c
 // In ledmodule.c
-#define LED_GPIO_PIN 17  // Change to your desired pin
+static const int LedGpioPin = 20;  // Change to your desired pin
 ```
 
 ---

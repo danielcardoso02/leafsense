@@ -53,14 +53,14 @@ This release implements real hardware support for I2C sensors and GPIO actuators
 - **Visual Logging**: Green/Yellow/Red ANSI color logs for I2C operations
 
 #### pH Sensor I2C Integration
-- **ADC Channel 0**: Reads voltage from analog pH probe
-- **Conversion Formula**: `pH = 7.0 + (1.65 - voltage) * 4.24`
-- **Visual Logs**: `[pH] Channel 0: Voltage=X.XXV, pH=X.XX`
+- **ADC Channel 2**: Reads voltage from analog pH probe
+- **Conversion Formula**: `pH = 7.0 + (1.03 - voltage) / 0.18`
+- **Visual Logs**: `[pH] Channel 2: Voltage=X.XXV, pH=X.XX`
 
 #### TDS Sensor I2C Integration  
-- **ADC Channel 1**: Reads voltage from analog TDS probe
+- **ADC Channel 3**: Reads voltage from analog TDS probe
 - **Conversion Formula**: `TDS = voltage * 435.0` (ppm)
-- **Visual Logs**: `[TDS] Channel 1: Voltage=X.XXV, EC=XXXXppm`
+- **Visual Logs**: `[TDS] Channel 3: Voltage=X.XXV, EC=XXXXppm`
 
 #### Heater GPIO Control (libgpiod)
 - **GPIO 26**: Controls water heater relay via libgpiod
@@ -423,7 +423,6 @@ This release fixes the touchscreen calibration for the piscreen display overlay.
 #### Updated Documentation
 - `deploy/rootfs-overlay/opt/leafsense/start_leafsense.sh` - New touchscreen config
 - `docs/00-PROJECT-STATUS.md` - Updated calibration info
-- `docs/15-DEMO-GUIDE.md` - Updated all touchscreen references
 - `docs/17-TOUCHSCREEN-CONFIGURATION.md` - Complete rewrite for piscreen overlay
 
 ### Configuration
