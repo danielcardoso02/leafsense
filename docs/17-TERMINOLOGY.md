@@ -1,13 +1,12 @@
-# LeafSense - Terminology & Concepts Guide
+<h1 align="center">LeafSense - Terminology & Concepts Guide</h1>
 
-**Version:** 1.5.1  
-**Last Updated:** January 19, 2026
+<p align="center">
+<strong>Version:</strong> 1.5.1 &nbsp;|&nbsp; <strong>Last Updated:</strong> January 19, 2026
+</p>
+
+<p align="center"><em>Technical terms, concepts, and processes explained for team members and reviewers</em></p>
 
 ---
-
-## Purpose
-
-This document explains all technical terms, concepts, and processes used throughout the LeafSense project to help team members and reviewers understand the system.
 
 ---
 

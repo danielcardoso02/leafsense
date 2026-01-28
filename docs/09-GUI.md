@@ -1,8 +1,8 @@
-# LeafSense - Graphical Interface (Qt5)
+<h1 align="center">LeafSense - Graphical Interface (Qt5)</h1>
 
-## Overview
+<p align="center"><em>Real-time visualization optimized for Waveshare 3.5" touchscreen (480×320)</em></p>
 
-The LeafSense graphical interface is developed in Qt5 and provides real-time visualization of system data, manual control, and settings. The interface is optimized for the Waveshare 3.5" display (480x320) with touchscreen support.
+---
 
 ## Display Configuration
 

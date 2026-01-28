@@ -1,7 +1,6 @@
-# LeafSense Networking Guide
+<h1 align="center">LeafSense Networking Guide</h1>
 
-## Overview
-This document describes the various networking options available for connecting the Raspberry Pi to a development machine or deploying LeafSense in a networked environment.
+<p align="center"><em>Network configuration options for Raspberry Pi connectivity</em></p>
 
 ---
 

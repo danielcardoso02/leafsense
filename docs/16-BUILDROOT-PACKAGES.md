@@ -1,13 +1,12 @@
-# LeafSense - Buildroot Package Reference
+<h1 align="center">LeafSense - Buildroot Package Reference</h1>
 
-**Version:** 1.5.1  
-**Last Updated:** January 19, 2026
+<p align="center">
+<strong>Version:</strong> 1.5.1 &nbsp;|&nbsp; <strong>Last Updated:</strong> January 19, 2026
+</p>
 
 ---
 
-## Overview
-
-This document provides a complete reference of all packages included in the LeafSense Buildroot image. The configuration is designed to be comprehensive enough that future development should not require image rebuilds for common functionality.
+<p align="center"><em>Complete reference of all packages included in the LeafSense Buildroot image</em></p>
 
 ### SD Card Partitions
 

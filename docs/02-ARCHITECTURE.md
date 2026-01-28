@@ -1,6 +1,8 @@
-# LeafSense - System Architecture
+<h1 align="center">LeafSense - System Architecture</h1>
 
-## Architecture Diagram
+---
+
+<h2 align="center">Architecture Diagram</h2>
 
 ```
 ┌───────────────────────────────────────────────────────────────────────────┐

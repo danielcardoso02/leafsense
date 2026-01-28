@@ -1,8 +1,6 @@
-# LeafSense - Raspberry Pi Deployment Guide
+<h1 align="center">LeafSense - Raspberry Pi Deployment Guide</h1>
 
-## Overview
-
-This document provides comprehensive step-by-step instructions for deploying the LeafSense hydroponic monitoring system on a Raspberry Pi 4 Model B. The deployment process involves configuring a custom Linux distribution using Buildroot, cross-compiling the application, and setting up all required dependencies.
+<p align="center"><em>Step-by-step instructions for deploying the LeafSense system on Raspberry Pi 4B</em></p>
 
 ---
 

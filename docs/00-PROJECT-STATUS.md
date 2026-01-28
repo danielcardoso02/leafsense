@@ -1,16 +1,16 @@
-# LeafSense Project Status
+<h1 align="center">LeafSense Project Status</h1>
 
 ---
 
-## Overview
-
-LeafSense is a complete embedded hydroponic monitoring system running on Raspberry Pi 4 with custom Buildroot Linux. This document provides a status report of all implemented features.
+<p align="center"><strong>LeafSense is a complete embedded hydroponic monitoring system running on Raspberry Pi 4 with custom Buildroot Linux. This document provides a status report of all implemented features.</strong></p>
 
 ---
 
 ## Implemented Features
 
-### Operating System (Buildroot)
+<h3 align="center">Operating System (Buildroot)</h3>
+
+<div align="center">
 
 | Component | Status | Details |
 |-----------|--------|---------|

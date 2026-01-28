@@ -1,10 +1,12 @@
-# LeafSense - Kernel Module (LED Driver)
+<h1 align="center">LeafSense - Kernel Module (LED Driver)</h1>
 
-## Overview
+<p align="center"><em>Direct GPIO control via BCM2711 registers for LED status indication</em></p>
 
-The kernel module `led.ko` provides direct control of an LED connected to GPIO through a character device (`/dev/led0`). The module uses direct access to the GPIO registers of the BCM2711 (Raspberry Pi 4).
+---
 
 ## Specifications
+
+<div align="center">
 
 | Property | Value |
 |----------|-------|

@@ -1,8 +1,8 @@
-# LeafSense - Machine Learning
+<h1 align="center">LeafSense - Machine Learning</h1>
 
-## Overview
+<p align="center"><em>Image classification model for plant disease detection using MobileNetV3-Small</em></p>
 
-The LeafSense Machine Learning system uses an image classification model to detect diseases in tomato plants. The model was trained to identify 4 different classes.
+---
 
 ## Classification Classes
 

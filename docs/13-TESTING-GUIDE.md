@@ -1,6 +1,8 @@
-# LeafSense - Complete Testing Guide
+<h1 align="center">LeafSense - Complete Testing Guide</h1>
 
-This document provides step-by-step commands for testing every component of the LeafSense system on Raspberry Pi 4B with 3.5" ILI9486 touchscreen display.
+<p align="center"><em>Step-by-step testing procedures for Raspberry Pi 4B with 3.5" touchscreen</em></p>
+
+---
 
 ## Table of Contents
 

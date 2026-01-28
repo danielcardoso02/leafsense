@@ -1,7 +1,10 @@
-# Buildroot Image Configuration and Creation
+<h1 align="center">Buildroot Image Configuration and Creation</h1>
 
-**Version**: 1.5.1  
-**Last Updated**: January 19, 2026
+<p align="center">
+<strong>Version:</strong> 1.5.1 &nbsp;|&nbsp; <strong>Last Updated:</strong> January 19, 2026
+</p>
+
+---
 
 ## Table of Contents
 

@@ -1,6 +1,6 @@
-# LeafSense - Changelog and Development History
+<h1 align="center">LeafSense - Changelog and Development History</h1>
 
-## Current Version: 1.6.1 (January 23, 2026)
+<p align="center"><strong>Current Version: 1.6.1</strong> (January 23, 2026)</p>
 
 ---
 

@@ -1,13 +1,15 @@
-# LeafSense LED Alert Driver - Device Driver Documentation
+<h1 align="center">LeafSense LED Alert Driver</h1>
 
-## Overview
+<p align="center"><em>Linux kernel module for GPIO-controlled LED status indication</em></p>
 
-The LeafSense LED Alert Driver is a Linux kernel module that provides a character device interface for controlling an LED indicator used for system alerts. The driver implements a simple write-only interface at `/dev/led0` where user-space applications can send commands ('1' or '0') to turn the LED on or off.
+<div align="center">
 
-**Driver Type:** Character Device  
-**Device Node:** `/dev/led0`  
-**Major Number:** Dynamic (assigned by kernel)  
-**Minor Number:** 0  
+| Property | Value |
+|----------|-------|
+| **Driver Type** | Character Device |
+| **Device Node** | `/dev/led0` |
+| **Major Number** | Dynamic (assigned by kernel) |
+| **Minor Number** | 0 |  
 **Module Name:** `ledmodule`  
 **Source Files:** `drivers/kernel_module/ledmodule.c`, `utils.c`, `utils.h`
 

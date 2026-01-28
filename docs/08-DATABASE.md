@@ -1,11 +1,12 @@
-# LeafSense - Database
+<h1 align="center">LeafSense - Database</h1>
 
-## Overview
+<p align="center"><em>SQLite schema for persistent storage of sensor data, logs, alerts, and ML results</em></p>
 
-LeafSense uses SQLite as an embedded database for persistent storage of sensor data, logs, alerts, and ML results.
+<p align="center">
+<strong>Schema Version:</strong> V1.0 &nbsp;|&nbsp; <strong>Last Updated:</strong> January 19, 2026
+</p>
 
-**Schema Version:** V1.0  
-**Last Updated:** January 19, 2026
+---
 
 ## Location
 

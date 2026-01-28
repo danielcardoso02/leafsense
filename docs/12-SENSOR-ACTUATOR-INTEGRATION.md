@@ -1,8 +1,6 @@
-# LeafSense - Sensor & Actuator Integration Guide
+<h1 align="center">LeafSense - Sensor & Actuator Integration Guide</h1>
 
-## Overview
-
-This guide explains how to integrate real hardware sensors and actuators into the LeafSense system, replacing the current mock implementations.
+<p align="center"><em>Hardware integration guide for real sensors and actuators</em></p>
 
 ---
 

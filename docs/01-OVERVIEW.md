@@ -1,8 +1,8 @@
-# LeafSense - Project Overview
+<h1 align="center">LeafSense - Project Overview</h1>
 
-## Description
+<p align="center"><strong>An intelligent monitoring and control system for hydroponic cultivation, developed for Raspberry Pi 4B.</strong></p>
 
-**LeafSense** is an intelligent monitoring and control system for hydroponic cultivation, developed for Raspberry Pi 4B. The system combines environmental sensors, automatic actuators, and Machine Learning for plant disease detection.
+---
 
 ## Objectives
 

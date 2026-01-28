@@ -1,13 +1,15 @@
-# LeafSense Touchscreen Configuration Guide
+<h1 align="center">LeafSense Touchscreen Configuration Guide</h1>
 
-## Critical Information
+<p align="center">
+<strong>Last Verified:</strong> January 22, 2026 &nbsp;|&nbsp; <strong>Hardware:</strong> 3.5" LCD (ILI9486 + ADS7846)
+</p>
 
-**Last Verified:** January 22, 2026  
-**Hardware:** 3.5" LCD with ILI9486 display and ADS7846 touchscreen  
-**Driver:** Qt5 evdev touchscreen plugin (NOT tslib)
+<p align="center">
+⚠️ <strong>IMPORTANT:</strong> The touchscreen configuration <code>rotate=180:invertx</code> is REQUIRED.<br>
+Do not change this - it was verified working on January 22, 2026.
+</p>
 
-> ⚠️ **IMPORTANT:** The touchscreen configuration `rotate=180:invertx` is REQUIRED.
-> Do not change this - it was verified working on January 22, 2026.
+---
 
 ---
 

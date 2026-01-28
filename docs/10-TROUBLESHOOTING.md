@@ -1,4 +1,8 @@
-# LeafSense - Troubleshooting Guide
+<h1 align="center">LeafSense - Troubleshooting Guide</h1>
+
+<p align="center"><em>Solutions for common compilation, deployment, and runtime issues</em></p>
+
+---
 
 ## Table of Contents
 
