@@ -2,7 +2,7 @@
  * @file Heater.cpp
  * @brief Implementation of Heater Control Driver via libgpiod
  * 
- * Controls a relay connected to GPIO pin 21 (default) for heater control.
+ * Controls a relay connected to GPIO pin 26 (default) for heater control.
  * Uses the libgpiod library for GPIO access.
  */
 
