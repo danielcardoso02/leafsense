@@ -80,8 +80,8 @@ LeafSense is a complete embedded system for intelligent hydroponic plant monitor
 #### PC Build (Development/Testing)
 
 ```bash
-git clone https://github.com/your-username/leafsense-project.git
-cd leafsense-project
+git clone https://github.com/danielcardoso02/leafsense.git
+cd leafsense
 
 mkdir build && cd build
 cmake ..
@@ -114,7 +114,7 @@ sudo dd if=sdcard.img of=/dev/sdX bs=4M status=progress && sync
 scp build-arm64/src/LeafSense root@10.42.0.196:/opt/leafsense/
 
 # Start application
-ssh root@10.42.0.196 '/opt/leafsense/start_leafsense.sh &'
+ssh root@10.42.0.196 '/opt/leafsense/start.sh &'
 ```
 
 ---
