@@ -1,20 +1,29 @@
-# LeafSense - Intelligent Hydroponic Monitoring System
-
-<p align="center">
+<div align="center">
   <img src="resources/images/logo_leafsense.png" alt="LeafSense Logo" width="400">
-</p>
 
-<p align="center">
+  # LeafSense - Intelligent Hydroponic Monitoring System
+  
   <strong>An embedded system for intelligent hydroponic plant monitoring and control</strong>
-</p>
 
-<p align="center">
-  <a href="#features">Features</a> •
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#documentation">Documentation</a> •
-  <a href="#architecture">Architecture</a> •
-  <a href="#authors">Authors</a>
-</p>
+  <p align="center">
+  <img src="https://img.shields.io/badge/Buildroot-2025.08-ef9421?style=flat" alt="Buildroot">
+  <img src="https://img.shields.io/badge/Linux-6.12.41--v8-007ec6?style=flat" alt="Linux">
+  <img src="https://img.shields.io/badge/C%2B%2B-17-f39c12?style=flat" alt="C++">
+  <img src="https://img.shields.io/badge/Qt-5.15.14-41CD52?style=flat" alt="Qt">
+  <img src="https://img.shields.io/badge/ONNX_Runtime-1.16.3-005BA1?style=flat" alt="ONNX Runtime">
+  <img src="https://img.shields.io/badge/OpenCV-4.11.0-5C3EE8?style=flat" alt="OpenCV">
+  <img src="https://img.shields.io/badge/SQLite-3.48.0-003B57?style=flat" alt="SQLite">
+  </p>
+
+  <p align="center">
+    <a href="#features">Features</a> •
+    <a href="#quick-start">Quick Start</a> •
+    <a href="#documentation">Documentation</a> •
+    <a href="#architecture">Architecture</a> •
+    <a href="#authors">Authors</a>
+  </p>
+
+</div>
 
 ---
 
